@@ -1,9 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const { Client, Collection, Intents } = require('discord.js');
+const { Player } = require('discord-music-player');
 const { token} = require('./config.json');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] });
+
+const player = new Player(client, {volume: 50});
+client.player = player;
 
 // Add command files
 client.commands = new Collection();
@@ -28,10 +32,11 @@ for (const file of commandFiles) {
 }
 
 // Add event files
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+const clientEventFiles = fs.readdirSync('./events/client').filter(file => file.endsWith('.js'));
+const playerEventFiles = fs.readdirSync('./events/player').filter(file => file.endsWith('.js'));
 
-for (const file of eventFiles) {
-    const event = require(`./events/${file}`);
+for (const file of clientEventFiles) {
+    const event = require(`./events/client/${file}`);
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args));
     } else {
@@ -39,4 +44,11 @@ for (const file of eventFiles) {
     }
 }
 
+for (const file of playerEventFiles) {
+    const event = require(`./events/player/${file}`);
+    client.player.on(event.name, (...args) => event.execute(...args));
+}
+
+
+// Login
 client.login(token);

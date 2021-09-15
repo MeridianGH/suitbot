@@ -3,7 +3,7 @@ const { simpleEmbed, sleep } = require('../../utilities');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('clear')
+        .setName('purge')
         .setDescription('Clears a specified amount of messages.')
         .addIntegerOption(option =>
             option.setName('amount')
