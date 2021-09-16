@@ -28,9 +28,6 @@ module.exports = {
             for (const song of queue.songs) {
                 description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`;
             }
-/*            queue.songs.forEach(song => {
-                description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`;
-            });*/
             description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function(prev, cur) { return prev + cur.millisecons; }, 0))} total duration**`
 
             const embed = new MessageEmbed()
@@ -49,9 +46,6 @@ module.exports = {
                 for (const song of songs) {
                     description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`;
                 }
-/*                songs.forEach(song => {
-                    description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`;
-                });*/
                 description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.slice(1, queue.songs.length).reduce(function(prev, cur) { return prev + cur.millisecons; }, 0))} total duration**`
 
                 const embed = new MessageEmbed()
