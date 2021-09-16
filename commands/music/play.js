@@ -41,7 +41,7 @@ module.exports = {
         });
 
         if (!song) {
-            return await interaction.editReply(simpleEmbed('There was an error when processing your request.', true))
+            return await interaction.editReply(simpleEmbed('There was an error when processing your request.'))
         }
         song.requestedBy = interaction.member.displayName;
 
@@ -72,7 +72,7 @@ module.exports = {
         });
 
         if (!playlist) {
-            return await interaction.editReply(simpleEmbed('There was an error when processing your request.', true))
+            return await interaction.editReply(simpleEmbed('There was an error when processing your request.'))
         }
         playlist.songs.forEach(song => {
             song.requestedBy = interaction.member.displayName;
