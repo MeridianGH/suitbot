@@ -12,8 +12,7 @@ module.exports = {
     async execute(interaction) {
         let amount = interaction.options.getInteger('amount');
         if (amount < 1 || amount > 100) {
-            await interaction.reply(simpleEmbed('You can only delete between 1-100 messages!'));
-            return;
+            return await interaction.reply(simpleEmbed('You can only delete between 1-100 messages!', true));
         }
         amount = amount.toString();
         await interaction.channel.messages.fetch({limit: amount}).then(messages => {
