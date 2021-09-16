@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { simpleEmbed } = require('../../utilities');
+const { simpleEmbed, msToHMS} = require('../../utilities');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,7 +11,9 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         const seconds = interaction.options.getInteger('seconds');
-        interaction.client.player.getQueue(interaction.guild.id).seek(seconds * 1000);
-        await interaction.reply(simpleEmbed(`Skipped to ${seconds}s.`));
+        const queue = interaction.client.player.getQueue(interaction.guild.id);
+        if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)); }
+        await queue.seek(seconds * 1000);
+        await interaction.reply(`⏩ Skipped to ${msToHMS(seconds)}.`);
     },
 };

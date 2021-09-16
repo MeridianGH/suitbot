@@ -6,7 +6,9 @@ module.exports = {
         .setName('skip')
         .setDescription('Skips the current song.'),
     async execute(interaction) {
-        interaction.client.player.getQueue(interaction.guild.id).skip();
-        await interaction.reply(simpleEmbed('Skipped.'));
+        const queue = interaction.client.player.getQueue(interaction.guild.id);
+        if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)); }
+        queue.skip();
+        await interaction.reply('⏭ Skipped.');
     },
 };

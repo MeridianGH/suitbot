@@ -6,7 +6,9 @@ module.exports = {
         .setName('pause')
         .setDescription('Pauses playback.'),
     async execute(interaction) {
-        interaction.client.player.getQueue(interaction.guild.id).setPaused(true);
-        await interaction.reply(simpleEmbed('Paused playback.'));
+        const queue = interaction.client.player.getQueue(interaction.guild.id);
+        if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)); }
+        queue.setPaused(queue.connection.paused !== true);
+        await interaction.reply(queue.connection.paused === true ? '⏸ Paused.' : '▶ Resumed.');
     },
 };

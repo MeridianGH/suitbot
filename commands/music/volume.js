@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { simpleEmbed } = require('../../utilities');
+const { simpleEmbed, sleep} = require('../../utilities');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,7 +11,9 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         const volume = interaction.options.getInteger('volume');
-        interaction.client.player.getQueue(interaction.guild.id).setVolume(volume);
-        await interaction.reply(simpleEmbed(`Set volume to ${volume}%.`));
+        const queue = interaction.client.player.getQueue(interaction.guild.id);
+        if (!queue) { return interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)); }
+        queue.setVolume(volume);
+        await interaction.reply(`🔊 Set volume to ${volume}%.`);
     },
 };

@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Shows the currently playing song.'),
     async execute(interaction) {
         const queue = interaction.client.player.getQueue(interaction.guild.id);
-        if (!queue) { return interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!')); }
+        if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)); }
         const song = queue.nowPlaying;
         const progressBar = queue.createProgressBar({block: '▬', arrow: '🔘'}).prettier;
 

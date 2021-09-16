@@ -6,7 +6,9 @@ module.exports = {
         .setName('clear')
         .setDescription('Clears the queue.'),
     async execute(interaction) {
-        interaction.client.player.getQueue(interaction.guild.id).clearQueue();
-        await interaction.reply(simpleEmbed('Cleared the queue.'));
+        const queue = interaction.client.player.getQueue(interaction.guild.id);
+        if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)); }
+        queue.clearQueue();
+        await interaction.reply('🗑️ Cleared the queue.');
     },
 };

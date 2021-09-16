@@ -6,7 +6,9 @@ module.exports = {
         .setName('shuffle')
         .setDescription('Shuffles the queue.'),
     async execute(interaction) {
-        interaction.client.player.getQueue(interaction.guild.id).shuffle();
-        await interaction.reply(simpleEmbed('Shuffled the queue.'));
+        const queue = interaction.client.player.getQueue(interaction.guild.id);
+        if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)); }
+        queue.shuffle();
+        await interaction.reply('🔀 Shuffled the queue.');
     },
 };
