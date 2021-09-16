@@ -17,18 +17,17 @@ module.exports = {
             let description = `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`;
             const embed = new MessageEmbed()
                 .setTitle('Queue.')
-                .setDescription(description + `No upcoming songs.\nAdd songs with /play!`)
+                .setDescription(description + `No upcoming songs.\nAdd songs with /play!\n${'\u2015'.repeat(34)}`)
                 .setFooter(`Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`);
             pages.push(embed);
         } else if (queue.songs.length > 1 && queue.songs.length <= 11) {
             // Format single page.
             let description = `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`;
             description = description + 'Up Next:\n'
-
             for (const song of queue.songs) {
                 description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`;
             }
-            description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function(prev, cur) { return prev + cur.millisecons; }, 0))} total duration**`
+            description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function(prev, cur) { return prev + cur.millisecons; }, 0))} total duration**\n${'\u2015'.repeat(34)}`
 
             const embed = new MessageEmbed()
                 .setTitle('Queue.')
@@ -42,17 +41,15 @@ module.exports = {
 
                 let description = `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`;
                 description = description + 'Up Next:\n'
-
                 for (const song of songs) {
                     description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`;
                 }
-                description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.slice(1, queue.songs.length).reduce(function(prev, cur) { return prev + cur.millisecons; }, 0))} total duration**`
+                description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.slice(1, queue.songs.length).reduce(function(prev, cur) { return prev + cur.millisecons; }, 0))} total duration**\n${'\u2015'.repeat(34)}`
 
                 const embed = new MessageEmbed()
                     .setTitle('Queue.')
                     .setDescription(description)
                     .setFooter(`Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
-
                 pages.push(embed);
             }
         }
@@ -60,11 +57,11 @@ module.exports = {
         const isOnePage = pages.length === 1;
 
         const previous = new MessageButton()
-            .setCustomId('previous')
+            .setCustomId('previousQueue')
             .setLabel('Previous')
             .setStyle('PRIMARY');
         const next = new MessageButton()
-            .setCustomId('next')
+            .setCustomId('nextQueue')
             .setLabel('Next')
             .setStyle('PRIMARY');
 
@@ -72,13 +69,11 @@ module.exports = {
 
         if (!isOnePage) {
             // Collect button interactions (when a user clicks a button),
-            // but only when the button as clicked by the original message author
             const collector = embedMessage.createMessageComponentCollector();
-
             let currentIndex = 0;
             collector.on('collect', async buttonInteraction => {
                 // Increase/decrease index
-                buttonInteraction.customId === 'previous' ? (currentIndex -= 1) : (currentIndex += 1);
+                buttonInteraction.customId === 'previousQueue' ? (currentIndex -= 1) : (currentIndex += 1);
                 // Respond to interaction by updating message with new embed
                 if (currentIndex === 0) {
                     await buttonInteraction.update({embeds: [pages[currentIndex]], components: [new MessageActionRow({components: [previous.setDisabled(true), next.setDisabled(false)]})]});

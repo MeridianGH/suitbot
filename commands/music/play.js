@@ -11,12 +11,13 @@ module.exports = {
                 .setDescription('The query to search for.')
                 .setRequired(true)),
     async execute(interaction) {
-        await interaction.deferReply();
         const channel = interaction.member.voice.channel;
-        if (!channel) { return interaction.editReply(simpleEmbed('You need to be in a voice channel to use this command.', true)); }
+        if (!channel) { return interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)); }
 
         const permissions = channel.permissionsFor(interaction.client.user);
-        if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return interaction.editReply(simpleEmbed('I do not have the correct permissions to play in your voice channel!', true));
+        if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return interaction.reply(simpleEmbed('I do not have the correct permissions to play in your voice channel!', true));
+
+        await interaction.deferReply();
 
         const query = interaction.options.getString('query');
         if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/user\/([\w\d]+)\/playlist\/[\w\d]+$/i) ||
