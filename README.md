@@ -47,7 +47,7 @@ You'll need Node.js v16 or newer and FFmpeg v4 or newer.\
 Installing SuitBot:
 
 ```shell
-git clone https://github.com/MeridianPY/suitbot.git
+git clone https://github.com/MeridianGH/suitbot.git
 cd suitbot
 npm install
 ```
