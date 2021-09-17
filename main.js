@@ -6,8 +6,8 @@ const { Player } = require('discord-music-player')
 // Check if running in Heroku
 let token = process.env.token
 if (!token) {
-  const { configToken } = require('./config.json')
-  token = configToken
+  const config = require('./config.json')
+  token = config.token
 }
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] })
