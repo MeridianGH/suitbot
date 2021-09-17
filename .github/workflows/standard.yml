@@ -1,12 +1,10 @@
-on: [push, pull_request]
-name: Main
+on: [push]
+
 jobs:
-  standardjs:
-    name: StandardJs
+  standard:
     runs-on: ubuntu-latest
+    name: Lints every push with StandardJS
     steps:
-    - uses: actions/checkout@master
-    - name: StandardJs
-      uses: docker://jopereyral/standardjs-action
-      with:
-        args: --fix
+      - name: Running npx standard
+        id: lint
+        uses: bnb/standard@latest
