@@ -1,4 +1,10 @@
 ![logo](https://repository-images.githubusercontent.com/406747355/0c0fcbbd-8dab-4259-a5d6-d8cc5069ef37)
+<p align="center">
+<a href="https://github.com/standard/standard"><img alt="JS Standard" src="https://cdn.rawgit.com/standard/standard/master/badge.svg" height=30></a>
+<a href="https://www.heroku.com"><img alt="Heroku" src="https://img.shields.io/static/v1?label=Hosted with&message=Heroku&color=7056bf&style=flat-square&logo=heroku" height=30></a>
+<a href="https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge" height=30></a>
+<a href="https://github.com/MeridianGH/suitbot/deployments/activity_log?environment=suitbot-host"><img alt="Status" src="https://img.shields.io/github/deployments/MeridianGH/suitbot/suitbot-host?label=Status&logo=statuspal&style=for-the-badge" height=30></a>
+</p>
 
 # SuitBot
 
@@ -7,8 +13,10 @@
 It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https://discord-music-player.js.org/) for its main features.
 
 ## Availability
-I'm currently hosting the bot myself, and it is publicly available with this invite link:\
-[![invite](https://img.shields.io/static/v1?style=flat&logo=discord&label=&labelColor=212121&message=Invite&color=212121)](https://discord.com/api/oauth2/authorize?client_id=887122733010411611&permissions=2167425024&scope=bot%20applications.commands) \
+I'm currently hosting the bot myself, and it is publicly available with this invite link:
+
+[![invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=&labelColor=212121&message=Invite&color=212121)](https://discord.com/api/oauth2/authorize?client_id=887122733010411611&permissions=2167425024&scope=bot%20applications.commands)
+
 You can check the current status to the right under `Environments`.
 
 
