@@ -83,7 +83,7 @@ heroku/nodejs
 https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
 ```
 
-Make sure to deploy your commands using `node deploy-commands.js` or `node deploy-commands-global.js` when developing new commands before running the bot, as both those files can not be executed on Heroku.
+Deploying on Heroku automatically deploys all commands globally, so make sure to test your commands locally beforehand.
 
 ## License
 <a href="https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge" height=30></a>

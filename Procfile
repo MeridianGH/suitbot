@@ -1,1 +1,1 @@
-Worker: node main.js
+worker: node deploy-commands-global.js & node main.js & wait -n
