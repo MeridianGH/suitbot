@@ -1,2 +1,12 @@
-- name: standardjs-ga
-  uses: devjoca/standardjs-action@0.4.0
+on: [push, pull_request]
+name: Main
+jobs:
+  standardjs:
+    name: StandardJs
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: StandardJs
+      uses: docker://jopereyral/standardjs-action
+      with:
+        args: --fix
