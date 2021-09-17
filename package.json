@@ -1,7 +1,7 @@
 {
-  "name": "suitbot-v2",
+  "name": "suitbot",
   "version": "1.0.0",
-  "description": "A rewrite of SuitBot in JS.",
+  "description": "A lightweight music and general purpose bot, that uses slash commands and buttons to be as user-friendly as possible! ",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,13 +10,12 @@
     "node": "16.x"
   },
   "author": "Meridian",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "discord-api-types": "^0.23.1",
     "discord-music-player": "^8.0.2",
-    "discord.js": "^13.1.0",
-    "eslint": "^7.32.0"
+    "discord.js": "^13.1.0"
   }
 }

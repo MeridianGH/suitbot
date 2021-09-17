@@ -1,5 +1,5 @@
-node_modules
-config.json
-.vscode/
+node_modules/
 .idea/
+config.json
 banner.png
+package-lock.json
