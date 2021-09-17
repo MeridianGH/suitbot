@@ -7,8 +7,8 @@
 It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https://discord-music-player.js.org/) for its main features.
 
 ## Availability
-I'm currently hosting the bot myself, and it is publicly available with this invite link:
-[Invite](https://discord.com/api/oauth2/authorize?client_id=887122733010411611&permissions=2167425024&scope=bot%20applications.commands)
+I'm currently hosting the bot myself, and it is publicly available with this invite link:\
+![](https://img.shields.io/static/v1?style=flat&logo=discord&label=&labelColor=212121&message=Invite&color=212121&link=https://discord.com/api/oauth2/authorize?client_id=887122733010411611&permissions=2167425024&scope=bot%20applications.commands)
 
 ## Commands & Features
 SuitBot uses slash commands to integrate itself into the server. You can easily access its commands directly by typing `/` in your chat window.
