@@ -57,4 +57,4 @@ for (const file of playerEventFiles) {
 
 
 // Login
-client.login(token).catch();
+client.login(token);
