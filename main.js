@@ -5,7 +5,7 @@ const { getFilesRecursively } = require('./utilities')
 
 const token = process.env.token ? process.env.token : require('./config.json').token
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] })
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES] })
 
 const player = new Player(client, { volume: 50 })
 client.player = player

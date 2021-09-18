@@ -15,7 +15,7 @@ module.exports = {
         .setDescription('The channel to move to.')
         .setRequired(true)),
   async execute (interaction) {
-    const user = interaction.options.getMentionable('user')
+    const member = interaction.options.getMentionable('user')
     const channel = interaction.options.getChannel('channel')
 
     if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) {
@@ -24,17 +24,17 @@ module.exports = {
     if (!channel.isVoice()) {
       return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true))
     }
-    if (!(user instanceof GuildMember)) {
+    if (!(member instanceof GuildMember)) {
       return await interaction.reply(simpleEmbed('You can only specify a valid user!', true))
     }
 
-    await user.voice.setChannel(channel)
+    await member.voice.setChannel(channel)
 
     const embed = new MessageEmbed()
       .setAuthor('Moved User', interaction.member.user.displayAvatarURL())
-      .setTitle(`${user.displayName} → ${channel.name}`)
-      .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
-      .setDescription(`Moved \`${user.displayName}\` to \`${channel.name}\`.`)
+      .setTitle(`${member.displayName} → ${channel.name}`)
+      .setThumbnail(member.user.displayAvatarURL({ format: 'png', size: 1024 }))
+      .setDescription(`Moved \`${member.displayName}\` to \`${channel.name}\`.`)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })

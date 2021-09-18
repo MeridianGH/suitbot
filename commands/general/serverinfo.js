@@ -7,7 +7,13 @@ module.exports = {
     .setDescription('Shows info about the server.'),
   async execute (interaction) {
     const guild = interaction.guild
-    const description = `**Created:** ${guild.createdAt.toUTCString()}\n**Channels:** ${guild.channels.channelCountWithoutThreads}\n**Members:** ${guild.memberCount}\n`
+    const description =
+`**Created:** ${guild.createdAt.toUTCString()}
+**Channels:** ${guild.channels.channelCountWithoutThreads}
+**Members:** ${guild.memberCount}
+**Boosts:** ${guild.premiumSubscriptionCount || 0}
+**Owner:** ${await guild.fetchOwner().then(m => `${m.user.username}#${m.user.discriminator}`)}
+**ID:** ${guild.id}`
 
     const embed = new MessageEmbed()
       .setAuthor('Server Information', interaction.member.user.displayAvatarURL())

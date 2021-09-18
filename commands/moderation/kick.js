@@ -14,22 +14,22 @@ module.exports = {
       option.setName('reason')
         .setDescription('The reason for the kick.')),
   async execute (interaction) {
-    const user = interaction.options.getMentionable('user')
+    const member = interaction.options.getMentionable('user')
     const reason = interaction.options.getString('reason')
 
     if (!interaction.user.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
       return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true))
     }
-    if (!(user instanceof GuildMember)) {
+    if (!(member instanceof GuildMember)) {
       return await interaction.reply(simpleEmbed('You can only specify a valid user!', true))
     }
 
-    await user.kick(reason).catch(() => interaction.reply(simpleEmbed('There was an error when kicking this user.\nThe bot is possibly missing permissions.', true)))
+    await member.kick(reason).catch(() => interaction.reply(simpleEmbed('There was an error when kicking this user.\nThe bot is possibly missing permissions.', true)))
 
     const embed = new MessageEmbed()
       .setAuthor('Kicked User', interaction.member.user.displayAvatarURL())
-      .setTitle(user.displayName)
-      .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
+      .setTitle(member.displayName)
+      .setThumbnail(member.user.displayAvatarURL({ format: 'png', size: 1024 }))
       .setDescription(`Reason: \`\`\`${reason}\`\`\``)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
