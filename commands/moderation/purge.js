@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed, sleep } = require('../../utilities')
+const { simpleEmbed } = require('../../utilities')
 const { Permissions } = require('discord.js')
 
 module.exports = {
@@ -24,8 +24,6 @@ module.exports = {
     await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
       interaction.channel.bulkDelete(messages)
     })
-    await interaction.reply(simpleEmbed(`Deleted ${amount} message(s).`))
-    await sleep(5000)
-    await interaction.deleteReply()
+    await interaction.reply(simpleEmbed(`Deleted ${amount} message(s).`, true))
   }
 }

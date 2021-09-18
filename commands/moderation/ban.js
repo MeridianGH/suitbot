@@ -28,11 +28,11 @@ module.exports = {
     await user.ban({ reason: reason }).catch(() => interaction.reply(simpleEmbed('There was an error when banning this user.\nThe bot is possibly missing permissions.', true)))
 
     const embed = new MessageEmbed()
-      .setAuthor('Banned User', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Banned User', interaction.member.user.displayAvatarURL())
       .setTitle(user.displayName)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
       .setDescription(`Reason: \`\`\`${reason}\`\`\``)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

@@ -28,9 +28,10 @@ module.exports = {
       description = description + '\u2015'.repeat(34)
 
       const embed = new MessageEmbed()
+        .setAuthor('Help', interaction.member.user.displayAvatarURL())
         .setTitle(category[0].toUpperCase() + category.substring(1) + '.')
         .setDescription(description)
-        .setFooter(`Page ${pages.length + 1}/${Object.entries(categories).length}`)
+        .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length}`, interaction.client.user.displayAvatarURL())
       pages.push(embed)
     }
 

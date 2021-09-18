@@ -18,11 +18,11 @@ module.exports = {
     const description = `**Created:** ${user.user.createdAt.toUTCString()}\n**Joined:** ${user.joinedAt.toUTCString()}\n**Full Name:** ${user.user.username}#${user.user.discriminator}\n`
 
     const embed = new MessageEmbed()
-      .setAuthor('User Information', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('User Information', interaction.member.user.displayAvatarURL())
       .setTitle(user.displayName)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
       .setDescription(description)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

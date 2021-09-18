@@ -19,11 +19,11 @@ module.exports = {
     const uptime = `**Uptime:** ${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`
 
     const embed = new MessageEmbed()
-      .setAuthor('Info', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Info', interaction.member.user.displayAvatarURL())
       .setTitle('Bot Information')
-      .setThumbnail(interaction.client.application.iconURL())
+      .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(servers + uptime)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

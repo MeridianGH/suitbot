@@ -31,11 +31,11 @@ module.exports = {
     await user.voice.setChannel(channel)
 
     const embed = new MessageEmbed()
-      .setAuthor('Moved User', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Moved User', interaction.member.user.displayAvatarURL())
       .setTitle(`${user.displayName} → ${channel.name}`)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
       .setDescription(`Moved \`${user.displayName}\` to \`${channel.name}\`.`)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

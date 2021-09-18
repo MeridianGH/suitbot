@@ -47,7 +47,7 @@ module.exports = {
 
     await interaction.editReply({
       embeds: [new MessageEmbed()
-        .setAuthor('Added to queue.', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+        .setAuthor('Added to queue.', interaction.member.user.displayAvatarURL())
         .setTitle(song.name)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
@@ -56,7 +56,7 @@ module.exports = {
           { name: 'Duration', value: song.duration, inline: true },
           { name: 'Position', value: queue.songs.indexOf(song).toString(), inline: true }
         )
-        .setFooter('SuitBot', interaction.client.application.iconURL())
+        .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
       ]
     })
   },
@@ -82,7 +82,7 @@ module.exports = {
 
     await interaction.editReply({
       embeds: [new MessageEmbed()
-        .setAuthor('Added to queue.', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+        .setAuthor('Added to queue.', interaction.member.user.displayAvatarURL())
         .setTitle(playlist.name)
         .setURL(playlist.url)
         .setThumbnail(playlist.songs[0].thumbnail)
@@ -91,7 +91,7 @@ module.exports = {
           { name: 'Amount', value: `${playlist.songs.length} songs`, inline: true },
           { name: 'Position', value: `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, inline: true }
         )
-        .setFooter('SuitBot', interaction.client.application.iconURL())
+        .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
       ]
     })
   }

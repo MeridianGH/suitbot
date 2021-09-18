@@ -3,11 +3,8 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = {
-  sleep: function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  },
   simpleEmbed: function (content, ephemeral = false) {
-    return { embeds: [new MessageEmbed().setDescription(content)], ephemeral: ephemeral }
+    return {embeds: [new MessageEmbed().setDescription(content)], ephemeral: ephemeral}
   },
   msToHMS: function msToHMS(ms) {
     let totalSeconds = (ms / 1000)

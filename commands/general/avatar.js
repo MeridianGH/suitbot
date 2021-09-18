@@ -18,11 +18,11 @@ module.exports = {
 
     const avatar = `https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}?size=1024`
     const embed = new MessageEmbed()
-      .setAuthor('Avatar', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Avatar', interaction.member.user.displayAvatarURL())
       .setTitle(user.displayName)
       .setURL(avatar)
       .setImage(avatar)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }
