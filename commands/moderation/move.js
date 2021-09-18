@@ -35,7 +35,7 @@ module.exports = {
       .setTitle(`${user.displayName} → ${channel.name}`)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
       .setDescription(`Moved \`${user.displayName}\` to \`${channel.name}\`.`)
-      .setFooter('SuitBot', 'https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+      .setFooter('SuitBot', interaction.client.application.iconURL())
 
     await interaction.reply({ embeds: [embed] })
   }

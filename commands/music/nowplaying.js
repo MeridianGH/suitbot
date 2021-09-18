@@ -22,7 +22,7 @@ module.exports = {
           { name: 'Channel', value: song.author, inline: true },
           { name: 'Duration', value: `\`${progressBar}\``, inline: true }
         )
-        .setFooter(`Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, 'https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+        .setFooter(`Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.application.iconURL())
       ]
     })
   }
