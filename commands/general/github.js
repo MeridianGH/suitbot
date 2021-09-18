@@ -13,6 +13,6 @@ module.exports = {
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription('The source code for this bot along with helpful information.')
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
-    await interaction.reply({embeds: [embed]})
+    await interaction.reply({ embeds: [embed] })
   }
 }

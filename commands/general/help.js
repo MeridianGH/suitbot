@@ -53,13 +53,13 @@ module.exports = {
       .setStyle('PRIMARY')
 
     let currentIndex = Object.keys(categories).indexOf(interaction.options.getString('category'))
-    const embedMessage = await interaction.reply({embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })], fetchReply: true})
+    const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
     const collector = embedMessage.createMessageComponentCollector()
     collector.on('collect', async buttonInteraction => {
       buttonInteraction.customId === 'previousHelp' ? (currentIndex -= 1) : (currentIndex += 1)
-      await buttonInteraction.update({embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })]})
+      await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
     }
     )
   }

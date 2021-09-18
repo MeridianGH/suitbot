@@ -4,9 +4,9 @@ const path = require('path')
 
 module.exports = {
   simpleEmbed: function (content, ephemeral = false) {
-    return {embeds: [new MessageEmbed().setDescription(content)], ephemeral: ephemeral}
+    return { embeds: [new MessageEmbed().setDescription(content)], ephemeral: ephemeral }
   },
-  msToHMS: function msToHMS(ms) {
+  msToHMS: function msToHMS (ms) {
     let totalSeconds = (ms / 1000)
     const hours = Math.floor(totalSeconds / 3600)
     totalSeconds %= 3600
@@ -14,7 +14,7 @@ module.exports = {
     const seconds = Math.floor(totalSeconds % 60)
     return (`${hours}:${minutes}:${seconds}`)
   },
-  getFilesRecursively: function getFilesRecursively(directory, files) {
+  getFilesRecursively: function getFilesRecursively (directory, files) {
     const contents = fs.readdirSync(directory)
     files = files || []
     for (const file of contents) {
