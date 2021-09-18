@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Permissions } = require('discord.js')
+const { simpleEmbed } = require('../../utilities')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,6 +11,10 @@ module.exports = {
         .setDescription('The new rate limit in seconds.')),
   async execute (interaction) {
     const seconds = interaction.options.getInteger('seconds')
+
+    if (!interaction.user.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) {
+      return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true))
+    }
 
     await interaction.channel.setRateLimitPerUser(seconds)
 

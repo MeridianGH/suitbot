@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed, GuildMember } = require('discord.js')
+const { MessageEmbed, GuildMember, Permissions } = require('discord.js')
 const { simpleEmbed } = require('../../utilities')
 
 module.exports = {
@@ -16,10 +16,14 @@ module.exports = {
     ),
   async execute (interaction) {
     const user = interaction.options.getMentionable('user')
-    if (!(user instanceof GuildMember)) {
+    const reason = interaction.options.getString('reason')
+
+    if (!user.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
+      return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true))
+    }
+    if (!(interaction.user instanceof GuildMember)) {
       return await interaction.reply(simpleEmbed('You can only specify a valid user!', true))
     }
-    const reason = interaction.options.getString('reason')
 
     await user.ban({ reason: reason }).catch(() => interaction.reply(simpleEmbed('There was an error when banning this user.\nThe bot is possibly missing permissions.', true)))
 
