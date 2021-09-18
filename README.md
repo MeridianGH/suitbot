@@ -12,6 +12,8 @@
 
 It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https://discord-music-player.js.org/) for its main features.
 
+WARNING: The bot currently uses moderation commands without permission checks, please refrain from giving it permissions to execute those commands in order to keep your server safe!
+
 ## Availability
 I'm currently hosting the bot myself, and it is publicly available with this invite link:
 
