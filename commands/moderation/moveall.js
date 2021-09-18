@@ -30,11 +30,11 @@ module.exports = {
     }
 
     const embed = new MessageEmbed()
-      .setAuthor('Moved All Users', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Moved All Users', interaction.member.user.displayAvatarURL())
       .setTitle(`${channel1.name} → ${channel2.name}`)
       .setThumbnail(interaction.guild.iconURL())
       .setDescription(`Moved all users from \`${channel1.name}\` to \`${channel2.name}\`.`)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

@@ -10,11 +10,11 @@ module.exports = {
     const ping = message.createdTimestamp - interaction.createdTimestamp
 
     const embed = new MessageEmbed()
-      .setAuthor('Ping', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Ping', interaction.member.user.displayAvatarURL())
       .setTitle('Bot & API  Latency')
-      .setThumbnail(interaction.client.application.iconURL())
+      .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(`Ping: ${ping}ms\nAPI Latency: ${Math.round(interaction.client.ws.ping)}ms`)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.editReply({ embeds: [embed] })
   }

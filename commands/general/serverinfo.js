@@ -7,14 +7,20 @@ module.exports = {
     .setDescription('Shows info about the server.'),
   async execute (interaction) {
     const guild = interaction.guild
-    const description = `**Created:** ${guild.createdAt.toUTCString()}\n**Channels:** ${guild.channels.channelCountWithoutThreads}\n**Members:** ${guild.memberCount}\n`
+    const description =
+`**Created:** ${guild.createdAt.toUTCString()}
+**Channels:** ${guild.channels.channelCountWithoutThreads}
+**Members:** ${guild.memberCount}
+**Boosts:** ${guild.premiumSubscriptionCount || 0}
+**Owner:** ${await guild.fetchOwner().then(m => `${m.user.username}#${m.user.discriminator}`)}
+**ID:** ${guild.id}`
 
     const embed = new MessageEmbed()
-      .setAuthor('Server Information', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Server Information', interaction.member.user.displayAvatarURL())
       .setTitle(guild.name)
       .setThumbnail(guild.iconURL())
       .setDescription(description)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

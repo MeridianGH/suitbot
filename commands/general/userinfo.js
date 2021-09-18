@@ -11,18 +11,24 @@ module.exports = {
         .setDescription('The user to get info from.')
         .setRequired(true)),
   async execute (interaction) {
-    const user = interaction.options.getMentionable('user')
-    if (!(user instanceof GuildMember)) {
+    const member = interaction.options.getMentionable('user')
+    if (!(member instanceof GuildMember)) {
       return await interaction.reply(simpleEmbed('You can only specify a valid user!', true))
     }
-    const description = `**Created:** ${user.user.createdAt.toUTCString()}\n**Joined:** ${user.joinedAt.toUTCString()}\n**Full Name:** ${user.user.username}#${user.user.discriminator}\n`
+    const description =
+`**Created:** ${member.user.createdAt.toUTCString()}
+**Joined:** ${member.joinedAt.toUTCString()}
+**Full Name:** ${member.user.username}#${member.user.discriminator}
+**Status:** ${member.presence.status === 'dnd' ? 'Do not disturb' : member.presence.status[0].toUpperCase() + member.presence.status.substring(1)}
+**Avatar:** [Link](${member.user.displayAvatarURL({ format: 'png', size: 1024 })})
+**Bot:** ${member.user.bot ? 'Yes' : 'No'}`
 
     const embed = new MessageEmbed()
-      .setAuthor('User Information', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
-      .setTitle(user.displayName)
-      .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
+      .setAuthor('User Information', interaction.member.user.displayAvatarURL())
+      .setTitle(member.displayName)
+      .setThumbnail(member.user.displayAvatarURL({ format: 'png', size: 1024 }))
       .setDescription(description)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

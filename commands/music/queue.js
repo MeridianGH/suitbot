@@ -18,7 +18,7 @@ module.exports = {
       const embed = new MessageEmbed()
         .setTitle('Queue.')
         .setDescription(description + `No upcoming songs.\nAdd songs with /play!\n${'\u2015'.repeat(34)}`)
-        .setFooter(`Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+        .setFooter(`SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.member.user.displayAvatarURL())
       pages.push(embed)
     } else if (queue.songs.length > 1 && queue.songs.length <= 11) {
       // Format single page.
@@ -32,7 +32,7 @@ module.exports = {
       const embed = new MessageEmbed()
         .setTitle('Queue.')
         .setDescription(description)
-        .setFooter(`Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+        .setFooter(`SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.member.user.displayAvatarURL())
       pages.push(embed)
     } else {
       // Format all pages.
@@ -49,7 +49,7 @@ module.exports = {
         const embed = new MessageEmbed()
           .setTitle('Queue.')
           .setDescription(description)
-          .setFooter(`Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+          .setFooter(`SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.member.user.displayAvatarURL())
         pages.push(embed)
       }
     }
@@ -72,16 +72,8 @@ module.exports = {
       const collector = embedMessage.createMessageComponentCollector()
       let currentIndex = 0
       collector.on('collect', async buttonInteraction => {
-        // Increase/decrease index
         buttonInteraction.customId === 'previousQueue' ? (currentIndex -= 1) : (currentIndex += 1)
-        // Respond to interaction by updating message with new embed
-        if (currentIndex === 0) {
-          await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(false)] })] })
-        } else if (currentIndex === pages.length - 1) {
-          await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(false), next.setDisabled(true)] })] })
-        } else {
-          await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(false), next.setDisabled(false)] })] })
-        }
+        await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
       })
     }
   }

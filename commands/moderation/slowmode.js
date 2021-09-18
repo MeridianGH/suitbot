@@ -19,11 +19,11 @@ module.exports = {
     await interaction.channel.setRateLimitPerUser(seconds)
 
     const embed = new MessageEmbed()
-      .setAuthor('Set Slowmode', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+      .setAuthor('Set Slowmode', interaction.member.user.displayAvatarURL())
       .setTitle(`#${interaction.channel.name}`)
       .setThumbnail(interaction.guild.iconURL())
       .setDescription(`Set the rate limit of #${interaction.channel.name} to ${seconds}s.`)
-      .setFooter('SuitBot', interaction.client.application.iconURL())
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
   }

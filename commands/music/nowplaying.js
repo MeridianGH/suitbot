@@ -14,15 +14,13 @@ module.exports = {
 
     await interaction.reply({
       embeds: [new MessageEmbed()
-        .setAuthor('Now Playing...', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
+        .setAuthor('Now Playing...', interaction.member.user.displayAvatarURL())
         .setTitle(song.name)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
-        .setFields(
-          { name: 'Channel', value: song.author, inline: true },
-          { name: 'Duration', value: `\`${progressBar}\``, inline: true }
-        )
-        .setFooter(`Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.application.iconURL())
+        .addField('Channel', song.author, true)
+        .addField('Duration', `\`${progressBar}\``, true)
+        .setFooter(`SuitBot | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.user.displayAvatarURL())
       ]
     })
   }

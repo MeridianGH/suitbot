@@ -5,7 +5,15 @@ const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('help')
-    .setDescription('Replies with help on how to use this bot.'),
+    .setDescription('Replies with help on how to use this bot.')
+    .addStringOption(option =>
+      option.setName('category')
+        .setDescription('The category to display first.')
+        .addChoices([
+          ['General', 'general'],
+          ['Moderation', 'moderation'],
+          ['Music', 'music']
+        ])),
   async execute (interaction) {
     const folders = fs.readdirSync('./commands/').filter(function (file) { return fs.statSync('./commands/' + file).isDirectory() })
     const categories = {}
@@ -28,9 +36,10 @@ module.exports = {
       description = description + '\u2015'.repeat(34)
 
       const embed = new MessageEmbed()
+        .setAuthor('Help', interaction.member.user.displayAvatarURL())
         .setTitle(category[0].toUpperCase() + category.substring(1) + '.')
         .setDescription(description)
-        .setFooter(`Page ${pages.length + 1}/${Object.entries(categories).length}`)
+        .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length}`, interaction.client.user.displayAvatarURL())
       pages.push(embed)
     }
 
@@ -43,31 +52,14 @@ module.exports = {
       .setLabel('Next')
       .setStyle('PRIMARY')
 
-    const embedMessage = await interaction.reply({ embeds: [pages[0]], components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(false)] })], fetchReply: true })
+    let currentIndex = Object.keys(categories).indexOf(interaction.options.getString('category'))
+    const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
     const collector = embedMessage.createMessageComponentCollector()
-    let currentIndex = 0
     collector.on('collect', async buttonInteraction => {
-      // Increase/decrease index
       buttonInteraction.customId === 'previousHelp' ? (currentIndex -= 1) : (currentIndex += 1)
-      // Respond to interaction by updating message with new embed
-      if (currentIndex === 0) {
-        await buttonInteraction.update({
-          embeds: [pages[currentIndex]],
-          components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(false)] })]
-        })
-      } else if (currentIndex === pages.length - 1) {
-        await buttonInteraction.update({
-          embeds: [pages[currentIndex]],
-          components: [new MessageActionRow({ components: [previous.setDisabled(false), next.setDisabled(true)] })]
-        })
-      } else {
-        await buttonInteraction.update({
-          embeds: [pages[currentIndex]],
-          components: [new MessageActionRow({ components: [previous.setDisabled(false), next.setDisabled(false)] })]
-        })
-      }
+      await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
     }
     )
   }

@@ -14,6 +14,6 @@ module.exports = {
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     await queue.seek(seconds * 1000)
-    await interaction.reply(`⏩ Skipped to ${msToHMS(seconds * 1000)}.`)
+    await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(seconds * 1000)}.`))
   }
 }

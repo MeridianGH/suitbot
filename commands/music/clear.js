@@ -9,6 +9,6 @@ module.exports = {
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     queue.clearQueue()
-    await interaction.reply('🗑️ Cleared the queue.')
+    await interaction.reply(simpleEmbed('🗑️ Cleared the queue.'))
   }
 }
