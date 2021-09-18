@@ -26,13 +26,23 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 ### General
 Command      | Description
 ------------ | ---
-/github      | Sends a link to the repo of this bot.
-/help        | Replies with help on how to use this bot.
-/move        | Moves the mentioned user to the specified channel.
-/moveall     | Moves all users from the first channel to the second channel.
-/ping        | Replies with the current latency.
-/purge       | Clears a specified amount of messages.
-/uptime      | Tells you how long the bot has been running.
+/avatar:     | Gives information about a user's avatar.
+/github:     | Sends a link to the repo of this bot.
+/help:       | Replies with help on how to use this bot.
+/info:       | Shows info about the bot.
+/ping:       | Replies with the current latency.
+/serverinfo: | Shows info about the server.
+/userinfo:   | Shows info about a user.
+
+### Moderation
+Command      | Description
+------------ | ---
+/ban:        | Bans a user.
+/kick:       | Kicks a user.
+/move:       | Moves the mentioned user to the specified channel.
+/moveall:    | Moves all users from the first channel to the second channel.
+/purge:      | Clears a specified amount of messages.
+/slowmode:   | Sets the rate limit of the current channel.
 
 ### Music
 Command      | Description
