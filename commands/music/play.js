@@ -51,11 +51,9 @@ module.exports = {
         .setTitle(song.name)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
-        .setFields(
-          { name: 'Channel', value: song.author, inline: true },
-          { name: 'Duration', value: song.duration, inline: true },
-          { name: 'Position', value: queue.songs.indexOf(song).toString(), inline: true }
-        )
+        .addField('Channel', song.author, true)
+        .addField('Duration', song.duration, true)
+        .addField('Position', queue.songs.indexOf(song).toString(), true)
         .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
       ]
     })
@@ -80,17 +78,16 @@ module.exports = {
       song.requestedBy = interaction.member.displayName
     })
 
+    // noinspection JSUnresolvedVariable
     await interaction.editReply({
       embeds: [new MessageEmbed()
         .setAuthor('Added to queue.', interaction.member.user.displayAvatarURL())
         .setTitle(playlist.name)
         .setURL(playlist.url)
         .setThumbnail(playlist.songs[0].thumbnail)
-        .setFields(
-          { name: 'Author', value: typeof playlist.author === 'string' ? playlist.author : playlist.author.name, inline: true },
-          { name: 'Amount', value: `${playlist.songs.length} songs`, inline: true },
-          { name: 'Position', value: `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, inline: true }
-        )
+        .addField('Author', typeof playlist.author === 'string' ? playlist.author : playlist.author.name, true)
+        .addField('Amount', `${playlist.songs.length} songs`, true)
+        .addField('Position', `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, true)
         .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
       ]
     })

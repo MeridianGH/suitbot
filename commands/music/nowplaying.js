@@ -18,10 +18,8 @@ module.exports = {
         .setTitle(song.name)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
-        .setFields(
-          { name: 'Channel', value: song.author, inline: true },
-          { name: 'Duration', value: `\`${progressBar}\``, inline: true }
-        )
+        .addField('Channel', song.author, true)
+        .addField('Duration', `\`${progressBar}\``, true)
         .setFooter(`SuitBot | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.user.displayAvatarURL())
       ]
     })
