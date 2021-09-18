@@ -72,16 +72,8 @@ module.exports = {
       const collector = embedMessage.createMessageComponentCollector()
       let currentIndex = 0
       collector.on('collect', async buttonInteraction => {
-        // Increase/decrease index
         buttonInteraction.customId === 'previousQueue' ? (currentIndex -= 1) : (currentIndex += 1)
-        // Respond to interaction by updating message with new embed
-        if (currentIndex === 0) {
-          await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(false)] })] })
-        } else if (currentIndex === pages.length - 1) {
-          await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(false), next.setDisabled(true)] })] })
-        } else {
-          await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(false), next.setDisabled(false)] })] })
-        }
+        await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
       })
     }
   }
