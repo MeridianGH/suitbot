@@ -1,26 +1,13 @@
-const fs = require('fs')
-const path = require('path')
 const { REST } = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v9')
-const { appId, token } = require('./config.json')
+const { getFilesRecursively } = require('./utilities')
+
+const token = process.env.token ? process.env.token : require('./config.json').token
+const appId = process.env.appId ? process.env.appId : require('./config.json').appId
 
 const commands = []
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
 
-const getFilesRecursively = (directory) => {
-  const filesInDirectory = fs.readdirSync(directory)
-  for (const file of filesInDirectory) {
-    const absolute = path.join(directory, file)
-    if (fs.statSync(absolute).isDirectory()) {
-      getFilesRecursively(absolute)
-    } else {
-      commandFiles.push(absolute)
-    }
-  }
-}
-getFilesRecursively('./commands/')
-
-for (const file of commandFiles) {
+for (const file of getFilesRecursively('./commands')) {
   const command = require(`./${file}`)
   commands.push(command.data.toJSON())
 }

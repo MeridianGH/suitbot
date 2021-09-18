@@ -1,14 +1,9 @@
 const fs = require('fs')
-const path = require('path')
 const { Client, Collection, Intents } = require('discord.js')
 const { Player } = require('discord-music-player')
+const { getFilesRecursively } = require('./utilities')
 
-// Check if running in Heroku
-let token = process.env.token
-if (!token) {
-  const config = require('./config.json')
-  token = config.token
-}
+const token = process.env.token ? process.env.token : require('./config.json').token
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] })
 
@@ -17,22 +12,8 @@ client.player = player
 
 // Add command files
 client.commands = new Collection()
-const commandFiles = []
 
-const getFilesRecursively = (directory) => {
-  const filesInDirectory = fs.readdirSync(directory)
-  for (const file of filesInDirectory) {
-    const absolute = path.join(directory, file)
-    if (fs.statSync(absolute).isDirectory()) {
-      getFilesRecursively(absolute)
-    } else {
-      commandFiles.push(absolute)
-    }
-  }
-}
-getFilesRecursively('./commands/')
-
-for (const file of commandFiles) {
+for (const file of getFilesRecursively('./commands')) {
   const command = require(`./${file}`)
   client.commands.set(command.data.name, command)
 }
