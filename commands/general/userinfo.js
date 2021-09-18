@@ -22,7 +22,7 @@ module.exports = {
       .setTitle(user.displayName)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}`)
       .setDescription(description)
-      .setFooter('SuitBot', 'https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+      .setFooter('SuitBot', interaction.client.application.iconURL())
 
     await interaction.reply({ embeds: [embed] })
   }

@@ -12,9 +12,9 @@ module.exports = {
     const embed = new MessageEmbed()
       .setAuthor('Ping', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
       .setTitle('Bot & API  Latency')
-      .setThumbnail('https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+      .setThumbnail(interaction.client.application.iconURL())
       .setDescription(`Ping: ${ping}ms\nAPI Latency: ${Math.round(interaction.client.ws.ping)}ms`)
-      .setFooter('SuitBot', 'https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+      .setFooter('SuitBot', interaction.client.application.iconURL())
 
     await interaction.editReply({ embeds: [embed] })
   }

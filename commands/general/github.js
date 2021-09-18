@@ -10,9 +10,9 @@ module.exports = {
       .setAuthor('GitHub', `https://cdn.discordapp.com/avatars/${interaction.member.user.id}/${interaction.member.user.avatar}`)
       .setTitle('GitHub Repository')
       .setURL('https://github.com/MeridianGH/suitbot')
-      .setThumbnail('https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+      .setThumbnail(interaction.client.application.iconURL())
       .setDescription('The source code for this bot along with helpful information.')
-      .setFooter('SuitBot', 'https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+      .setFooter('SuitBot', interaction.client.application.iconURL())
     await interaction.reply({embeds: [embed]})
   }
 }

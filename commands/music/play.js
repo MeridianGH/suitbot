@@ -56,7 +56,7 @@ module.exports = {
           { name: 'Duration', value: song.duration, inline: true },
           { name: 'Position', value: queue.songs.indexOf(song).toString(), inline: true }
         )
-        .setFooter('SuitBot', 'https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+        .setFooter('SuitBot', interaction.client.application.iconURL())
       ]
     })
   },
@@ -91,7 +91,7 @@ module.exports = {
           { name: 'Amount', value: `${playlist.songs.length} songs`, inline: true },
           { name: 'Position', value: `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, inline: true }
         )
-        .setFooter('SuitBot', 'https://cdn.discordapp.com/app-icons/887122733010411611/78c68033a9da502750c5165029b57817.png')
+        .setFooter('SuitBot', interaction.client.application.iconURL())
       ]
     })
   }
