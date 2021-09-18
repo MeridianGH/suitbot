@@ -20,8 +20,8 @@ module.exports = {
     await interaction.deferReply()
 
     const query = interaction.options.getString('query')
-    if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/user\/([\w\d]+)\/playlist\/[\w\d]+$/i) ||
-                   query.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/i)) {
+    if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/[\w\d]+$/i)
+      || query.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/i)) {
       await this._playPlaylist(interaction)
     } else {
       await this._playSong(interaction)
@@ -87,7 +87,7 @@ module.exports = {
         .setURL(playlist.url)
         .setThumbnail(playlist.songs[0].thumbnail)
         .setFields(
-          { name: 'Author', value: playlist.author, inline: true },
+          { name: 'Author', value: typeof playlist.author === 'string' ? playlist.author : playlist.author.name, inline: true },
           { name: 'Amount', value: `${playlist.songs.length} songs`, inline: true },
           { name: 'Position', value: `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, inline: true }
         )
