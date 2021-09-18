@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { simpleEmbed } = require('../../utilities')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Permissions } = require('discord.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -18,6 +18,9 @@ module.exports = {
     const channel1 = interaction.options.getChannel('channel1')
     const channel2 = interaction.options.getChannel('channel2')
 
+    if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) {
+      return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true))
+    }
     if (!channel1.isVoice() || !channel2.isVoice()) {
       return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true))
     }
