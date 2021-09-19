@@ -12,7 +12,7 @@ module.exports = {
 **Channels:** ${guild.channels.channelCountWithoutThreads}
 **Members:** ${guild.memberCount}
 **Boosts:** ${guild.premiumSubscriptionCount || 0}
-**Owner:** ${await guild.fetchOwner().then(m => `${m.user.username}#${m.user.discriminator}`)}
+**Owner:** ${await guild.fetchOwner().then(member => { return member.user.tag })}
 **ID:** ${guild.id}`
 
     const embed = new MessageEmbed()

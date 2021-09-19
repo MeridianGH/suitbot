@@ -18,7 +18,7 @@ module.exports = {
     const description =
 `**Created:** ${member.user.createdAt.toUTCString()}
 **Joined:** ${member.joinedAt.toUTCString()}
-**Full Name:** ${member.user.username}#${member.user.discriminator}
+**Full Name:** ${member.user.tag}
 **Status:** ${member.presence.status === 'dnd' ? 'Do not disturb' : member.presence.status[0].toUpperCase() + member.presence.status.substring(1)}
 **Avatar:** [Link](${member.user.displayAvatarURL({ format: 'png', size: 1024 })})
 **Bot:** ${member.user.bot ? 'Yes' : 'No'}`
