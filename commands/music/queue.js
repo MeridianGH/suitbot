@@ -16,9 +16,9 @@ module.exports = {
       // Format single page with no upcoming songs.
       const description = `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`
       const embed = new MessageEmbed()
-        .setTitle('Queue.')
+        .setAuthor('Queue.', interaction.member.user.displayAvatarURL())
         .setDescription(description + `No upcoming songs.\nAdd songs with /play!\n${'\u2015'.repeat(34)}`)
-        .setFooter(`SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.member.user.displayAvatarURL())
+        .setFooter(`SuitBot | Page 1/1 | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.user.displayAvatarURL())
       pages.push(embed)
     } else if (queue.songs.length > 1 && queue.songs.length <= 11) {
       // Format single page.
@@ -30,9 +30,9 @@ module.exports = {
       description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function (prev, cur) { return prev + cur.millisecons }, 0))} total duration**\n${'\u2015'.repeat(34)}`
 
       const embed = new MessageEmbed()
-        .setTitle('Queue.')
+        .setAuthor('Queue.', interaction.member.user.displayAvatarURL())
         .setDescription(description)
-        .setFooter(`SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.member.user.displayAvatarURL())
+        .setFooter(`SuitBot | Page 1/1 | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.user.displayAvatarURL())
       pages.push(embed)
     } else {
       // Format all pages.
@@ -47,9 +47,9 @@ module.exports = {
         description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.slice(1, queue.songs.length).reduce(function (prev, cur) { return prev + cur.millisecons }, 0))} total duration**\n${'\u2015'.repeat(34)}`
 
         const embed = new MessageEmbed()
-          .setTitle('Queue.')
+          .setAuthor('Queue.', interaction.member.user.displayAvatarURL())
           .setDescription(description)
-          .setFooter(`SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.member.user.displayAvatarURL())
+          .setFooter(`SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.user.displayAvatarURL())
         pages.push(embed)
       }
     }
