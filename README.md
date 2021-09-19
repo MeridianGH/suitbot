@@ -30,11 +30,13 @@ Command      | Description
 ------------ | ---
 /activity:   | Creates a Discord activity.
 /avatar:     | Gives information about a user's avatar.
+/bugreport   | Reports a bug to the developer.
 /github:     | Sends a link to the repo of this bot.
 /help:       | Replies with help on how to use this bot.
 /info:       | Shows info about the bot.
 /ping:       | Replies with the current latency.
 /serverinfo: | Shows info about the server.
+/suggestion  | Sends a suggestion to the developer.
 /userinfo:   | Shows info about a user.
 
 ### Moderation
@@ -90,7 +92,7 @@ node main.js
 
 ### Heroku
 It is also possible to install and run the bot in Heroku.\
-Add your fork of this repository as a GitHub source, add the buildpacks listed below and place your bot token as `token` as well as your Application ID as `appId` in the config vars.
+Add your fork of this repository as a GitHub source, add the buildpacks listed below and place your config information with their respective name in the config vars.
 ```
 heroku/nodejs
 https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
