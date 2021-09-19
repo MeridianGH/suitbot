@@ -28,6 +28,7 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 ### General
 Command      | Description
 ------------ | ---
+/activity:   | Creates a Discord activity.
 /avatar:     | Gives information about a user's avatar.
 /github:     | Sends a link to the repo of this bot.
 /help:       | Replies with help on how to use this bot.
