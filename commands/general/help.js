@@ -48,7 +48,7 @@ module.exports = {
       .setLabel('Next')
       .setStyle('PRIMARY')
 
-    let currentIndex = Object.keys(categories).indexOf(interaction.options.getString('category'))
+    let currentIndex = Math.max(0, Object.keys(categories).indexOf(interaction.options.getString('category')))
     const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
