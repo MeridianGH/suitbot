@@ -6,13 +6,8 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('kick')
     .setDescription('Kicks a user.')
-    .addMentionableOption(option =>
-      option.setName('user')
-        .setDescription('The user to kick.')
-        .setRequired(true))
-    .addStringOption(option =>
-      option.setName('reason')
-        .setDescription('The reason for the kick.')),
+    .addMentionableOption(option => option.setName('user').setDescription('The user to kick.').setRequired(true))
+    .addStringOption(option => option.setName('reason').setDescription('The reason for the kick.')),
   async execute (interaction) {
     const member = interaction.options.getMentionable('user')
     const reason = interaction.options.getString('reason')

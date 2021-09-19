@@ -6,10 +6,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('play')
     .setDescription('Searches and plays a song or playlist from YouTube or Spotify.')
-    .addStringOption(option =>
-      option.setName('query')
-        .setDescription('The query to search for.')
-        .setRequired(true)),
+    .addStringOption(option => option.setName('query').setDescription('The query to search for.').setRequired(true)),
   async execute (interaction) {
     const channel = interaction.member.voice.channel
     if (!channel) { return interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }

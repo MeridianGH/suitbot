@@ -6,10 +6,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('purge')
     .setDescription('Clears a specified amount of messages.')
-    .addIntegerOption(option =>
-      option.setName('amount')
-        .setDescription('The amount of messages to clear.')
-        .setRequired(true)),
+    .addIntegerOption(option => option.setName('amount').setDescription('The amount of messages to clear.').setRequired(true)),
   async execute (interaction) {
     let amount = interaction.options.getInteger('amount')
     amount = amount.toString()

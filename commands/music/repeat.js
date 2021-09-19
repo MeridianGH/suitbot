@@ -5,13 +5,10 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('repeat')
     .setDescription('Sets the current repeat mode.')
-    .addStringOption(option =>
-      option.setName('mode')
-        .setDescription('The query to search for.')
-        .setRequired(true)
-        .addChoice('None', 'none')
-        .addChoice('Song', 'song')
-        .addChoice('Queue', 'queue')),
+    .addStringOption(option => option.setName('mode').setDescription('The query to search for.').setRequired(true)
+      .addChoice('None', 'none')
+      .addChoice('Song', 'song')
+      .addChoice('Queue', 'queue')),
   async execute (interaction) {
     const mode = interaction.options.getString('mode')
     const queue = interaction.client.player.getQueue(interaction.guild.id)

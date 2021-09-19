@@ -6,10 +6,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('userinfo')
     .setDescription('Shows info about a user.')
-    .addMentionableOption(option =>
-      option.setName('user')
-        .setDescription('The user to get info from.')
-        .setRequired(true)),
+    .addMentionableOption(option => option.setName('user').setDescription('The user to get info from.').setRequired(true)),
   async execute (interaction) {
     const member = interaction.options.getMentionable('user')
     if (!(member instanceof GuildMember)) {

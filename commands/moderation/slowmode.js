@@ -6,9 +6,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('slowmode')
     .setDescription('Sets the rate limit of the current channel.')
-    .addIntegerOption(option =>
-      option.setName('seconds')
-        .setDescription('The new rate limit in seconds.')),
+    .addIntegerOption(option => option.setName('seconds').setDescription('The new rate limit in seconds.')),
   async execute (interaction) {
     const seconds = interaction.options.getInteger('seconds')
 

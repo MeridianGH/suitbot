@@ -6,14 +6,8 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('move')
     .setDescription('Moves the mentioned user to the specified channel.')
-    .addMentionableOption(option =>
-      option.setName('user')
-        .setDescription('The user to move.')
-        .setRequired(true))
-    .addChannelOption(option =>
-      option.setName('channel')
-        .setDescription('The channel to move to.')
-        .setRequired(true)),
+    .addMentionableOption(option => option.setName('user').setDescription('The user to move.').setRequired(true))
+    .addChannelOption(option => option.setName('channel').setDescription('The channel to move to.').setRequired(true)),
   async execute (interaction) {
     const member = interaction.options.getMentionable('user')
     const channel = interaction.options.getChannel('channel')

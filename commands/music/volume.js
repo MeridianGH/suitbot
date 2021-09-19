@@ -5,10 +5,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('volume')
     .setDescription('Sets the volume of the music player.')
-    .addIntegerOption(option =>
-      option.setName('volume')
-        .setDescription('The volume to set the player to.')
-        .setRequired(true)),
+    .addIntegerOption(option => option.setName('volume').setDescription('The volume to set the player to.').setRequired(true)),
   async execute (interaction) {
     const volume = interaction.options.getInteger('volume')
     const queue = interaction.client.player.getQueue(interaction.guild.id)

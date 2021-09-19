@@ -6,14 +6,10 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('help')
     .setDescription('Replies with help on how to use this bot.')
-    .addStringOption(option =>
-      option.setName('category')
-        .setDescription('The category to display first.')
-        .addChoices([
-          ['General', 'general'],
-          ['Moderation', 'moderation'],
-          ['Music', 'music']
-        ])),
+    .addStringOption(option => option.setName('category').setDescription('The category to display first.')
+      .addChoice('General', 'general')
+      .addChoice('Moderation', 'moderation')
+      .addChoice('Music', 'music')),
   async execute (interaction) {
     const folders = fs.readdirSync('./commands/').filter(function (file) { return fs.statSync('./commands/' + file).isDirectory() })
     const categories = {}
