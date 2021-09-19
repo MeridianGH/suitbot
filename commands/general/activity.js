@@ -7,7 +7,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('activity')
     .setDescription('Creates a Discord activity.')
-    .addStringOption(option => option.setName('activity').setDescription('The activity to create').setRequired(true)
+    .addStringOption(option => option.setName('activity').setDescription('The activity to create.').setRequired(true)
       .addChoice('YouTube Together', '755600276941176913')
       .addChoice('Poker Night', '755827207812677713')
       .addChoice('Betrayal.io', '773336526917861400')
