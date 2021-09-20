@@ -7,9 +7,10 @@ module.exports = {
     .setName('help')
     .setDescription('Replies with help on how to use this bot.')
     .addStringOption(option => option.setName('category').setDescription('The category to display first.')
-      .addChoice('General', 'general')
-      .addChoice('Moderation', 'moderation')
-      .addChoice('Music', 'music')),
+      .addChoice('General', '1')
+      .addChoice('Music', '2')
+      .addChoice('Moderation', '3')
+      .addChoice('Feedback', '4')),
   async execute (interaction) {
     const folders = fs.readdirSync('./commands/').filter(function (file) { return fs.statSync('./commands/' + file).isDirectory() })
     const categories = {}
@@ -33,7 +34,7 @@ module.exports = {
 
       const embed = new MessageEmbed()
         .setAuthor('Help', interaction.member.user.displayAvatarURL())
-        .setTitle(category[0].toUpperCase() + category.substring(1) + '.')
+        .setTitle(category)
         .setDescription(description)
         .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length}`, interaction.client.user.displayAvatarURL())
       pages.push(embed)
@@ -48,7 +49,7 @@ module.exports = {
       .setLabel('Next')
       .setStyle('PRIMARY')
 
-    let currentIndex = Math.max(0, Object.keys(categories).indexOf(interaction.options.getString('category')))
+    let currentIndex = Number(interaction.options.getString('category')) || 0
     const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)

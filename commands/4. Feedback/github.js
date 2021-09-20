@@ -4,7 +4,7 @@ const { MessageEmbed } = require('discord.js')
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('github')
-    .setDescription('Sends a link to the repo of this bot.'),
+    .setDescription('Sends a link to the source code of this bot.'),
   async execute (interaction) {
     const embed = new MessageEmbed()
       .setAuthor('GitHub', interaction.member.user.displayAvatarURL())
