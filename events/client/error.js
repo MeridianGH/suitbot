@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'uncaughtException',
+  name: 'error',
   execute (error) {
     console.log('Ignoring uncaught exception:\n' + error)
   }
