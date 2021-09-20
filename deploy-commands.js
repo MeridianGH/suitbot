@@ -1,4 +1,4 @@
-const { REST } = require('@discordjs/rest')
+const discordRest = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v9')
 const { getFilesRecursively } = require('./utilities')
 
@@ -13,17 +13,8 @@ for (const file of getFilesRecursively('./commands')) {
   commands.push(command.data.toJSON())
 }
 
-const rest = new REST({ version: '9' }).setToken(token);
+const rest = new discordRest.REST({ version: '9' }).setToken(token);
 
-(async () => {
-  try {
-    await rest.put(
-      Routes.applicationGuildCommands(appId, guildId),
-      { body: commands }
-    )
-
-    console.log('Successfully registered application commands.')
-  } catch (error) {
-    console.error(error)
-  }
-})()
+rest.put(Routes.applicationGuildCommands(appId, guildId), { body: commands })
+  .then(() => console.log('Successfully registered application commands.'))
+  .catch(error => console.log(error))

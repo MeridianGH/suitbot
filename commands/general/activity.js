@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { simpleEmbed } = require('../../utilities')
-const { REST } = require('@discordjs/rest')
+const discordRest = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v9')
 
 module.exports = {
@@ -20,22 +20,10 @@ module.exports = {
       return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true))
     }
 
-    const rest = new REST({ version: '8' }).setToken(interaction.client.token)
+    const rest = new discordRest.REST({ version: '9' }).setToken(interaction.client.token)
 
-    await (async () => {
-      try {
-        await rest.post(
-          Routes.channelInvites(channel.id),
-          {
-            body: {
-              target_application_id: interaction.options.getString('activity'),
-              target_type: 2
-            }
-          }
-        ).then(response => interaction.reply(simpleEmbed(`[Click here to open Activity](https://discord.gg/${response.code})`)))
-      } catch (error) {
-        console.error(error)
-      }
-    })()
+    await rest.post(Routes.channelInvites(channel.id), { body: { target_application_id: interaction.options.getString('activity'), target_type: 2 } })
+      .then(response => interaction.reply(simpleEmbed(`[Click here to open Activity](https://discord.gg/${response.code})`)))
+      .catch(error => console.log(error))
   }
 }
