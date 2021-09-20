@@ -13,7 +13,7 @@ for (const file of getFilesRecursively('./commands')) {
   commands.push(command.data.toJSON())
 }
 
-const rest = new discordRest.REST({ version: '9' }).setToken(token);
+const rest = new discordRest.REST({ version: '9' }).setToken(token)
 
 rest.put(Routes.applicationGuildCommands(appId, guildId), { body: commands })
   .then(() => console.log('Successfully registered application commands.'))
