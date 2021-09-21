@@ -17,8 +17,8 @@ module.exports = {
     await interaction.deferReply()
 
     const query = interaction.options.getString('query')
-    if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/[\w\d]+$/i) ||
-      query.match(/^(?!.*\?.*\bv=)https:\/\/www\.youtube\.com\/.*\?.*\blist=.*$/i)) {
+    if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/.+$/i) ||
+      query.match(/^https?:\/\/(?:www\.)?youtube\.com\/playlist\?list=.+$/i)) {
       await this._playPlaylist(interaction)
     } else {
       await this._playSong(interaction)
