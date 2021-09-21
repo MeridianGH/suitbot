@@ -10,7 +10,7 @@ module.exports = {
     const track = interaction.options.getInteger('track')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-    queue.remove(track)
-    await interaction.reply(simpleEmbed(`🗑️ Removed track \`${track}.\` ${queue.songs[track].name}.`))
+    const song = queue.remove(track)
+    await interaction.reply(simpleEmbed(`🗑️ Removed track \`${track}.\`: **${song.name}**`))
   }
 }
