@@ -1,0 +1,31 @@
+<%- include("partials/header", { bot, user, path, title: `Queue | ${guild.name}` }) %>
+
+<div class="container-sm center" style="margin-top: 30px;">
+  <div>
+    <h1><%= guild.name %></h1>
+    <hr>
+    <% if(queue) { %>
+      <table>
+          <tr>
+              <th>Position</th>
+              <th>Song</th>
+              <th>Author</th>
+              <th>Duration</th>
+          </tr>
+          <% for (var i = 0; i < queue.songs.length; i++) { %>
+              <tr>
+                  <td><%= i %></td>
+                  <td><%= queue.songs[i].name %></td>
+                  <td><%= queue.songs[i].author %></td>
+                  <td><%= queue.songs[i].duration %></td>
+              </tr>
+
+          <% }; %>
+      </table>
+    <% } else { %>
+      <div>Nothing currently playing!</div>
+    <% } %>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

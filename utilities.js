@@ -4,7 +4,7 @@ const path = require('path')
 
 module.exports = {
   simpleEmbed: function (content, ephemeral = false) {
-    return { embeds: [new MessageEmbed().setDescription(content).setFooter('SuitBot', require('./events/client/ready').iconURl)], ephemeral: ephemeral }
+    return { embeds: [new MessageEmbed().setDescription(content).setFooter('SuitBot', require('./events/client/ready').iconURL)], ephemeral: ephemeral }
   },
   msToHMS: function msToHMS (ms) {
     let totalSeconds = (ms / 1000)

@@ -1,0 +1,28 @@
+<%- include("partials/header", { bot, user, path, title: "Select server" }) %>
+<div class="card col-sm-10 offset-sm-1" style="background-color: #323232;">
+  <header class="card-header" style="background-color: #121212;">
+    <div style="color: #ffffff;">Your Servers</div>
+    <div class="card-header-actions"></div>
+  </header>
+  <div class="card-body">
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+      <% user.guilds.forEach(guild => {
+        if(!bot.guilds.cache.get(guild.id)) { return }
+      %>
+        <div class="card <%= bot.player.getQueue(guild.id) ? 'border border-success border-3' : 'border-0' %>" style="max-width: 18rem; margin: 2rem; min-width: 10em;">
+          <%- guild.icon ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}" class="card-img-top" style="max-width: 18rem;">` : "" %>
+          <div class="card-body">
+            <a href="/dashboard/<%- guild.id %>" class="stretched-link"></a>
+            <h5 class="card-title" style="color: #000000;"><%= guild.name %></h5>
+            <p class="card-text" style="color: #000000;"><%- bot.player.getQueue(guild.id) ? `Now Playing:<br>${bot.player.getQueue(guild.id).nowPlaying.name}` : 'Nothing playing on this server.' %></p>
+          </div>
+        </div>
+      <%
+        });
+      %>
+    </div>
+  </div>
+</div>
+
+
+<%- include("partials/footer") %>
