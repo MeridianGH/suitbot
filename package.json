@@ -14,17 +14,18 @@
   "dependencies": {
     "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
+    "body-parser": "^1.19.0",
     "discord-api-types": "^0.23.1",
     "discord-music-player": "^8.0.2",
     "discord.js": "^13.1.0",
     "ejs": "^3.1.6",
     "ejs-lint": "^1.2.1",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "memorystore": "^1.6.6",
     "node-fetch": "^3.0.0",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
-    "standard": "*",
-    "express-session": "^1.17.2"
+    "standard": "*"
   }
 }

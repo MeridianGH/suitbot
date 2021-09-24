@@ -5,33 +5,36 @@
     <title><%= title %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
-    <script src="https://kit.fontawesome.com/48dbe0ef45.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/876e2bf8d0.js" crossorigin="anonymous"></script> -->
+    <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
 </head>
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark" style="background-color: #121212;">
+<link rel="icon" href="<%= bot.user.displayAvatarURL() %>">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
   <div class="container-fluid">
-    <img src=<%= bot.user.displayAvatarURL() %> alt="Logo" width="30">
-    <a class="navbar-brand" href="/" style="padding-left:10px ;">SuitBot</a>
+    <img src="<%= bot.user.displayAvatarURL() %>" style="border-radius: 50%; height: 30px;">
+    <a class="navbar-brand" href="/" style="padding-left:10px;">SuitBot</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="fas fa-list"></i> Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a></li>
         <li class="nav-item"><a class="nav-link" href="https://discord.gg/qX2CBrrUpf"><i class="fab fa-discord"></i> Discord</a></li>
         <li class="nav-item"><a class="nav-link" href="https://github.com/MeridianGH/suitbot"><i class="fab fa-github"></i> GitHub</a></li>
-        <li class="nav-item"><a class="nav-link" href="https://discordapp.com/oauth2/authorize?client_id=${bot.user.id}&scope=bot&guild_id=${guild.id}&response_type=code&redirect_uri=localhost:80/callback"><i class="fas fa-plus-square"></i> Invite</a></li>
+        <li class="nav-item"><a class="nav-link" href="<%= `https://discordapp.com/oauth2/authorize?client_id=${bot.user.id}&scope=bot%20applications.commands&permissions=2167425024&response_type=code&redirect_uri=http://localhost:80/callback` %>"><i class="fas fa-plus-square"></i> Invite</a></li>
       </ul>
       <ul class="navbar-nav">
         <% if (user) { %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Logged in as <%= user.username %>#<%= user.discriminator %>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" style="display: flex; align-items: center;">
+              <span style="margin-right: 5px;"><%= user.username %><span style="color: #bbbbbb;">#<%= user.discriminator %></span></span>
+              <img src="<%= `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}` %>" style="border-radius: 50%; height: 30px;">
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-              <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">Logout</a></li>
-            </ul>
+            <div class="dropdown-menu dropdown-menu-end">
+              <a class="dropdown-item" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item" href="/logout"><i class="far fa-sign-out"> Logout</i></a>
+            </div>
           </li>
           </li>
         <% } else { %>

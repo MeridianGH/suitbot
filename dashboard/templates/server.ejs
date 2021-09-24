@@ -1,26 +1,51 @@
 <%- include("partials/header", { bot, user, path, title: `Queue | ${guild.name}` }) %>
-
-<div class="container-sm center" style="margin-top: 30px;">
-  <div>
-    <h1><%= guild.name %></h1>
-    <hr>
-    <% if(queue) { %>
-      <table>
+<script type="text/javascript">
+  const evtSource = new EventSource('/update')
+  evtSource.onmessage = function () { window.location.href = '' }
+  // window.onbeforeunload = function() { evtSource.close() }
+</script>
+<div class="card col-sm-10 offset-sm-1">
+  <header class="card-header">
+    <div><i class="fas fa-list"></i> <%= guild.name %></div>
+  </header>
+  <div class="card-body">
+    <% if(queue && queue.nowPlaying) { %>
+      <div style="height: 200px; margin-bottom: 10px;">
+        <ul class="now_playing">
+          <li><img src="<%- queue.nowPlaying.thumbnail %>" style="height: 200px; flex-shrink: 4"></li>
+          <li class="now_playing">
+            <h4><%= queue.nowPlaying.name %></h4>
+            <h6><%= queue.nowPlaying.author %></h6>
+            <h5><%= queue.nowPlaying.duration %></h5>
+            <form method="POST" style="width: 100%; margin: 0;">
+                <button type="submit" class="music-btn" id="pause" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
+                <button type="submit" class="music-btn" name="action" value="skip"><i class="fas fa-forward"></i></button>
+                <button type="submit" class="music-btn" name="action" value="shuffle"><i class="fas fa-random"></i></button>
+                <button type="submit" class="music-btn" id="repeat" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <form method="POST" style="">
+        <button type="submit" class="music-btn" name="action" value="play"><i class="fas fa-plus"></i></button>
+        <input type="text" class="music-form" name="query" placeholder="Add to queue">
+      </form>
+      <table style="border-spacing: 20px; border-collapse: separate;">
+        <tr>
+          <th>Position</th>
+          <th>Song</th>
+          <th>Author</th>
+          <th>Duration</th>
+        </tr>
+        <% for (var i = 1; i < queue.songs.length; i++) { %>
           <tr>
-              <th>Position</th>
-              <th>Song</th>
-              <th>Author</th>
-              <th>Duration</th>
+            <td><%= i %></td>
+            <td><%= queue.songs[i].name %></td>
+            <td><%= queue.songs[i].author %></td>
+            <td><%= queue.songs[i].duration %></td>
+            <td><%- '<button type="submit" class="music-btn" style="float: right; margin-left: 5px;" name="action" value="remove"><i class="fas fa-trash-alt"></i></button>' %>
           </tr>
-          <% for (var i = 0; i < queue.songs.length; i++) { %>
-              <tr>
-                  <td><%= i %></td>
-                  <td><%= queue.songs[i].name %></td>
-                  <td><%= queue.songs[i].author %></td>
-                  <td><%= queue.songs[i].duration %></td>
-              </tr>
-
-          <% }; %>
+        <% }; %>
       </table>
     <% } else { %>
       <div>Nothing currently playing!</div>

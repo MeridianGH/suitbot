@@ -1,5 +1,67 @@
 body {
     font-size: 1em !important;
     color: #ffffff;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto Light', sans-serif;
+}
+
+.navbar-dark, .navbar-expand-lg .navbar-nav .dropdown-menu {
+    border: 0;
+    background-color: #333333;
+}
+.navbar-dark .navbar-nav .nav-link, .navbar-dark .navbar-brand, .dropdown-item, .dropdown-divider {
+    opacity: 1;
+    color: #ffffff;
+}
+.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-brand:hover, .dropdown-item:hover {
+    background-color: #333333;
+     color: #bbbbbb;
+ }
+
+.card {
+    background-color: #333333;
+}
+.card-header {
+    background-color: #121212;
+    color: #ffffff;
+}
+.card-img-top {
+    border-radius: 0;
+}
+
+.music-btn {
+    font-size: 30px;
+    padding: 0;
+    margin-right: 20px;
+    border: 0;
+    background: inherit;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+}
+
+.music-form {
+    display: inline;
+    width: 150px;
+    height: 30px;
+    padding: 5px;
+    border: 2px solid white;
+    border-radius: 5px;
+    background: inherit;
+    outline: none;
+    color: #ffffff;
+}
+
+ul.now_playing {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+li.now_playing {
+    display: inline-block;
+    flex-grow: 4;
+    margin: 20px;
 }
