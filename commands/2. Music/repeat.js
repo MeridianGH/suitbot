@@ -5,31 +5,15 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('repeat')
     .setDescription('Sets the current repeat mode.')
-    .addStringOption(option => option.setName('mode').setDescription('The query to search for.').setRequired(true)
-      .addChoice('None', 'none')
-      .addChoice('Song', 'song')
-      .addChoice('Queue', 'queue')),
+    .addIntegerOption(option => option.setName('mode').setDescription('The query to search for.').setRequired(true)
+      .addChoice('None', 0)
+      .addChoice('Song', 1)
+      .addChoice('Queue', 2)),
   async execute (interaction) {
-    const mode = interaction.options.getString('mode')
+    const mode = interaction.options.getInteger('mode')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-
-    let reply = 'Set repeat mode to '
-    switch (mode) {
-      case 'none':
-        queue.setRepeatMode(0)
-        reply = reply + '`None` ▶'
-        break
-      case 'song':
-        queue.setRepeatMode(1)
-        reply = reply + '`Song` 🔂'
-        break
-      case 'queue':
-        queue.setRepeatMode(2)
-        reply = reply + '`Queue` 🔁'
-        break
-    }
-
-    await interaction.reply(simpleEmbed(reply))
+    queue.setRepeatMode(mode)
+    await interaction.reply(simpleEmbed(`Set repeat mode to ${mode === 0 ? 'None ▶' : mode === 1 ? 'Song 🔂' : 'Queue 🔁'}`))
   }
 }
