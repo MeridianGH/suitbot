@@ -10,8 +10,8 @@ const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
 
-const clientId = process.env.token ? process.env.token : require('../config.json').appId
-const clientSecret = process.env.token ? process.env.token : require('../config.json').clientSecret
+const clientId = process.env.clientId ? process.env.clientId : require('../config.json').appId
+const clientSecret = process.env.clientSecret ? process.env.clientSecret : require('../config.json').clientSecret
 
 module.exports = async (client) => {
   // We declare absolute paths.
@@ -23,7 +23,7 @@ module.exports = async (client) => {
   passport.deserializeUser((obj, done) => done(null, obj))
 
   const port = process.env.PORT || 3000
-  const domain = `https://suitbotxyz.herokuapp.com:${port}`
+  const domain = `https://suitbotxyz.herokuapp.com`
   const callbackUrl = `${domain}/callback`
 
   passport.use(
