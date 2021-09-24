@@ -82,7 +82,7 @@ module.exports = {
         .setTitle(playlist.name)
         .setURL(playlist.url)
         .setThumbnail(playlist.songs[0].thumbnail)
-        .addField('Author', typeof playlist.author === 'string' ? playlist.author : playlist.author.name, true)
+        .addField('Author', playlist.author.name || playlist.author, true)
         .addField('Amount', `${playlist.songs.length} songs`, true)
         .addField('Position', `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, true)
         .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
