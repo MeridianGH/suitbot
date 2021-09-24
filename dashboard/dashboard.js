@@ -79,7 +79,7 @@ module.exports = async (client) => {
 
   const checkAuth = (req, res, next) => {
     // If authenticated we forward the request further in the route.
-    if (req.isAuthenticated()) return next()
+    if (req.isAuthenticated()) { return next() }
     // If not authenticated, we set the url the user is redirected to into the memory.
     req.session.backURL = req.url
     // We redirect user to login endpoint/route.
@@ -97,7 +97,7 @@ module.exports = async (client) => {
     sse = res
   })
   client.player.on('songChanged', () => {
-    sse.write('data: refresh\n\n')
+    if (sse) { sse.write('data: refresh\n\n') }
   })
 
   // Login endpoint.
@@ -161,56 +161,67 @@ module.exports = async (client) => {
 
   // Server endpoint.
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
-    // We validate the request, check if guild exists, member is in guild and if member has minimum permissions, if not, we redirect it back.
     const guild = client.guilds.cache.get(req.params.guildID)
-    if (!guild) return res.redirect('/dashboard')
+    if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
-    if (!member) return res.redirect('/dashboard')
+    if (!member) { return res.redirect('/dashboard') }
     const queue = client.player.getQueue(guild.id)
-    // TODO: Check if member is in the same voice channel
 
-    renderTemplate(req, res, 'server.ejs', { guild, queue })
+    renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null })
   })
 
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
-    // We validate the request, check if guild exists, member is in guild and if member has minimum permissions, if not, we redirect it back.
     const guild = client.guilds.cache.get(req.params.guildID)
-    if (!guild) return res.redirect('/dashboard')
+    if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
-    if (!member) return res.redirect('/dashboard')
+    if (!member) { return res.redirect('/dashboard') }
     const queue = client.player.getQueue(guild.id)
-    // TODO: Check if member is in the same voice channel
+    if (!(member.voice.channel === queue.connection.channel)) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'You need to be in the same voice channel as the bot to use this!', type: 'danger' }) }
 
+    let alert = null
     const query = req.body.query
+    const index = req.body.index
     switch (req.body.action) {
       case 'pause':
         queue.setPaused(queue.connection.paused !== true)
-        // queue.lastTextChannel.send(simpleEmbed(queue.connection.paused === true ? '⏸ Paused.' : '▶ Resumed.', false, 'SuitBot Webinterface'))
+        alert = queue.connection.paused === true ? '⏸ Paused.' : '▶ Resumed.'
         break
       case 'skip':
         queue.skip()
-        // queue.lastTextChannel.send(simpleEmbed('⏭ Skipped.', false, 'SuitBot Webinterface'))
+        alert = '⏭ Skipped.'
         await sleep(1)
         break
       case 'shuffle':
         queue.shuffle()
-        // queue.lastTextChannel.send(simpleEmbed('🔀 Shuffled the queue.', false, 'SuitBot Webinterface'))
+        alert = '🔀 Shuffled the queue.'
         break
       case 'repeat':
         queue.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1)
-        // queue.lastTextChannel.send(simpleEmbed(`Set repeat mode to ${mode === 0 ? 'None ▶' : mode === 1 ? 'Song 🔂' : 'Queue 🔁'}`, false, 'SuitBot Webinterface'))
+        alert = `Set repeat mode to ${queue.repeatMode === 0 ? 'None ▶' : queue.repeatMode === 1 ? 'Song 🔂' : 'Queue 🔁'}`
         break
-      // TODO: "Remove" endpoint
+      case 'clear':
+        queue.clearQueue()
+        alert = '🗑️ Cleared the queue.'
+        break
+      case 'remove':
+        alert = `🗑️ Removed track #${index}: "${queue.remove(index).name}".`
+        break
+      case 'skipto':
+        queue.songs = queue.songs.slice(index - 1)
+        alert = `⏭ Skipped to #${index}: "${queue.skip().name}".`
+        break
       case 'play':
         if (!query) { return }
         if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/.+$/i) ||
           query.match(/^https?:\/\/(?:www\.)?youtube\.com\/playlist\?list=.+$/i)) {
-          const playlist = await queue.playlist(query).catch(error => { console.log(error) })
-          if (!playlist) { return }
+          const playlist = await queue.playlist(query)
+          if (!playlist) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error when adding that playlist!', type: 'danger' }) }
           playlist.songs.forEach(song => {
             song.requestedBy = member.displayName
           })
+
+          alert = `Added playlist "${playlist.name}" by ${playlist.author.name || playlist.author} to the queue!`
 
           queue.lastTextChannel.send({
             embeds: [new MessageEmbed()
@@ -218,16 +229,18 @@ module.exports = async (client) => {
               .setTitle(playlist.name)
               .setURL(playlist.url)
               .setThumbnail(playlist.songs[0].thumbnail)
-              .addField('Author', typeof playlist.author === 'string' ? playlist.author : playlist.author.name, true)
+              .addField('Author', playlist.author.name || playlist.author, true)
               .addField('Amount', `${playlist.songs.length} songs`, true)
               .addField('Position', `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, true)
-              .setFooter('SuitBot', client.user.displayAvatarURL())
+              .setFooter('SuitBot Web Interface', client.user.displayAvatarURL())
             ]
           })
         } else {
-          const song = await queue.play(query).catch(error => { console.log(error) })
-          if (!song) { return }
+          const song = await queue.play(query)
+          if (!song) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error when adding that song!', type: 'danger' }) }
           song.requestedBy = member.displayName
+
+          alert = `Added "${song.name}" to the queue!`
 
           queue.lastTextChannel.send({
             embeds: [new MessageEmbed()
@@ -238,17 +251,19 @@ module.exports = async (client) => {
               .addField('Channel', song.author, true)
               .addField('Duration', song.duration, true)
               .addField('Position', queue.songs.indexOf(song).toString(), true)
-              .setFooter('SuitBot Webinterface', client.user.displayAvatarURL())
+              .setFooter('SuitBot Web Interface', client.user.displayAvatarURL())
             ]
           })
         }
         break
     }
 
-    renderTemplate(req, res, 'server.ejs', { guild, queue })
+    renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
   })
 
   app.listen(port, null, null, () =>
     console.log(`Dashboard is up and running on port ${port}.`)
   )
 }
+
+// Copyright Notice: Most of the code in this folder (/dashboard) is heavily based on MrAugu's "simple-discordjs-dashboard" (https://github.com/MrAugu/simple-discordjs-dashboard).

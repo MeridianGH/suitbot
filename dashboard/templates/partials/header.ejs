@@ -5,14 +5,17 @@
     <title><%= title %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <!-- <script src="https://kit.fontawesome.com/876e2bf8d0.js" crossorigin="anonymous"></script> -->
     <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
 </head>
 <link rel="icon" href="<%= bot.user.displayAvatarURL() %>">
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
   <div class="container-fluid">
-    <img src="<%= bot.user.displayAvatarURL() %>" style="border-radius: 50%; height: 30px;">
-    <a class="navbar-brand" href="/" style="padding-left:10px;">SuitBot</a>
+    <a class="navbar-brand" href="/"><img src="<%= bot.user.displayAvatarURL() %>" style="border-radius: 50%; height: 30px;"> <span style="font-family: 'Bebas Neue'; height: 30px; display: inline-block; vertical-align: middle;">SuitBot</span></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -38,10 +41,10 @@
           </li>
           </li>
         <% } else { %>
-          <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+          <li class="nav-item"><a href="/login" class="nav-link"><i class="far fa-sign-in"></i> Login</a></li>
         <% } %>
       </ul>
     </div>
   </div>
 </nav>
-<body style="background-color: #212121; padding-top: 100px;">
+<body>

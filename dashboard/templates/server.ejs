@@ -2,18 +2,24 @@
 <script type="text/javascript">
   const evtSource = new EventSource('/update')
   evtSource.onmessage = function () { window.location.href = '' }
-  // window.onbeforeunload = function() { evtSource.close() }
+  window.onload = function () {
+    const alert = document.getElementById('alert')
+    alert.addEventListener('transitioned', () => alert.remove())
+    setTimeout(() => alert.style.opacity = '0', 5000)
+  }
 </script>
 <div class="card col-sm-10 offset-sm-1">
   <header class="card-header">
     <div><i class="fas fa-list"></i> <%= guild.name %></div>
   </header>
   <div class="card-body">
+    <%- alert && type ? `<div class="alert alert-${type}" id="alert" style="color: #000000; opacity: 0.85; position: absolute; width: calc(100% - 2rem); margin: 0; transition: opacity 1s;"><i class="fas fa-info-circle"></i> ${alert}</div>` : '' %>
     <% if(queue && queue.nowPlaying) { %>
+      <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
       <div style="height: 200px; margin-bottom: 10px;">
-        <ul class="now_playing">
-          <li><img src="<%- queue.nowPlaying.thumbnail %>" style="height: 200px; flex-shrink: 4"></li>
-          <li class="now_playing">
+        <ul class="horizontal-list">
+          <li><img src="<%- queue.nowPlaying.thumbnail %>" style="height: 200px; flex-shrink: 4; margin-right: 20px;"></li>
+          <li>
             <h4><%= queue.nowPlaying.name %></h4>
             <h6><%= queue.nowPlaying.author %></h6>
             <h5><%= queue.nowPlaying.duration %></h5>
@@ -26,29 +32,44 @@
           </li>
         </ul>
       </div>
-      <form method="POST" style="">
-        <button type="submit" class="music-btn" name="action" value="play"><i class="fas fa-plus"></i></button>
-        <input type="text" class="music-form" name="query" placeholder="Add to queue">
-      </form>
-      <table style="border-spacing: 20px; border-collapse: separate;">
-        <tr>
-          <th>Position</th>
-          <th>Song</th>
-          <th>Author</th>
-          <th>Duration</th>
-        </tr>
+      <h1 style="font-family: 'Bebas Neue';">Queue</h1>
+      <ul class="horizontal-list" style="margin-bottom: 10px;">
+        <li>
+          <form method="POST" style="margin: 0;">
+            <input type="text" class="music-form" name="query" placeholder="Add to queue">
+            <button type="submit" class="button" name="action" value="play"><i class="fas fa-plus"></i> Play</button>
+          </form>
+        </li>
+        <li style="border-left: 2px solid #ffffff; height: 30px; padding-left: 20px;">
+          <form method="POST" style="margin: 0;">
+            <button type="submit" class="button" name="action" value="clear"><i class="fas fa-trash-alt"></i> Clear queue</button>
+          </form>
+        </li>
+      </ul>
+      <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Song</th>
+            <th>Author</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
         <% for (var i = 1; i < queue.songs.length; i++) { %>
           <tr>
             <td><%= i %></td>
             <td><%= queue.songs[i].name %></td>
             <td><%= queue.songs[i].author %></td>
             <td><%= queue.songs[i].duration %></td>
-            <td><%- '<button type="submit" class="music-btn" style="float: right; margin-left: 5px;" name="action" value="remove"><i class="fas fa-trash-alt"></i></button>' %>
+            <td><form method="POST"><input type="hidden" name="index" value="<%= i %>"><button type="submit" class="music-btn" name="action" value="remove"><i class="fas fa-trash-alt"></i></button><button type="submit" class="music-btn" name="action" value="skipto"><i class="fas fa-forward"></i></button></form></td>
           </tr>
         <% }; %>
+        </tbody>
       </table>
     <% } else { %>
-      <div>Nothing currently playing!</div>
+      <div>Nothing currently playing!<br>Join a voice channel and type "/play" to get started!</div>
     <% } %>
   </div>
 </div>

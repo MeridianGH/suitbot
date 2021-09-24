@@ -1,67 +1,117 @@
-body {
-    font-size: 1em !important;
-    color: #ffffff;
-    font-family: 'Roboto Light', sans-serif;
+:root {
+    --background: #212529;
+    --background-light: #373b3e;
+    --background-lighter: #44494d;
+    --text-color: #ffffff;
+    --text-hover: #bbbbbb;
+    --button-color: #373b3e;
+    --button-hover: #212529;
 }
 
-.navbar-dark, .navbar-expand-lg .navbar-nav .dropdown-menu {
+body {
+    color: var(--text-color);
+    background-color: var(--background);
+    background-image: url("header.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    padding-top: 60px;
+    font-size: 1em !important;
+    font-family: 'Roboto', sans-serif;
+}
+
+.navbar-dark, .navbar-expand-lg .navbar-nav {
     border: 0;
-    background-color: #333333;
+    background-color: var(--background-light);
+    text-align: center;
 }
-.navbar-dark .navbar-nav .nav-link, .navbar-dark .navbar-brand, .dropdown-item, .dropdown-divider {
-    opacity: 1;
-    color: #ffffff;
+.navbar-dark .navbar-nav .nav-link, .navbar-dark .navbar-brand {
+    color: var(--text-color);
 }
-.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-brand:hover, .dropdown-item:hover {
-    background-color: #333333;
-     color: #bbbbbb;
- }
+.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-brand:hover {
+    color: var(--text-hover);
+}
+.dropdown-menu, .dropdown-item {
+    color: var(--text-color);
+    background-color: var(--background-light);
+}
+.dropdown-menu {
+    border: 2px solid var(--background-lighter);
+}
+.dropdown-item:hover {
+    color: var(--text-hover);
+    background-color: var(--background-light);
+}
 
 .card {
-    background-color: #333333;
+    background-color: var(--background-lighter);
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 .card-header {
-    background-color: #121212;
-    color: #ffffff;
+    background-color: var(--background-light);
+    color: var(--text-color);
 }
 .card-img-top {
     border-radius: 0;
 }
 
 .music-btn {
-    font-size: 30px;
+    color: var(--text-color);
+    background: inherit;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
     padding: 0;
     margin-right: 20px;
     border: 0;
-    background: inherit;
     outline: none;
-    width: 30px;
+    vertical-align: bottom;
+}
+.music-btn:hover {
+    color: var(--text-hover);
+}
+
+.button {
+    color: var(--text-color);
+    background-color: var(--button-color);
     height: 30px;
-    color: #ffffff;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-right: 20px;
+    border: 2px solid var(--button-color);
+    border-radius: 5px;
+    outline: none;
+    vertical-align: bottom;
+    text-align: center;
+}
+.button:hover {
+    background-color: var(--button-hover);
+    border-color: var(--button-hover);
 }
 
 .music-form {
-    display: inline;
+    color: var(--text-color);
+    background: var(--button-color);
     width: 150px;
     height: 30px;
     padding: 5px;
-    border: 2px solid white;
+    border: 2px solid var(--button-color);
     border-radius: 5px;
-    background: inherit;
     outline: none;
-    color: #ffffff;
 }
 
-ul.now_playing {
+ul.horizontal-list {
+    padding: 0;
+    margin: 0;
     list-style: none;
     display: flex;
     align-items: center;
-    padding: 0;
-    margin: 0;
+}
+ul.horizontal-list li {
+    display: inline-block;
 }
 
-li.now_playing {
-    display: inline-block;
-    flex-grow: 4;
-    margin: 20px;
+.table > :not(caption) > * > * {
+    color: var(--text-color);
+    background-color: var(--background-light);
 }

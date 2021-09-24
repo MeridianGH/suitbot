@@ -13,7 +13,7 @@
           <div class="card-body">
             <%- bot.player.getQueue(guild.id) ? `<a href="/dashboard/${guild.id}" class="stretched-link"></a>` : '' %>
             <h5 class="card-title" style="color: #000000;"><%= guild.name %></h5>
-            <p class="card-text" style="color: #000000;"><%- bot.player.getQueue(guild.id) ? `Now Playing:<br>${bot.player.getQueue(guild.id).nowPlaying.name}` : 'Nothing playing on this server.' %></p>
+            <p class="card-text" style="color: #000000;"><%- bot.player.getQueue(guild.id) && bot.player.getQueue(guild.id).nowPlaying ? `Now Playing:<br>${bot.player.getQueue(guild.id).nowPlaying.name}` : 'Nothing playing on this server.' %></p>
           </div>
         </div>
       <%
