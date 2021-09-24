@@ -23,7 +23,7 @@ module.exports = async (client) => {
   passport.deserializeUser((obj, done) => done(null, obj))
 
   const port = 3000
-  const domain = `https://localhost:${port}`
+  const domain = `https://suitbotxyz.herokuapp.com:${port}`
   const callbackUrl = `${domain}/callback`
 
   passport.use(
