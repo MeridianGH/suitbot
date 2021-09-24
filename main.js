@@ -30,11 +30,13 @@ for (const file of clientEventFiles) {
     client.on(event.name, (...args) => event.execute(...args))
   }
 }
-
 for (const file of playerEventFiles) {
   const event = require(`./events/player/${file}`)
   client.player.on(event.name, (...args) => event.execute(...args))
 }
+process.on('uncaughtException', error => {
+  console.log('Ignoring uncaught exception: ' + error)
+})
 
 // Login
 client.login(token)
