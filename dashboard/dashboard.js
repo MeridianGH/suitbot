@@ -10,7 +10,7 @@ const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
 
-const clientId = process.env.clientId ? process.env.clientId : require('../config.json').appId
+const clientId = process.env.clientId ? process.env.appId : require('../config.json').appId
 const clientSecret = process.env.clientSecret ? process.env.clientSecret : require('../config.json').clientSecret
 
 module.exports = async (client) => {
