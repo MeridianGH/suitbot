@@ -22,8 +22,8 @@ module.exports = async (client) => {
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((obj, done) => done(null, obj))
 
-  const port = 80
-  const domain = `http://localhost:${port}`
+  const port = 3000
+  const domain = `https://localhost:${port}`
   const callbackUrl = `${domain}/callback`
 
   passport.use(
