@@ -95,7 +95,7 @@ module.exports = async (client) => {
       Connection: 'keep-alive'
     })
     sse = res
-    setTimeout(() => sse.write('data: null\n\n'), 55000)
+    setTimeout(() => sse.write('data: null\n\n'), 15000)
   })
   client.player.on('songChanged', () => {
     if (sse) { sse.write('data: refresh\n\n') }

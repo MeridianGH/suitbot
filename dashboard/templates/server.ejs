@@ -2,7 +2,7 @@
 <script type="text/javascript">
   const evtSource = new EventSource('/update')
   evtSource.onmessage = function (content) {
-    if (content) { window.location.href = '' }
+    if (content.data === 'refresh') { window.location.href = '' }
   }
   window.onload = function () {
     const alert = document.getElementById('alert')
