@@ -94,6 +94,7 @@ module.exports = async (client) => {
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive'
     })
+    req.socket.setTimeout(0x7FFFFFFF)
     sse = res
     setTimeout(() => sse.write('data: null\n\n'), 15000)
   })
@@ -167,6 +168,7 @@ module.exports = async (client) => {
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
     const queue = client.player.getQueue(guild.id)
+
 
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null })
   })
