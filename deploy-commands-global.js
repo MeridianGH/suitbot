@@ -2,8 +2,8 @@ const discordRest = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v9')
 const { getFilesRecursively } = require('./utilities')
 
-const token = process.env.token ? process.env.token : require('./config.json').token
-const appId = process.env.appId ? process.env.appId : require('./config.json').appId
+const token = process.env.token || require('./config.json').token
+const appId = process.env.appId || require('./config.json').appId
 
 const commands = []
 

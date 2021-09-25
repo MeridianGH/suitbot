@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { simpleEmbed } = require('../../utilities')
 const { MessageEmbed } = require('discord.js')
-const guildId = process.env.guildId ? process.env.guildId : require('../../config.json').guildId
+const guildId = process.env.guildId || require('../../config.json').guildId
 
 module.exports = {
   data: new SlashCommandBuilder()

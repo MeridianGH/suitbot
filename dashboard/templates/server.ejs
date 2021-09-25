@@ -4,8 +4,10 @@
   evtSource.onmessage = function () { window.location.href = '' }
   window.onload = function () {
     const alert = document.getElementById('alert')
-    alert.addEventListener('transitioned', () => alert.remove())
-    setTimeout(() => alert.style.opacity = '0', 5000)
+    if (alert) {
+      alert.addEventListener('transitioned', () => alert.remove())
+      setTimeout(() => alert.style.opacity = '0', 5000)
+    }
   }
 </script>
 <div class="card col-sm-10 offset-sm-1">
