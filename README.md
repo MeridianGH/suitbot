@@ -8,7 +8,7 @@
 
 # SuitBot
 
-> A lightweight music and general purpose bot, that uses slash commands and buttons to be as user-friendly as possible!
+> A lightweight music and general purpose bot with dashboard, that uses slash commands and buttons to be as user-friendly as possible!
 
 It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https://discord-music-player.js.org/) for its main features.
 
@@ -19,6 +19,7 @@ I'm currently hosting the bot myself, and it is publicly available with this inv
 
 [![invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=&labelColor=212121&message=Invite&color=212121)](https://discord.com/api/oauth2/authorize?client_id=887122733010411611&permissions=2167425024&scope=bot%20applications.commands)
 
+The dashboard is available here: [Dashboard](https://suitbotxyz.herokuapp.com)\
 You can check the current status to the right under `Environments`.
 
 
@@ -30,24 +31,12 @@ Command      | Description
 ------------ | ---
 /activity:   | Creates a Discord activity.
 /avatar:     | Gives information about a user's avatar.
-/bugreport   | Reports a bug to the developer.
-/github:     | Sends a link to the repo of this bot.
+/dashboard:     | Sends a link to the dashboard.
 /help:       | Replies with help on how to use this bot.
 /info:       | Shows info about the bot.
 /ping:       | Replies with the current latency.
 /serverinfo: | Shows info about the server.
-/suggestion  | Sends a suggestion to the developer.
 /userinfo:   | Shows info about a user.
-
-### Moderation
-Command      | Description
------------- | ---
-/ban:        | Bans a user.
-/kick:       | Kicks a user.
-/move:       | Moves the mentioned user to the specified channel.
-/moveall:    | Moves all users from the first channel to the second channel.
-/purge:      | Clears a specified amount of messages.
-/slowmode:   | Sets the rate limit of the current channel.
 
 ### Music
 Command      | Description
@@ -63,8 +52,24 @@ Command      | Description
 /seek        | Skips to the specified point in the current track.
 /shuffle     | Shuffles the queue.
 /skip        | Skips the current song.
+/skipto      | Skips to the specified song in the queue.
 /stop        | Stops playback.
 /volume      | Sets the volume of the music player.
+
+### Moderation
+Command      | Description
+------------ | ---
+/ban:        | Bans a user.
+/kick:       | Kicks a user.
+/move:       | Moves the mentioned user to the specified channel.
+/moveall:    | Moves all users from the first channel to the second channel.
+/purge:      | Clears a specified amount of messages.
+/slowmode:   | Sets the rate limit of the current channel.
+
+### Feedback
+/bugreport   | Reports a bug to the developer.
+/github:     | Sends a link to the repo of this bot.
+/suggestion  | Sends a suggestion to the developer.
 
 
 
@@ -92,6 +97,7 @@ node main.js
 
 ### Heroku
 It is also possible to install and run the bot in Heroku.\
+Replace the domain in `dashboard.js` with the domain of you Heroku app.\
 Add your fork of this repository as a GitHub source, add the buildpacks listed below and place your config information with their respective name in the config vars.
 ```
 heroku/nodejs
