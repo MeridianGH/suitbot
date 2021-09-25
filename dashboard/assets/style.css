@@ -17,6 +17,7 @@ body {
     padding-top: 60px;
     font-size: 1em !important;
     font-family: 'Roboto', sans-serif;
+    text-align: left;
 }
 
 .navbar-dark, .navbar-expand-lg .navbar-nav {
@@ -77,7 +78,6 @@ body {
     height: 30px;
     padding-left: 5px;
     padding-right: 5px;
-    margin-right: 20px;
     border: 2px solid var(--button-color);
     border-radius: 5px;
     outline: none;
@@ -87,6 +87,16 @@ body {
 .button:hover {
     background-color: var(--button-hover);
     border-color: var(--button-hover);
+}
+.mainbutton {
+    color: var(--text-color);
+    background-color: transparent;
+    border: 5px solid var(--text-color);
+}
+.mainbutton:hover {
+    color: var(--background);
+    background-color: var(--text-color);
+    border: 5px solid var(--text-color);
 }
 
 .music-form {

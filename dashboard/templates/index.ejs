@@ -1,12 +1,96 @@
 <%- include("partials/header", { bot, user, path, title: "SuitBot" }) %>
 
-<div class="container-sm center" style="margin-top: 25px;text-align: center;">
-  <div class="d-grid gap-2 col-6 mx-auto">
-    <h2>Welcome to the SuitBot Dashboard!</h2>
-    <a class="btn btn-secondary" href="/dashboard">Dashboard</a>
-    <a class="btn btn-primary" href="https://github.com/MrAugu/simple-discordjs-dashboard">GitHub</a>
-    <a class="btn btn-warning" href="">Discord Server</a>
+<div class="container" style="margin: 0; padding: 0;">
+  <div class="row align-items-center">
+    <div class="col" style="flex-shrink: 5;"><img src="suit.png" style="height: 500px; margin-top: 25px;"></div>
+    <div class="col" style="flex-grow: 5;">
+      <h1 style="font-family: 'Bebas Neue'; font-size: 100px;">SuitBot<br>Dashboard</h1>
+      <div style="font-size: 20px; margin-bottom: 20px;">Serving <b><%- bot.users.cache.size %></b> users in <b><%- bot.guilds.cache.size %></b> servers.</div>
+      <a class="btn btn-lg mainbutton btn-secondary btn-block rounded-pill" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
+    </div>
   </div>
 </div>
+<div class="container" style="max-width: 1000px; margin-top: 150px;">
+  <div style="font-family: 'Bebas Neue'; font-size: 50px; text-align: center;">Features</div>
+  <hr>
+  <div class="container">
+    <span style="font-family: 'Bebas Neue'; font-size: 25px;">Slash Commands</span>
+    <ul>
+      <li>Use every command with a simple interface</li>
+      <li>No more guessing with variables</li>
+      <li>Quick overview over all commands</li>
+      <li>Directly implemented in Discord</li>
+    </ul>
+    <img src="slash_commands.png" style="width: 100%;">
+  </div>
+  <hr>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <span style="font-family: 'Bebas Neue'; font-size: 25px;">Music</span>
+        <ul>
+          <li>Add any song or playlist from YouTube via link or search</li>
+          <li>Supports Spotify links and playlists</li>
+          <li>Interactive Web Dashboard</li>
+          <li>Pause, Skip, Remove, Volume and more commands</li>
+        </ul>
+      </div>
+      <div class="col">
+        <img src="music.png" style="width: 100%;">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <span style="font-family: 'Bebas Neue'; font-size: 25px;">Activities</span>
+        <ul>
+          <li>Create invites for Discord Activities</li>
+          <li>YouTube Together + 4 minigames</li>
+          <li>Have fun with everyone in your voice channel</li>
+        </ul>
+      </div>
+      <div class="col">
+        <img src="activities.png" style="width: 100%;">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <span style="font-family: 'Bebas Neue'; font-size: 25px;">Basic Moderation</span>
+        <ul>
+          <li>Info commands (User, Server, Avatar)</li>
+          <li>Kick, Ban, Move, Slowmode and more commands</li>
+          <li>Permission check on commands</li>
+        </ul>
+      </div>
+      <div class="col">
+        <img src="moderation.png" style="width: 100%;">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="container">
+    <span style="font-family: 'Bebas Neue'; font-size: 25px;">More Features</span>
+    <ul>
+      <li>Request any features you'd like to see with /suggestion</li>
+      <li>Found a bug? Report it with /bugreport</li>
+      <li>Check the GitHub repository to see what features are planned!</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="container">
+    <span style="font-family: 'Bebas Neue'; font-size: 25px;">For a complete list of commands see the description in the GitHub Repository:</span><br>
+    <a class="btn btn-lg mainbutton btn-secondary btn-block rounded-pill" href="https://github.com/MeridianGH/suitbot"><i class="fab fa-github"></i> GitHub</a>
+  </div>
+</div>
+<footer style="margin-top: 60px;">
+  <div class="text-center p-3" style="background-color: var(--background); filter: brightness(75%); color: var(--text-color)">
+    © 2021 Copyright: <a class="text-light" href="https://suitbotxyz.herokuapp.com">suitbotxyz.herokuapp.com</a>
+  </div>
+</footer>
 
 <%- include("partials/footer") %>
