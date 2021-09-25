@@ -97,7 +97,6 @@ module.exports = async (client) => {
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive'
     })
-    req.socket.setTimeout(Infinity);
     setTimeout(() => res.write('data: null\n\n'), 15000)
 
     client.player.on('songChanged', refreshHandler)
