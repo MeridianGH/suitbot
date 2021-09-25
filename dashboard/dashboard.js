@@ -9,6 +9,7 @@ const { Strategy } = require('passport-discord')
 const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
+const fetch = require('node-fetch')
 
 const clientId = process.env.appId || require('../config.json').appId
 const clientSecret = process.env.clientSecret || require('../config.json').clientSecret
@@ -86,6 +87,12 @@ module.exports = async (client) => {
     res.redirect('/login')
   }
 
+  const heartbeat = () => {
+    setTimeout(() => {
+      fetch(domain).catch(() => console.log('Error when sending heartbeat.')).finally(() => heartbeat())
+    }, 1500000)
+  }
+
   // Queue update endpoint.
   app.get('/update', (req, res) => {
     function refreshHandler () {
@@ -99,7 +106,18 @@ module.exports = async (client) => {
       Connection: 'keep-alive'
     })
     // Heartbeat to keep connection alive
-    setInterval(() => { res.write('data: null\n\n') }, 12000)
+    const updateHeartbeat = () => {
+      setTimeout(() => {
+        try {
+          res.write('data: null\n\n')
+        } catch (error) {
+          console.log('Error when sending /update heartbeat.')
+        } finally {
+          updateHeartbeat()
+        }
+      }, 30000)
+    }
+    updateHeartbeat()
 
     client.player.on('songChanged', refreshHandler)
   })
@@ -266,9 +284,10 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
   })
 
-  app.listen(port, null, null, () =>
+  app.listen(port, () => {
     console.log(`Dashboard is up and running on port ${port}.`)
-  )
+    heartbeat()
+  })
 }
 
 // Copyright Notice: Most of the code in this folder (/dashboard) is heavily based on MrAugu's "simple-discordjs-dashboard" (https://github.com/MrAugu/simple-discordjs-dashboard).
