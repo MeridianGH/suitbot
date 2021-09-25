@@ -87,19 +87,23 @@ module.exports = async (client) => {
   }
 
   // Queue update endpoint.
-  let sse = null
   app.get('/update', (req, res) => {
+    function refreshHandler () {
+      res.write('data: refresh\n\n')
+    }
+
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive'
     })
-    req.socket.setTimeout(0x7FFFFFFF)
-    sse = res
-    setTimeout(() => sse.write('data: null\n\n'), 15000)
-  })
-  client.player.on('songChanged', () => {
-    if (sse) { sse.write('data: refresh\n\n') }
+    req.socket.setTimeout(Infinity);
+    setTimeout(() => res.write('data: null\n\n'), 15000)
+
+    client.player.on('songChanged', refreshHandler)
+    req.on('close', () => {
+      client.player.removeListener('songChanged', refreshHandler)
+    })
   })
 
   // Login endpoint.
