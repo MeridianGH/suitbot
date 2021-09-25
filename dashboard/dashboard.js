@@ -90,7 +90,6 @@ module.exports = async (client) => {
   app.get('/update', (req, res) => {
     function refreshHandler () {
       res.write('data: refresh\n\n')
-      console.log('refresh')
     }
 
     res.writeHead(200, {
@@ -98,6 +97,7 @@ module.exports = async (client) => {
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive'
     })
+    // Heartbeat to keep connection alive
     setInterval(() => { res.write('data: null\n\n') }, 12000)
 
     client.player.on('songChanged', refreshHandler)
