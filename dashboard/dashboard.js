@@ -90,6 +90,7 @@ module.exports = async (client) => {
   app.get('/update', (req, res) => {
     function refreshHandler () {
       res.write('data: refresh\n\n')
+      client.player.removeListener('songChanged', refreshHandler)
     }
 
     res.writeHead(200, {
@@ -101,9 +102,6 @@ module.exports = async (client) => {
     setInterval(() => { res.write('data: null\n\n') }, 12000)
 
     client.player.on('songChanged', refreshHandler)
-    req.on('close', () => {
-      client.player.removeListener('songChanged', refreshHandler)
-    })
   })
 
   // Login endpoint.
