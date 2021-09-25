@@ -9,7 +9,7 @@ const { Strategy } = require('passport-discord')
 const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
-const fetch = require('node-fetch')
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const clientId = process.env.appId || require('../config.json').appId
 const clientSecret = process.env.clientSecret || require('../config.json').clientSecret
