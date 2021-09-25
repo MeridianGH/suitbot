@@ -9,13 +9,12 @@ const { Strategy } = require('passport-discord')
 const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args))
 
 const clientId = process.env.appId || require('../config.json').appId
 const clientSecret = process.env.clientSecret || require('../config.json').clientSecret
 
 module.exports = async (client) => {
-  // We declare absolute paths.
   const dataDir = __dirname
   const templateDir = path.join(dataDir, 'templates')
 
@@ -55,11 +54,7 @@ module.exports = async (client) => {
   app.set('view engine', 'ejs')
 
   app.use(bodyParser.json())
-  app.use(
-    bodyParser.urlencoded({
-      extended: true
-    })
-  )
+  app.use(bodyParser.urlencoded({ extended: true }))
 
   app.use('/', express.static(path.join(dataDir, 'assets')))
 
@@ -70,11 +65,7 @@ module.exports = async (client) => {
       path: req.path,
       user: req.isAuthenticated() ? req.user : null
     }
-    // We render template using the absolute path of the template and the merged default data with the additional data provided.
-    res.render(
-      path.join(templateDir, template),
-      Object.assign(baseData, data)
-    )
+    res.render(path.join(templateDir, template), Object.assign(baseData, data))
   }
 
   const checkAuth = (req, res, next) => {
@@ -136,22 +127,19 @@ module.exports = async (client) => {
     }
     // Forward the request to the passport middleware.
     next()
-  },
-  passport.authenticate('discord')
-  )
+  }, passport.authenticate('discord'))
 
   // Callback endpoint.
   app.get('/callback', passport.authenticate('discord', { failureRedirect: '/' }), (req, res) => {
-      // If user had set a returning url, we redirect him there, otherwise we redirect him to index.
-      if (req.session.backURL) {
-        const backURL = req.session.backURL
-        req.session.backURL = null
-        res.redirect(backURL)
-      } else {
-        res.redirect('/')
-      }
+    // If user had set a returning url, we redirect him there, otherwise we redirect him to index.
+    if (req.session.backURL) {
+      const backURL = req.session.backURL
+      req.session.backURL = null
+      res.redirect(backURL)
+    } else {
+      res.redirect('/')
     }
-  )
+  })
 
   // Logout endpoint.
   app.get('/logout', (req, res) => {
@@ -178,7 +166,6 @@ module.exports = async (client) => {
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
     const queue = client.player.getQueue(guild.id)
-
 
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null })
   })
