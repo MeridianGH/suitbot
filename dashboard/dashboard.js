@@ -18,13 +18,12 @@ module.exports = async (client) => {
   // We declare absolute paths.
   const dataDir = __dirname
   const templateDir = path.join(dataDir, 'templates')
-  console.log(dataDir, templateDir)
 
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((obj, done) => done(null, obj))
 
-  const port = process.env.PORT || 3000
-  const domain = `https://suitbotxyz.herokuapp.com`
+  const port = process.env.PORT || 80
+  const domain = process.env.PORT ? 'https://suitbotxyz.herokuapp.com' : 'http://localhost'
   const callbackUrl = `${domain}/callback`
 
   passport.use(
@@ -142,13 +141,7 @@ module.exports = async (client) => {
   )
 
   // Callback endpoint.
-  app.get(
-    '/callback',
-    passport.authenticate('discord', { failureRedirect: '/' }),
-    /* We authenticate the user, if user canceled we redirect him to index. */ (
-      req,
-      res
-    ) => {
+  app.get('/callback', passport.authenticate('discord', { failureRedirect: '/' }), (req, res) => {
       // If user had set a returning url, we redirect him there, otherwise we redirect him to index.
       if (req.session.backURL) {
         const backURL = req.session.backURL
@@ -161,12 +154,9 @@ module.exports = async (client) => {
   )
 
   // Logout endpoint.
-  app.get('/logout', function (req, res) {
-    // We destroy the session.
+  app.get('/logout', (req, res) => {
     req.session.destroy(() => {
-      // We logout the user.
       req.logout()
-      // We redirect user to index.
       res.redirect('/')
     })
   })
