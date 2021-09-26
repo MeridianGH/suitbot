@@ -35,6 +35,7 @@ for (const file of playerEventFiles) {
   client.player.on(event.name, (...args) => event.execute(...args))
 }
 process.on('uncaughtException', error => {
+  fs.appendFile('errors.txt', `${error}\n${error.stack}\n`, (e) => { if (e) { console.log('Failed logging error.') } })
   console.log('Ignoring uncaught exception: ' + error)
 })
 
