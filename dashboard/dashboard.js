@@ -209,7 +209,9 @@ module.exports = async (client) => {
         break
       case 'skipto':
         queue.songs = queue.songs.slice(index - 1)
-        alert = `⏭ Skipped to #${index}: "${queue.skip().name}".`
+        queue.skip()
+        alert = `⏭ Skipped to #${index}: "${queue.songs[1].name}".`
+        await sleep(1)
         break
       case 'play':
         if (!query) { return }
@@ -224,7 +226,7 @@ module.exports = async (client) => {
           alert = `Added playlist "${playlist.name}" by ${playlist.author.name || playlist.author} to the queue!`
 
           queue.lastTextChannel.send({
-            embeds: [new MessageEmbed()
+            embeds: [ new MessageEmbed()
               .setAuthor('Added to queue.', member.user.displayAvatarURL())
               .setTitle(playlist.name)
               .setURL(playlist.url)

@@ -18,15 +18,15 @@
   </header>
   <div class="card-body">
     <%- alert && type ? `<div class="alert alert-${type}" id="alert" style="color: #000000; opacity: 0.85; position: absolute; width: calc(100% - 2rem); margin: 0; transition: opacity 1s;"><i class="fas fa-info-circle"></i> ${alert}</div>` : '' %>
-    <% if(queue && queue.nowPlaying) { %>
+    <% if(queue && queue.songs[0]) { %>
       <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
       <div style="height: 200px; margin-bottom: 10px;">
         <ul class="horizontal-list">
-          <li><img src="<%- queue.nowPlaying.thumbnail %>" style="height: 200px; flex-shrink: 4; margin-right: 20px;"></li>
+          <li><img src="<%- queue.songs[0].thumbnail %>" style="height: 200px; flex-shrink: 4; margin-right: 20px;"></li>
           <li>
-            <h4><%= queue.nowPlaying.name %></h4>
-            <h6><%= queue.nowPlaying.author %></h6>
-            <h5><%= queue.nowPlaying.duration %></h5>
+            <h4><%= queue.songs[0].name %></h4>
+            <h6><%= queue.songs[0].author %></h6>
+            <h5><%= queue.songs[0].duration %></h5>
             <form method="POST" style="width: 100%; margin: 0;">
                 <button type="submit" class="music-btn" id="pause" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
                 <button type="submit" class="music-btn" name="action" value="skip"><i class="fas fa-forward"></i></button>
