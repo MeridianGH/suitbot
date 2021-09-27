@@ -1,6 +1,6 @@
 <%- include("partials/header", { bot, user, path, title: `Queue | ${guild.name}` }) %>
 <script type="text/javascript">
-  const evtSource = new EventSource('/update')
+  const evtSource = new EventSource('/update/<%= guild.id %>')
   evtSource.onmessage = function (content) {
     if (content.data === 'refresh') { window.location.href = '' }
   }

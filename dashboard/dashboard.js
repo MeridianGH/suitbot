@@ -84,10 +84,20 @@ module.exports = async (client) => {
   }
 
   // Queue update endpoint.
-  app.get('/update', (req, res) => {
-    function refreshHandler () {
-      res.write('data: refresh\n\n')
-      client.player.removeListener('songChanged', refreshHandler)
+  const updates = {}
+  app.get('/update/:guildID', (req, res) => {
+    const guildId = req.params['guildID']
+    const user = req.user
+    if (!user) { return }
+    if (updates[guildId]) {
+      const subIndex = updates[guildId].findIndex((sub => sub.userId === user.id))
+      if (subIndex !== -1) {
+        updates[guildId][subIndex].res = res
+      } else {
+        updates[guildId].push({ userId: user.id, res: res })
+      }
+    } else {
+      updates[guildId] = [{ userId: user.id , res: res }]
     }
 
     res.writeHead(200, {
@@ -95,22 +105,28 @@ module.exports = async (client) => {
       'Cache-Control': 'no-cache',
       Connection: 'keep-alive'
     })
-    // Heartbeat to keep connection alive
-    const updateHeartbeat = () => {
-      setTimeout(() => {
-        try {
-          res.write('data: null\n\n')
-        } catch (error) {
-          console.log('Error when sending /update heartbeat.')
-        } finally {
-          updateHeartbeat()
-        }
-      }, 30000)
-    }
-    updateHeartbeat()
-
-    client.player.on('songChanged', refreshHandler)
+    res.write('data: subscribed\n\n')
   })
+  client.player.on('songChanged', (queue) => {
+    if (queue.guild.id in updates) {
+      for (const sub of updates[queue.guild.id]) {
+        sub.res.write('data: refresh\n\n')
+      }
+      delete updates[queue.guild.id]
+    }
+  })
+  // Heartbeat to keep connection alive
+  const updateHeartbeat = () => {
+    setTimeout(() => {
+      for (const guildId in updates) {
+        for (const sub of updates[guildId]) {
+            sub.res.write('data: null\n\n')
+        }
+      }
+      updateHeartbeat()
+    }, 30000)
+  }
+  updateHeartbeat()
 
   // Login endpoint.
   app.get('/login', (req, res, next) => {
@@ -161,7 +177,7 @@ module.exports = async (client) => {
 
   // Server endpoint.
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
-    const guild = client.guilds.cache.get(req.params.guildID)
+    const guild = client.guilds.cache.get(req.params['guildID'])
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -172,7 +188,7 @@ module.exports = async (client) => {
 
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
-    const guild = client.guilds.cache.get(req.params.guildID)
+    const guild = client.guilds.cache.get(req.params['guildID'])
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -185,32 +201,32 @@ module.exports = async (client) => {
     switch (req.body.action) {
       case 'pause':
         queue.setPaused(queue.connection.paused !== true)
-        alert = queue.connection.paused === true ? '⏸ Paused.' : '▶ Resumed.'
+        alert = queue.connection.paused === true ? 'Paused.' : 'Resumed.'
         break
       case 'skip':
         queue.skip()
-        alert = '⏭ Skipped.'
+        alert = 'Skipped.'
         await sleep(1)
         break
       case 'shuffle':
         queue.shuffle()
-        alert = '🔀 Shuffled the queue.'
+        alert = 'Shuffled the queue.'
         break
       case 'repeat':
         queue.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1)
-        alert = `Set repeat mode to ${queue.repeatMode === 0 ? 'None ▶' : queue.repeatMode === 1 ? 'Song 🔂' : 'Queue 🔁'}`
+        alert = `Set repeat mode to "${queue.repeatMode === 0 ? 'None' : queue.repeatMode === 1 ? 'Song' : 'Queue'}"`
         break
       case 'clear':
         queue.clearQueue()
-        alert = '🗑️ Cleared the queue.'
+        alert = 'Cleared the queue.'
         break
       case 'remove':
-        alert = `🗑️ Removed track #${index}: "${queue.remove(index).name}".`
+        alert = `Removed track #${index}: "${queue.remove(index).name}".`
         break
       case 'skipto':
         queue.songs = queue.songs.slice(index - 1)
         queue.skip()
-        alert = `⏭ Skipped to #${index}: "${queue.songs[1].name}".`
+        alert = `Skipped to #${index}: "${queue.songs[1].name}".`
         await sleep(1)
         break
       case 'play':
@@ -260,13 +276,15 @@ module.exports = async (client) => {
         break
     }
 
-    renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
+    res.redirect('')
+    // renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
   })
 
-  app.listen(port, () => {
+  const server = app.listen(port, null, null,() => {
     console.log(`Dashboard is up and running on port ${port}.`)
     heartbeat()
   })
+  process.on('SIGTERM', () => { server.close(() => { console.log('Received SIGTERM, closed server.') }) })
 }
 
 // Copyright Notice: Most of the code in this folder (/dashboard) is heavily based on MrAugu's "simple-discordjs-dashboard" (https://github.com/MrAugu/simple-discordjs-dashboard).
