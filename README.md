@@ -15,7 +15,7 @@ It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https:/
 Join the [Discord server](https://discord.gg/qX2CBrrUpf) for information about updates and support or if you'd like to report a bug or leave a suggestion.
 
 ## Availability
-Disclaimer: The bot is still in development, so expect some bugs or features that might not work 100% yet. Please report any bugs or suggestions via the respective commands.\
+> Disclaimer: The bot is still in development, so expect some bugs or features that might not work 100% yet. Please report any bugs or suggestions via the respective commands.\
 I'm currently hosting the bot myself, and it is publicly available with this invite link:
 
 [![invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=&labelColor=212121&message=Invite&color=212121)](https://discord.com/api/oauth2/authorize?client_id=887122733010411611&permissions=2167425024&scope=bot%20applications.commands)
