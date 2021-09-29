@@ -276,8 +276,7 @@ module.exports = async (client) => {
         break
     }
 
-    res.redirect('')
-    // renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
+    renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
   })
 
   const server = app.listen(port, null, null,() => {
