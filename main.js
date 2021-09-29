@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { Client, Collection, Intents } = require('discord.js')
+const { Client, Collection, Intents, MessageEmbed } = require('discord.js')
 const { Player } = require('discord-music-player')
 const { getFilesRecursively } = require('./utilities')
 
@@ -37,6 +37,18 @@ for (const file of playerEventFiles) {
 process.on('uncaughtException', error => {
   fs.appendFile('errors.txt', `${error.stack}\n\n`, (e) => { if (e) { console.log('Failed logging error.') } })
   console.log('Ignoring uncaught exception: ' + error)
+})
+process.on('SIGTERM', () => {
+  for (const queue in client.player) {
+    client.player[queue].destroy()
+    client.player[queue].lastTextChannel?.send({ embeds: new MessageEmbed()
+        .setTitle('Server shutdown.')
+        .setDescription('The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.')
+        .setFooter('SuitBot', require('./events/client/ready').iconURL)
+        .setColor('#ff0000') })
+  }
+  client.destroy()
+  console.log('Received SIGTERM, destroyed client.')
 })
 
 // Login

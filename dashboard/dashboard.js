@@ -188,6 +188,7 @@ module.exports = async (client) => {
 
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
+    /** @namespace queue.lastTextChannel */
     const guild = client.guilds.cache.get(req.params['guildID'])
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
