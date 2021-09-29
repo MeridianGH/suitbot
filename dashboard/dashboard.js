@@ -86,18 +86,18 @@ module.exports = async (client) => {
   // Queue update endpoint.
   const updates = {}
   app.get('/update/:guildID', (req, res) => {
-    const guildId = req.params['guildID']
+    const guildId = req.params.guildID
     const user = req.user
     if (!user) { return }
     if (updates[guildId]) {
-      const subIndex = updates[guildId].findIndex((sub => sub.userId === user.id))
+      const subIndex = updates[guildId].findIndex(sub => sub.userId === user.id)
       if (subIndex !== -1) {
         updates[guildId][subIndex].res = res
       } else {
         updates[guildId].push({ userId: user.id, res: res })
       }
     } else {
-      updates[guildId] = [{ userId: user.id , res: res }]
+      updates[guildId] = [{ userId: user.id, res: res }]
     }
 
     res.writeHead(200, {
@@ -120,7 +120,7 @@ module.exports = async (client) => {
     setTimeout(() => {
       for (const guildId in updates) {
         for (const sub of updates[guildId]) {
-            sub.res.write('data: null\n\n')
+          sub.res.write('data: null\n\n')
         }
       }
       updateHeartbeat()
@@ -177,7 +177,7 @@ module.exports = async (client) => {
 
   // Server endpoint.
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
-    const guild = client.guilds.cache.get(req.params['guildID'])
+    const guild = client.guilds.cache.get(req.params.guildID)
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -189,7 +189,7 @@ module.exports = async (client) => {
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
     /** @namespace queue.lastTextChannel */
-    const guild = client.guilds.cache.get(req.params['guildID'])
+    const guild = client.guilds.cache.get(req.params.guildID)
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -243,7 +243,7 @@ module.exports = async (client) => {
           alert = `Added playlist "${playlist.name}" by ${playlist.author.name || playlist.author} to the queue!`
 
           queue.lastTextChannel.send({
-            embeds: [ new MessageEmbed()
+            embeds: [new MessageEmbed()
               .setAuthor('Added to queue.', member.user.displayAvatarURL())
               .setTitle(playlist.name)
               .setURL(playlist.url)
@@ -280,7 +280,7 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
   })
 
-  const server = app.listen(port, null, null,() => {
+  const server = app.listen(port, null, null, () => {
     console.log(`Dashboard is up and running on port ${port}.`)
     heartbeat()
   })
