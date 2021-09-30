@@ -38,20 +38,24 @@ process.on('uncaughtException', error => {
   fs.appendFile('errors.txt', `${error.stack}\n\n`, (e) => { if (e) { console.log('Failed logging error.') } })
   console.log('Ignoring uncaught exception: ' + error)
 })
-process.on('SIGTERM', () => {
-  for (const queue in client.player) {
-    client.player[queue].destroy()
-    client.player[queue].lastTextChannel?.send(
+process.on('SIGTERM', async () => {
+  for (const entry of client.player.queues) {
+    const queue = entry[1]
+    await queue.lastTextChannel.send(
       {
-        embeds: new MessageEmbed()
+        embeds: [new MessageEmbed()
           .setTitle('Server shutdown.')
           .setDescription('The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.')
           .setFooter('SuitBot', require('./events/client/ready').iconURL)
-          .setColor('#ff0000')
-      })
+          .setColor('#ff0000')]
+      }
+    )
+    queue.destroy(true)
   }
   client.destroy()
-  console.log('Received SIGTERM, destroyed client.')
+  client.dashboard.close()
+  console.log('Received SIGTERM, shutting down.')
+  process.exit(0)
 })
 
 // Login

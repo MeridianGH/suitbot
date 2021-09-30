@@ -188,7 +188,6 @@ module.exports = async (client) => {
 
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
-    /** @namespace queue.lastTextChannel */
     const guild = client.guilds.cache.get(req.params.guildID)
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
@@ -280,11 +279,10 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
   })
 
-  const server = app.listen(port, null, null, () => {
+  client.dashboard = app.listen(port, null, null, () => {
     console.log(`Dashboard is up and running on port ${port}.`)
     heartbeat()
   })
-  process.on('SIGTERM', () => { server.close(() => { console.log('Received SIGTERM, closed server.') }) })
 }
 
 // Copyright Notice: Most of the code in this folder (/dashboard) is heavily based on MrAugu's "simple-discordjs-dashboard" (https://github.com/MrAugu/simple-discordjs-dashboard).
