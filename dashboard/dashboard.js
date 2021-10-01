@@ -83,6 +83,14 @@ module.exports = async (client) => {
     }, 1500000)
   }
 
+  app.use(function forceDomain(req, res, next) {
+    // Redirect from Heroku app to domain
+    if (req.get('Host') === 'suitbotxyz.herokuapp.com') {
+      return res.redirect(301, 'suitbot.xyz/' + req.originalUrl);
+    }
+    return next();
+  });
+
   // Queue update endpoint.
   const updates = {}
   app.get('/update/:guildID', (req, res) => {
