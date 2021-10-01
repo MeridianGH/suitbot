@@ -14,7 +14,9 @@ module.exports = {
 
     if (queue.songs.length === 1) {
       // Format single page with no upcoming songs.
-      const description = `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`
+      let description = ''
+      description += 'Still using old and boring commands? Use the new [web dashboard](http://suitbot.xyz) instead!\n\n'
+      description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`
       const embed = new MessageEmbed()
         .setAuthor('Queue.', interaction.member.user.displayAvatarURL())
         .setDescription(description + `No upcoming songs.\nAdd songs with /play!\n${'\u2015'.repeat(34)}`)
@@ -22,12 +24,13 @@ module.exports = {
       pages.push(embed)
     } else if (queue.songs.length > 1 && queue.songs.length <= 11) {
       // Format single page.
-      let description = `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`
-      description = description + 'Up Next:\n'
+      let description = ''
+      description += 'Still using old and boring commands? Use the new [web dashboard](http://suitbot.xyz) instead!\n\n'
+      description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\nUp Next:\n`
       for (const song of queue.songs) {
-        description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
+        description += `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
       }
-      description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function (prev, cur) { return prev + cur.millisecons }, 0))} total duration**\n${'\u2015'.repeat(34)}`
+      description += `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function (prev, cur) { return prev + cur.millisecons }, 0))} total duration**\n${'\u2015'.repeat(34)}`
 
       const embed = new MessageEmbed()
         .setAuthor('Queue.', interaction.member.user.displayAvatarURL())
@@ -39,12 +42,13 @@ module.exports = {
       for (let i = 1; i < queue.songs.length - 1; i += 10) {
         const songs = queue.songs.slice(i, i + 10)
 
-        let description = `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`
-        description = description + 'Up Next:\n'
+        let description = ''
+        description += 'Still using old and boring commands? Use the new [web dashboard](http://suitbot.xyz) instead!\n\n'
+        description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\nUp Next:\n`
         for (const song of songs) {
-          description = description + `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
+          description += `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
         }
-        description = description + `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.slice(1, queue.songs.length).reduce(function (prev, cur) { return prev + cur.millisecons }, 0))} total duration**\n${'\u2015'.repeat(34)}`
+        description += `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.slice(1, queue.songs.length).reduce(function (prev, cur) { return prev + cur.millisecons }, 0))} total duration**\n${'\u2015'.repeat(34)}`
 
         const embed = new MessageEmbed()
           .setAuthor('Queue.', interaction.member.user.displayAvatarURL())
