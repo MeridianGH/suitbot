@@ -86,7 +86,7 @@ module.exports = async (client) => {
   app.use(function forceDomain(req, res, next) {
     // Redirect from Heroku app to domain
     if (req.get('Host') === 'suitbotxyz.herokuapp.com') {
-      return res.redirect(301, 'http://suitbot.xyz/' + req.originalUrl);
+      return res.redirect(301, 'http://suitbot.xyz' + req.originalUrl);
     }
     return next();
   });
