@@ -38,7 +38,7 @@ module.exports = {
     })
 
     if (!song) {
-      return await interaction.editReply({ embeds: [new MessageEmbed().setDescription('There was an error when processing your request.').setColor('#ff0000').setFooter('SuitBot', require('../../events/client/ready').iconURL))] })
+      return await interaction.editReply({ embeds: [new MessageEmbed().setDescription('There was an error when processing your request.').setColor('#ff0000').setFooter('SuitBot', require('../../events/client/ready').iconURL)] })
     }
     song.requestedBy = interaction.member.displayName
 
@@ -69,7 +69,7 @@ module.exports = {
     })
 
     if (!playlist) {
-      return await interaction.editReply({ embeds: [new MessageEmbed().setDescription('There was an error when processing your request.').setColor('#ff0000').setFooter('SuitBot', require('../../events/client/ready').iconURL))] })
+      return await interaction.editReply({ embeds: [new MessageEmbed().setDescription('There was an error when processing your request.').setColor('#ff0000').setFooter('SuitBot', require('../../events/client/ready').iconURL)] })
     }
     playlist.songs.forEach(song => {
       song.requestedBy = interaction.member.displayName
