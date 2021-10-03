@@ -1,3 +1,4 @@
+var fs = require('fs');
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js')
 
@@ -6,7 +7,7 @@ module.exports = {
     .setName('info')
     .setDescription('Shows info about the bot.'),
   async execute (interaction) {
-    const client = interaction.client
+    const client = interaction.client;
     const servers = `**Servers:** ${client.guilds.cache.size}\n`
 
     let totalSeconds = (client.uptime / 1000)
@@ -18,13 +19,14 @@ module.exports = {
     const seconds = Math.floor(totalSeconds % 60)
     const uptime = `**Uptime:** ${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`
 
-    const embed = new MessageEmbed()
+    let embed = new MessageEmbed()
+      .setColor('RANDOM')
       .setAuthor('Info', interaction.member.user.displayAvatarURL())
       .setTitle('Bot Information')
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(servers + uptime)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
-    await interaction.reply({ embeds: [embed] })
-  }
-}
+    await interaction.reply({ embeds: [embed] });
+  },
+};
