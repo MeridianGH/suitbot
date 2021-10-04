@@ -1,7 +1,7 @@
 const fs = require('fs')
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js')
 const { Player } = require('discord-music-player')
-const { getFilesRecursively } = require('./utilities')
+const { getFilesRecursively, errorEmbed } = require('./utilities')
 
 const token = process.env.token ? process.env.token : require('./config.json').token
 
@@ -41,15 +41,7 @@ process.on('uncaughtException', error => {
 process.on('SIGTERM', async () => {
   for (const entry of client.player.queues) {
     const queue = entry[1]
-    await queue.lastTextChannel.send(
-      {
-        embeds: [new MessageEmbed()
-          .setTitle('Server shutdown.')
-          .setDescription('The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.')
-          .setFooter('SuitBot', require('./events/client/ready').iconURL)
-          .setColor('#ff0000')]
-      }
-    )
+    await queue.lastTextChannel.send(errorEmbed('Server shutdown', 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'))
     queue.destroy(true)
   }
   client.destroy()

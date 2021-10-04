@@ -6,6 +6,9 @@ module.exports = {
   simpleEmbed: function (content, ephemeral = false) {
     return { embeds: [new MessageEmbed().setDescription(content).setFooter('SuitBot', require('./events/client/ready').iconURL)], ephemeral: ephemeral }
   },
+  errorEmbed: function (title, content, ephemeral = false) {
+    return { embeds: [new MessageEmbed().setTitle(title).setDescription(content).setFooter('SuitBot', require('./events/client/ready').iconURL).setColor('#ff0000')], ephemeral: ephemeral }
+  },
   sleep: function (seconds) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000))
   },

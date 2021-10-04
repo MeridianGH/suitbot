@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js')
-const { simpleEmbed } = require('../../utilities')
+const { simpleEmbed, errorEmbed } = require('../../utilities')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -38,7 +38,7 @@ module.exports = {
     })
 
     if (!song) {
-      return await interaction.editReply({ embeds: [new MessageEmbed().setDescription('There was an error when processing your request.').setColor('#ff0000').setFooter('SuitBot', require('../../events/client/ready').iconURL)] })
+      return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.'))
     }
     song.requestedBy = interaction.member.displayName
 
@@ -69,13 +69,12 @@ module.exports = {
     })
 
     if (!playlist) {
-      return await interaction.editReply({ embeds: [new MessageEmbed().setDescription('There was an error when processing your request.').setColor('#ff0000').setFooter('SuitBot', require('../../events/client/ready').iconURL)] })
+      return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your playlist to the queue.'))
     }
     playlist.songs.forEach(song => {
       song.requestedBy = interaction.member.displayName
     })
 
-    // noinspection JSUnresolvedVariable
     await interaction.editReply({
       embeds: [new MessageEmbed()
         .setAuthor('Added to queue.', interaction.member.user.displayAvatarURL())
