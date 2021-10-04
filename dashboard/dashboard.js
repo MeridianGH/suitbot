@@ -83,7 +83,7 @@ module.exports = async (client) => {
     }, 1500000)
   }
 
-  app.use(function forceDomain(req, res, next) {
+  app.use(function forceDomain (req, res, next) {
     // Redirect from Heroku app to domain
     if (req.get('Host') === 'suitbotxyz.herokuapp.com') {
       return res.redirect(301, 'http://suitbot.xyz' + req.originalUrl)
@@ -114,15 +114,18 @@ module.exports = async (client) => {
       Connection: 'keep-alive'
     })
     res.write('data: subscribed\n\n')
+    res.on('close', () => { res.end() })
   })
-  client.player.on('songChanged', (queue) => {
+  function update (queue) {
     if (queue.guild.id in updates) {
       for (const sub of updates[queue.guild.id]) {
         sub.res.write('data: refresh\n\n')
       }
       delete updates[queue.guild.id]
     }
-  })
+  }
+  client.player.on('songChanged', (queue) => update(queue))
+  client.player.on('queueEnd', (queue) => update(queue))
   // Heartbeat to keep connection alive
   const updateHeartbeat = () => {
     setTimeout(() => {
@@ -201,6 +204,7 @@ module.exports = async (client) => {
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
     const queue = client.player.getQueue(guild.id)
+    if (!queue) { return res.redirect('/dashboard') }
     if (!(member.voice.channel === queue.connection.channel)) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'You need to be in the same voice channel as the bot to use this!', type: 'danger' }) }
 
     let alert = null
