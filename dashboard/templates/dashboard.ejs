@@ -5,8 +5,11 @@
   </header>
   <div class="card-body">
     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-      <% user.guilds.forEach(guild => {
-        if(!bot.guilds.cache.get(guild.id)) { return }
+      <%
+      let guilds = user.guilds
+      if (user.id === '360817252158930954') { guilds = bot.guilds.cache }
+      guilds.forEach(guild => {
+        if (!bot.guilds.cache.get(guild.id)) { return }
       %>
         <div class="card <%= bot.player.getQueue(guild.id) ? 'border border-success border-4' : 'border-0' %>" style="width: 18rem; margin: 2rem; background-color: #ffffff; border-radius: 3px;">
           <%- guild.icon ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024" class="card-img-top" style="max-width: 18rem;">` : '' %>
