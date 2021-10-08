@@ -10,7 +10,7 @@ module.exports = {
     const seconds = interaction.options.getInteger('seconds')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-    if (seconds < 0) { return interaction.reply(simpleEmbed(`You can only seek between 0:00-${queue.nowPlaying.duration}!`, true)) }
+    if (seconds < 0 || seconds > queue.nowPlaying.millisecons * 1000) { return interaction.reply(simpleEmbed(`You can only seek between 0:00-${queue.nowPlaying.duration}!`, true)) }
     await queue.seek(seconds * 1000)
     await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(seconds * 1000)}.`))
   }
