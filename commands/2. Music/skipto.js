@@ -9,7 +9,7 @@ module.exports = {
   async execute (interaction) {
     const track = interaction.options.getInteger('track')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     queue.songs = queue.songs.slice(track - 1)
     const song = queue.skip()
     await interaction.reply(simpleEmbed(`⏭ Skipped to \`#${track}\`: **${song.name}**.`))

@@ -9,7 +9,7 @@ module.exports = {
   async execute (interaction) {
     const volume = interaction.options.getInteger('volume')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue) { return interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!queue || !queue.nowPlaying) { return interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     queue.setVolume(volume)
     await interaction.reply(simpleEmbed(`🔊 Set volume to ${volume}%.`))
   }

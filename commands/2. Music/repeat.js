@@ -12,7 +12,7 @@ module.exports = {
   async execute (interaction) {
     const mode = interaction.options.getInteger('mode')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     queue.setRepeatMode(mode)
     await interaction.reply(simpleEmbed(`Set repeat mode to ${mode === 0 ? 'None ▶' : mode === 1 ? 'Song 🔂' : 'Queue 🔁'}`))
   }
