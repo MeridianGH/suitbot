@@ -1,17 +1,24 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { simpleEmbed, msToHMS } = require('../../utilities')
+const { Utils } = require('discord-music-player')
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('seek')
     .setDescription('Skips to the specified point in the current track.')
-    .addIntegerOption(option => option.setName('seconds').setDescription('The seconds to skip to.').setRequired(true)),
+    .addStringOption(option => option.setName('time').setDescription('The time to skip to. Can be seconds or HH:MM:SS.').setRequired(true)),
   async execute (interaction) {
-    const seconds = interaction.options.getInteger('seconds')
+    const time = interaction.options.getString('time')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-    if (seconds < 0 || seconds > queue.nowPlaying.millisecons * 1000) { return interaction.reply(simpleEmbed(`You can only seek between 0:00-${queue.nowPlaying.duration}!`, true)) }
-    await queue.seek(seconds * 1000)
-    await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(seconds * 1000)}.`))
+    if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    let milliseconds
+    if (isNaN(time)) {
+      milliseconds = Utils.timeToMs(time)
+    } else {
+      milliseconds = time * 1000
+    }
+    if (milliseconds < 0 || milliseconds > queue.nowPlaying.millisecons) { return interaction.reply(simpleEmbed(`You can only seek between 0:00-${queue.nowPlaying.duration}!`, true)) }
+    await queue.seek(milliseconds)
+    await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(milliseconds)}.`))
   }
 }
