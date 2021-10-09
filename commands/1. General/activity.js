@@ -13,6 +13,7 @@ module.exports = {
       .addChoice('Betrayal.io', '773336526917861400')
       .addChoice('Fishington.io', '814288819477020702')
       .addChoice('Chess in the Park', '832012774040141894'))
+    // TODO: Add channel type once builder supports it
     .addChannelOption(option => option.setName('channel').setDescription('The voice channel to create the activity in.').setRequired(true)),
   async execute (interaction) {
     const channel = interaction.options.getChannel('channel')

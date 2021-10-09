@@ -12,6 +12,7 @@ module.exports = {
   sleep: function (seconds) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000))
   },
+  // TODO: Add leading zeros
   msToHMS: function msToHMS (ms) {
     let totalSeconds = (ms / 1000)
     const hours = Math.floor(totalSeconds / 3600)
