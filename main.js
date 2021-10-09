@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { Client, Collection, Intents, MessageEmbed } = require('discord.js')
+const { Client, Collection, Intents } = require('discord.js')
 const { Player } = require('discord-music-player')
 const { getFilesRecursively, errorEmbed } = require('./utilities')
 
