@@ -4,6 +4,7 @@
   "description": "A lightweight music and general purpose bot, that uses slash commands and buttons to be as user-friendly as possible! ",
   "main": "main.js",
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
