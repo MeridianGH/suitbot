@@ -12,14 +12,13 @@ module.exports = {
   sleep: function (seconds) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000))
   },
-  // TODO: Add leading zeros
   msToHMS: function msToHMS (ms) {
     let totalSeconds = (ms / 1000)
-    const hours = Math.floor(totalSeconds / 3600)
+    const hours = Math.floor(totalSeconds / 3600).toString()
     totalSeconds %= 3600
-    const minutes = Math.floor(totalSeconds / 60)
-    const seconds = Math.floor(totalSeconds % 60)
-    return (hours === 0 ? `${minutes}:${seconds}` : `${hours}:${minutes}:${seconds}`)
+    const minutes = Math.floor(totalSeconds / 60).toString()
+    const seconds = Math.floor(totalSeconds % 60).toString()
+    return (hours === '0' ? `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}` : `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
   },
   getFilesRecursively: function getFilesRecursively (directory, files) {
     const contents = fs.readdirSync(directory)
