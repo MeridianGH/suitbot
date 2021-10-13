@@ -4,7 +4,6 @@
   "description": "A lightweight music and general purpose bot, that uses slash commands and buttons to be as user-friendly as possible! ",
   "main": "main.js",
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
@@ -17,7 +16,7 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "body-parser": "^1.19.0",
     "discord-api-types": "^0.23.1",
-    "discord-music-player": "^8.0.2",
+    "discord-music-player": "^8.2.0",
     "discord.js": "^13.1.0",
     "ejs": "^3.1.6",
     "ejs-lint": "^1.2.1",
@@ -28,8 +27,5 @@
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
     "standard": "*"
-  },
-  "resolutions": {
-    "youtubei": "0.0.1-rc.24"
   }
 }
