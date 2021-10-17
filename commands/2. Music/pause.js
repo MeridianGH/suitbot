@@ -8,7 +8,7 @@ module.exports = {
   async execute (interaction) {
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-    queue.setPaused(queue.connection.paused !== true)
-    await interaction.reply(simpleEmbed(queue.connection.paused === true ? '⏸ Paused.' : '▶ Resumed.'))
+    queue.setPaused(queue.paused !== true)
+    await interaction.reply(simpleEmbed(queue.paused === true ? '⏸ Paused.' : '▶ Resumed.'))
   }
 }

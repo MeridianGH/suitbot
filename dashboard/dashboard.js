@@ -212,8 +212,8 @@ module.exports = async (client) => {
     const index = req.body.index
     switch (req.body.action) {
       case 'pause':
-        queue.setPaused(queue.connection.paused !== true)
-        alert = queue.connection.paused === true ? 'Paused.' : 'Resumed.'
+        queue.setPaused(queue.paused !== true)
+        alert = queue.paused === true ? 'Paused.' : 'Resumed.'
         break
       case 'skip':
         queue.skip()
