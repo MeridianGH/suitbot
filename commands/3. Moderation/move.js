@@ -7,20 +7,16 @@ module.exports = {
     .setName('move')
     .setDescription('Moves the mentioned user to the specified channel.')
     .addMentionableOption(option => option.setName('user').setDescription('The user to move.').setRequired(true))
+    // TODO: Add channel type once builder supports it
     .addChannelOption(option => option.setName('channel').setDescription('The channel to move to.').setRequired(true)),
   async execute (interaction) {
     const member = interaction.options.getMentionable('user')
     const channel = interaction.options.getChannel('channel')
 
-    if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) {
-      return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true))
-    }
-    if (!channel.isVoice()) {
-      return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true))
-    }
-    if (!(member instanceof GuildMember)) {
-      return await interaction.reply(simpleEmbed('You can only specify a valid user!', true))
-    }
+    if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
+    if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
+    // Will be obsolete with channel types
+    if (!channel.isVoice()) { return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true)) }
 
     await member.voice.setChannel(channel)
 

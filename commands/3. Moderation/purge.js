@@ -11,12 +11,8 @@ module.exports = {
     let amount = interaction.options.getInteger('amount')
     amount = amount.toString()
 
-    if (!interaction.user.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-      return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true))
-    }
-    if (amount < 1 || amount > 100) {
-      return await interaction.reply(simpleEmbed('You can only delete between 1-100 messages!', true))
-    }
+    if (!interaction.user.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
+    if (amount < 1 || amount > 100) { return await interaction.reply(simpleEmbed('You can only delete between 1-100 messages!', true)) }
 
     await interaction.channel.messages.fetch({ limit: amount }).then(messages => {
       interaction.channel.bulkDelete(messages)

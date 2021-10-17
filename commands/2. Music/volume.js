@@ -7,7 +7,8 @@ module.exports = {
     .setDescription('Sets the volume of the music player.')
     .addIntegerOption(option => option.setName('volume').setDescription('The volume to set the player to.').setRequired(true)),
   async execute (interaction) {
-    const volume = interaction.options.getInteger('volume')
+    let volume = interaction.options.getInteger('volume')
+    volume = Math.min(Math.max(volume, 0), 200)
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.nowPlaying) { return interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     queue.setVolume(volume)
