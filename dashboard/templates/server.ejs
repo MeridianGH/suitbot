@@ -65,7 +65,7 @@
             <td><span class="text-nowrap"><%= queue.songs[i].duration %></span></td>
             <td><span class="text-nowrap"><form method="POST"><input type="hidden" name="index" value="<%= i %>"><button type="submit" class="music-btn" name="action" value="remove"><i class="fas fa-trash-alt"></i></button><button type="submit" class="music-btn" name="action" value="skipto"><i class="fas fa-forward"></i></button></form></span></td>
           </tr>
-        <% }; %>
+        <% } %>
         </tbody>
       </table>
     <% } else { %>
