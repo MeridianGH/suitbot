@@ -11,7 +11,7 @@ module.exports = {
 
     const embed = new MessageEmbed()
       .setAuthor('Ping', interaction.member.user.displayAvatarURL())
-      .setTitle('Bot & API  Latency')
+      .setTitle('Bot & API Latency')
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(`Ping: ${ping}ms\nAPI Latency: ${Math.round(interaction.client.ws.ping)}ms`)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
