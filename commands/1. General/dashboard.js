@@ -9,7 +9,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setAuthor('Dashboard', interaction.member.user.displayAvatarURL())
       .setTitle('SuitBot Dashboard')
-      .setURL('https://suitbotxyz.herokuapp.com')
+      .setURL('http://suitbot.xyz')
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription('The bots dashboard website.')
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
