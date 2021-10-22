@@ -1,14 +1,14 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { simpleEmbed } = require('../../utilities')
 const { MessageEmbed, Permissions } = require('discord.js')
+const { ChannelType } = require('discord-api-types/v9')
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('moveall')
     .setDescription('Moves all users from the first channel to the second channel.')
-    // TODO: Add channel type once builder supports it
-    .addChannelOption(option => option.setName('channel1').setDescription('The channel to move from.').setRequired(true))
-    .addChannelOption(option => option.setName('channel2').setDescription('The channel to move to.').setRequired(true)),
+    .addChannelOption(option => option.setName('channel1').setDescription('The channel to move from.').addChannelType(ChannelType.GuildVoice).setRequired(true))
+    .addChannelOption(option => option.setName('channel2').setDescription('The channel to move to.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
   async execute (interaction) {
     const channel1 = interaction.options.getChannel('channel1')
     const channel2 = interaction.options.getChannel('channel2')

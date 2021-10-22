@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { simpleEmbed } = require('../../utilities')
 const discordRest = require('@discordjs/rest')
-const { Routes } = require('discord-api-types/v9')
+const { Routes, ChannelType } = require('discord-api-types/v9')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,8 +13,7 @@ module.exports = {
       .addChoice('Betrayal.io', '773336526917861400')
       .addChoice('Fishington.io', '814288819477020702')
       .addChoice('Chess in the Park', '832012774040141894'))
-    // TODO: Add channel type once builder supports it
-    .addChannelOption(option => option.setName('channel').setDescription('The voice channel to create the activity in.').setRequired(true)),
+    .addChannelOption(option => option.setName('channel').setDescription('The voice channel to create the activity in.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
   async execute (interaction) {
     const channel = interaction.options.getChannel('channel')
     if (!channel.isVoice()) {

@@ -1,14 +1,14 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { simpleEmbed } = require('../../utilities')
 const { GuildMember, MessageEmbed, Permissions } = require('discord.js')
+const { ChannelType } = require('discord-api-types/v9')
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('move')
     .setDescription('Moves the mentioned user to the specified channel.')
     .addMentionableOption(option => option.setName('user').setDescription('The user to move.').setRequired(true))
-    // TODO: Add channel type once builder supports it
-    .addChannelOption(option => option.setName('channel').setDescription('The channel to move to.').setRequired(true)),
+    .addChannelOption(option => option.setName('channel').setDescription('The channel to move to.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
   async execute (interaction) {
     const member = interaction.options.getMentionable('user')
     const channel = interaction.options.getChannel('channel')
