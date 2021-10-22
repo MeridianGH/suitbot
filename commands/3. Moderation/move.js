@@ -13,7 +13,7 @@ module.exports = {
     const member = interaction.options.getMentionable('user')
     const channel = interaction.options.getChannel('channel')
 
-    if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
+    if (!interaction.member.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
     if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
 
     await member.voice.setChannel(channel)

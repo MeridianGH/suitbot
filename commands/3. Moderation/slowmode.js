@@ -10,7 +10,7 @@ module.exports = {
   async execute (interaction) {
     const seconds = interaction.options.getInteger('seconds')
 
-    if (!interaction.user.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
+    if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
 
     await interaction.channel.setRateLimitPerUser(seconds)
 

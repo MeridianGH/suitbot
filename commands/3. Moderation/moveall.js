@@ -13,7 +13,7 @@ module.exports = {
     const channel1 = interaction.options.getChannel('channel1')
     const channel2 = interaction.options.getChannel('channel2')
 
-    if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
+    if (!interaction.member.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
 
     for (const user of channel1.members) {
       await user[1].voice.setChannel(channel2)
