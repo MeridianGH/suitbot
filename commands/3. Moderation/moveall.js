@@ -14,8 +14,6 @@ module.exports = {
     const channel2 = interaction.options.getChannel('channel2')
 
     if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
-    // Will be obsolete with channel types
-    if (!channel1.isVoice() || !channel2.isVoice()) { return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true)) }
 
     for (const user of channel1.members) {
       await user[1].voice.setChannel(channel2)

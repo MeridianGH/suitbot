@@ -15,8 +15,6 @@ module.exports = {
 
     if (!interaction.user.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
     if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
-    // Will be obsolete with channel types
-    if (!channel.isVoice()) { return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true)) }
 
     await member.voice.setChannel(channel)
 
