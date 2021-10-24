@@ -27,7 +27,7 @@ module.exports = {
       let description = ''
       description += 'Still using old and boring commands? Use the new [web dashboard](http://suitbot.xyz) instead!\n\n'
       description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\nUp Next:\n`
-      for (const song of queue.songs) {
+      for (const song of queue.songs.slice(1)) {
         description += `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
       }
       description += `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function (prev, cur) { return prev + cur.millisecons }, 0))} total duration**\n${'\u2015'.repeat(34)}`
