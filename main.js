@@ -39,6 +39,7 @@ process.on('uncaughtException', error => {
   console.log('Ignoring uncaught exception: ' + error)
 })
 process.on('SIGTERM', async () => {
+  console.log(`Closing ${client.player.queues.size} queues.`)
   for (const entry of client.player.queues) {
     const queue = entry[1]
     await queue.lastTextChannel.send(errorEmbed('Server shutdown', 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'))
