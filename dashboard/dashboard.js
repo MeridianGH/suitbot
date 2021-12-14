@@ -205,6 +205,7 @@ module.exports = async (client) => {
     if (!member) { return res.redirect('/dashboard') }
     const queue = client.player.getQueue(guild.id)
     if (!queue) { return res.redirect('/dashboard') }
+    if (req.body.action === 'reload') { return res.redirect('back') }
     if (!(member.voice.channel === queue.connection.channel)) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'You need to be in the same voice channel as the bot to use this!', type: 'danger' }) }
 
     let alert = null
