@@ -18,7 +18,7 @@ module.exports = {
     totalSeconds %= 3600
     const minutes = Math.floor(totalSeconds / 60).toString()
     const seconds = Math.floor(totalSeconds % 60).toString()
-    return (hours === '0' ? `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}` : `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
+    return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
   },
   getFilesRecursively: function getFilesRecursively (directory, files) {
     const contents = fs.readdirSync(directory)
