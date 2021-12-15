@@ -22,10 +22,10 @@
     <%- alert && type ? `<div class="alert alert-${type}" id="alert" style="color: #000000; opacity: 0.85; position: absolute; width: calc(100% - 2rem); margin: 0; transition: opacity 1s;"><i class="fas fa-info-circle"></i> ${alert}</div>` : '' %>
     <% if(queue && queue.songs[0]) { %>
       <div style="display: flex; justify-content: space-between;">
-          <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
-          <form method="POST" style="margin: 0;">
-              <button type="submit" class="button" name="action" value="reload"><i class="far fa-redo-alt"></i></button>
-          </form>
+        <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
+        <form method="POST" style="margin: 0;">
+          <button type="submit" class="button" name="action" value="reload"><i class="far fa-redo-alt"></i></button>
+        </form>
       </div>
       <div style="height: 200px; margin-bottom: 10px;">
         <ul class="horizontal-list">
@@ -35,10 +35,10 @@
             <h6><%= queue.songs[0].author %></h6>
             <h5><%= queue.songs[0].duration %></h5>
             <form method="POST" style="width: 100%; margin: 0;">
-                <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
-                <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
-                <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
-                <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
+              <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
+              <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
+              <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
+              <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
             </form>
           </li>
         </ul>
