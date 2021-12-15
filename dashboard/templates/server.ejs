@@ -1,4 +1,4 @@
-<%- include("partials/header", { bot, user, path, title: `Queue | ${guild.name}` }) %>
+<%- include("partials/header", { bot, user, path, title: `Queue | ${guild.name}` }, "../../utilities.js") %>
 
 <script type="text/javascript">
   const evtSource = new EventSource('/update/<%= guild.id %>')
@@ -11,6 +11,26 @@
       alert.addEventListener('transitioned', () => alert.remove())
       setTimeout(() => alert.style.opacity = '0', 5000)
     }
+    <% if (queue && queue.songs[0]) { %>
+      function msToHMS (ms) {
+        let totalSeconds = (ms / 1000)
+        const hours = Math.floor(totalSeconds / 3600).toString()
+        totalSeconds %= 3600
+        const minutes = Math.floor(totalSeconds / 60).toString()
+        const seconds = Math.floor(totalSeconds % 60).toString()
+        return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
+      }
+      let currentMS = <%= queue.connection.time %>;
+      const time = document.getElementById('time')
+      const progress = document.getElementById('progress')
+
+      function incrementSeconds () {
+        currentMS += 1000
+        time.innerHTML = `${msToHMS(currentMS)} / <%= queue.songs[0].duration %>`
+        progress.style.width = `${(currentMS / <%= queue.songs[0].milliseconds %> * 100)}%`
+      }
+      setInterval(incrementSeconds, 1000)
+    <% } %>
   }
 </script>
 
@@ -19,7 +39,7 @@
     <div><i class="fas fa-list"></i> <%= guild.name %></div>
   </header>
   <div class="card-body">
-    <%- alert && type ? `<div class="alert alert-${type}" id="alert" style="color: #000000; opacity: 0.85; position: absolute; width: calc(100% - 2rem); margin: 0; transition: opacity 1s;"><i class="fas fa-info-circle"></i> ${alert}</div>` : '' %>
+    <%- alert && type ? `<div class="alert alert-${type}" id="alert" style="color: #000000; opacity: 0.85; position: absolute; width: calc(100% - 2rem); margin: 0; transition: opacity 1s; pointer-events:none;"><i class="fas fa-info-circle"></i> ${alert}</div>` : '' %>
     <% if(queue && queue.songs[0]) { %>
       <div style="display: flex; justify-content: space-between;">
         <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
@@ -29,11 +49,17 @@
       </div>
       <div style="height: 200px; margin-bottom: 10px;">
         <ul class="horizontal-list">
-          <li><img src="<%- queue.songs[0].thumbnail %>" style="height: 200px; flex-shrink: 4; margin-right: 20px;"></li>
+          <li>
+            <img src="<%- queue.songs[0].thumbnail %>" style="height: 200px; width: 356px; flex-shrink: 4; margin-right: 20px;">
+            <div style="width: 356px; background-color: #373b3e">
+              <div id="progress" style="width: <%= queue.connection.time / queue.songs[0].milliseconds * 100 %>%; height: 5px; background-color: #ff0000">
+              </div>
+            </div>
+          </li>
           <li>
             <h4><%= queue.songs[0].name %></h4>
             <h6><%= queue.songs[0].author %></h6>
-            <h5><%= queue.songs[0].duration %></h5>
+            <h5 id="time"><%= utilities.msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
             <form method="POST" style="width: 100%; margin: 0;">
               <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
               <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
