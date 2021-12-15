@@ -1,4 +1,12 @@
-<%- include("partials/header", { bot, user, path, title: `Queue | ${guild.name}` }, "../../utilities.js") %>
+<%- include("partials/header", { bot, user, path, title: `Queue | ${guild.name}` }) %>
+<% function msToHMS (ms) {
+  let totalSeconds = (ms / 1000)
+  const hours = Math.floor(totalSeconds / 3600).toString()
+  totalSeconds %= 3600
+  const minutes = Math.floor(totalSeconds / 60).toString()
+  const seconds = Math.floor(totalSeconds % 60).toString()
+  return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
+} %>
 
 <script type="text/javascript">
   const evtSource = new EventSource('/update/<%= guild.id %>')
@@ -59,7 +67,7 @@
           <li>
             <h4><%= queue.songs[0].name %></h4>
             <h6><%= queue.songs[0].author %></h6>
-            <h5 id="time"><%= utilities.msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
+            <h5 id="time"><%= msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
             <form method="POST" style="width: 100%; margin: 0;">
               <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
               <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
