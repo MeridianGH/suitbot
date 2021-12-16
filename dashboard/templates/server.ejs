@@ -19,7 +19,7 @@
       alert.addEventListener('transitioned', () => alert.remove())
       setTimeout(() => alert.style.opacity = '0', 5000)
     }
-    <% if (queue && queue.songs[0] && !queue.paused) { %>
+    <% if (queue && queue.songs[0] && !queue.connection.paused) { %>
       function msToHMS (ms) {
         let totalSeconds = (ms / 1000)
         const hours = Math.floor(totalSeconds / 3600).toString()
@@ -69,7 +69,7 @@
             <h6><%= queue.songs[0].author %></h6>
             <h5 id="time"><%= msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
             <form method="POST" style="width: 100%; margin: 0;">
-              <button type="submit" class="button" name="action" value="pause"><%- queue.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
+              <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
               <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
               <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
               <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
