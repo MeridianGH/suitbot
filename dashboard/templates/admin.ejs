@@ -29,7 +29,7 @@
       <tbody>
         <% bot.guilds.cache.forEach(guild => { %>
         <tr>
-          <td style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 20px"></a></td>
+          <td style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" target="_blank"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 20px"></a></td>
           <td style="width: 60%"><span class="text-nowrap"><%= guild.name %></span></td>
           <td><span class="text-nowrap"><%= guild.memberCount %></span></td>
           <td><span class="text-nowrap"><%= guild.channels.channelCountWithoutThreads %></span></td>
