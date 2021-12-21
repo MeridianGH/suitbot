@@ -91,7 +91,10 @@ npm install
 Rename `config_example.json` to `config.json` and replace the placeholders inside with your info:
 - A Discord Bot Token (**[Guide](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot)**)
 - Your Application ID which you can find the the `General Information` tab in your Discord application.
+- Your Client Secret which is under `OAuth2` in your Discord application. 
+  - While you're here, add `http://localhost/callback` to the `Redirects`.
 - The Guild ID of the server in which you want to test the bot. To get this ID, activate `Developer Mode` in Discord's options and right-click your server.
+- Your User ID of your Discord account which will be your Admin-Account for the bot. Right-click yourself with `Developer Mode` activated.
 
 Use `node deploy-commands.js` to update and add commands in the guild you specified and `node deploy-commands-global.js` to update the commands in every guild the bot is in.\
 Guild commands are refreshed instantly while global commands can take up to an hour.
@@ -102,9 +105,10 @@ node main.js
 ```
 
 ### Heroku
-It is also possible to install and run the bot in Heroku.\
-Replace the domain in `dashboard.js` with the domain of you Heroku app.\
-Add your fork of this repository as a GitHub source, add the buildpacks listed below and place your config information with their respective names in the config vars.
+It is also possible to install and run the bot in Heroku.
+- Replace the domain in `dashboard.js` with the domain of you Heroku app.
+- Replace `http://localhost/callback` in your Discord Application Redirects with `http://yourHerokuDomain/callback`
+- Add your fork of this repository as a GitHub source, add the buildpacks listed below and place your config information with their respective names in the config vars.
 ```
 heroku/nodejs
 https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest

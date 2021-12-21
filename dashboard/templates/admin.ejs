@@ -1,0 +1,44 @@
+<%- include("partials/header", { bot, user, path, title: 'Admin Panel' }) %>
+<% function uptime (ms) {
+  let totalSeconds = (ms / 1000)
+  const days = Math.floor(totalSeconds / 86400)
+  totalSeconds %= 86400
+  const hours = Math.floor(totalSeconds / 3600)
+  totalSeconds %= 3600
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = Math.floor(totalSeconds % 60)
+  return `Uptime: ${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`
+} %>
+
+<div class="card col-sm-10 offset-sm-1">
+  <header class="card-header">
+    <div><i class="fas fa-list"></i> Admin Panel</div>
+  </header>
+  <div class="card-body">
+    <h4><%= uptime(bot.uptime) %></h4>
+    <table class="table table-dark table-striped">
+      <thead>
+      <tr>
+        <th>Icon</th>
+        <th>Guild</th>
+        <th>Members</th>
+        <th>Channels</th>
+        <th>Created</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% bot.guilds.cache.forEach(guild => { %>
+        <tr>
+          <td style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 20px"></a></td>
+          <td style="width: 60%"><span class="text-nowrap"><%= guild.name %></span></td>
+          <td><span class="text-nowrap"><%= guild.memberCount %></span></td>
+          <td><span class="text-nowrap"><%= guild.channels.channelCountWithoutThreads %></span></td>
+          <td style="width: 1%"><span class="text-nowrap"><%= guild.createdAt.toUTCString() %></span></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include("partials/footer") %>

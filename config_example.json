@@ -1,6 +1,7 @@
 {
 	"token": "yourToken",
 	"appId": "yourApplicationID",
+	"clientSecret": "yourClientSecret",
 	"guildId": "yourGuildID",
-	"clientSecret": "yourClientSecret"
+	"adminId": "yourUserID"
 }

@@ -28,20 +28,19 @@
       </ul>
       <ul class="navbar-nav">
         <% if (user) { %>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" style="display: flex; align-items: center;">
-              <span style="margin-right: 5px;"><%= user.username %><span style="color: #bbbbbb;">#<%= user.discriminator %></span></span>
-              <img src="<%= `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}` %>" style="border-radius: 50%; height: 30px;">
-            </a>
-            <div class="dropdown-menu dropdown-menu-end">
-              <a class="dropdown-item" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
-              <hr class="dropdown-divider">
-              <a class="dropdown-item" href="/logout"><i class="far fa-sign-out"> Logout</i></a>
-            </div>
-          </li>
-          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" style="display: flex; align-items: center;">
+            <span style="margin-right: 5px;"><%= user.username %><span style="color: #bbbbbb;">#<%= user.discriminator %></span></span>
+            <img src="<%= `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}` %>" style="border-radius: 50%; height: 30px;">
+          </a>
+          <div class="dropdown-menu dropdown-menu-end">
+            <a class="dropdown-item" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item" href="/logout"><i class="far fa-sign-out"> Logout</i></a>
+          </div>
+        </li>
         <% } else { %>
-          <li class="nav-item"><a href="/login" class="nav-link"><i class="far fa-sign-in"></i> Login</a></li>
+        <li class="nav-item"><a href="/login" class="nav-link"><i class="far fa-sign-in"></i> Login</a></li>
         <% } %>
       </ul>
     </div>

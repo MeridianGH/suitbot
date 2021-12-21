@@ -20,24 +20,24 @@
       setTimeout(() => alert.style.opacity = '0', 5000)
     }
     <% if (queue && queue.songs[0] && !queue.connection.paused) { %>
-      function msToHMS (ms) {
-        let totalSeconds = (ms / 1000)
-        const hours = Math.floor(totalSeconds / 3600).toString()
-        totalSeconds %= 3600
-        const minutes = Math.floor(totalSeconds / 60).toString()
-        const seconds = Math.floor(totalSeconds % 60).toString()
-        return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
-      }
-      let currentMS = <%= queue.connection.time %>;
-      const time = document.getElementById('time')
-      const progress = document.getElementById('progress')
+    function msToHMS (ms) {
+      let totalSeconds = (ms / 1000)
+      const hours = Math.floor(totalSeconds / 3600).toString()
+      totalSeconds %= 3600
+      const minutes = Math.floor(totalSeconds / 60).toString()
+      const seconds = Math.floor(totalSeconds % 60).toString()
+      return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
+    }
+    let currentMS = <%= queue.connection.time %>;
+    const time = document.getElementById('time')
+    const progress = document.getElementById('progress')
 
-      function incrementSeconds () {
-        currentMS += 1000
-        time.innerHTML = `${msToHMS(currentMS)} / <%= queue.songs[0].duration %>`
-        progress.style.width = `${(currentMS / <%= queue.songs[0].milliseconds %> * 100)}%`
-      }
-      setInterval(incrementSeconds, 1000)
+    function incrementSeconds () {
+      currentMS += 1000
+      time.innerHTML = `${msToHMS(currentMS)} / <%= queue.songs[0].duration %>`
+      progress.style.width = `${(currentMS / <%= queue.songs[0].milliseconds %> * 100)}%`
+    }
+    setInterval(incrementSeconds, 1000)
     <% } %>
   }
 </script>
@@ -49,68 +49,68 @@
   <div class="card-body">
     <%- alert && type ? `<div class="alert alert-${type}" id="alert" style="color: #000000; opacity: 0.85; position: absolute; width: calc(100% - 2rem); margin: 0; transition: opacity 1s; pointer-events:none;"><i class="fas fa-info-circle"></i> ${alert}</div>` : '' %>
     <% if(queue && queue.songs[0]) { %>
-      <div style="display: flex; justify-content: space-between;">
-        <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
-        <form method="POST" style="margin: 0;">
-          <button type="submit" class="button" name="action" value="reload"><i class="far fa-redo-alt"></i></button>
-        </form>
-      </div>
-      <div style="height: 200px; margin-bottom: 10px;">
-        <ul class="horizontal-list">
-          <li>
-            <img src="<%- queue.songs[0].thumbnail %>" style="height: 200px; width: 356px; flex-shrink: 4; margin-right: 20px;">
-            <div style="width: 356px; background-color: #373b3e">
-              <div id="progress" style="width: <%= queue.connection.time / queue.songs[0].milliseconds * 100 %>%; height: 5px; background-color: #ff0000">
-              </div>
+    <div style="display: flex; justify-content: space-between;">
+      <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
+      <form method="POST" style="margin: 0;">
+        <button type="submit" class="button" name="action" value="reload"><i class="far fa-redo-alt"></i></button>
+      </form>
+    </div>
+    <div style="height: 200px; margin-bottom: 10px;">
+      <ul class="horizontal-list">
+        <li>
+          <img src="<%- queue.songs[0].thumbnail %>" style="height: 200px; width: 356px; flex-shrink: 4; margin-right: 20px;">
+          <div style="width: 356px; background-color: #373b3e">
+            <div id="progress" style="width: <%= queue.connection.time / queue.songs[0].milliseconds * 100 %>%; height: 5px; background-color: #ff0000">
             </div>
-          </li>
-          <li>
-            <h4><%= queue.songs[0].name %></h4>
-            <h6><%= queue.songs[0].author %></h6>
-            <h5 id="time"><%= msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
-            <form method="POST" style="width: 100%; margin: 0;">
-              <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
-              <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
-              <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
-              <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
-            </form>
-          </li>
-        </ul>
-      </div>
-      <h1 style="font-family: 'Bebas Neue';">Queue</h1>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-        <form method="POST" style="margin: 0;">
-          <input type="text" class="music-form" name="query" placeholder="Add to queue">
-          <button type="submit" class="button" name="action" value="play"><i class="fas fa-plus"></i> Play</button>
-        </form>
-        <form method="POST" style="margin: 0;">
-          <button type="submit" class="button" name="action" value="clear"><i class="fas fa-trash-alt"></i> Clear queue</button>
-        </form>
-      </div>
-      <table class="table table-dark table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th style="width: 100%;">Song</th>
-            <th>Author</th>
-            <th>Duration</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+          </div>
+        </li>
+        <li>
+          <h4><%= queue.songs[0].name %></h4>
+          <h6><%= queue.songs[0].author %></h6>
+          <h5 id="time"><%= msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
+          <form method="POST" style="width: 100%; margin: 0;">
+            <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
+            <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
+            <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
+            <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    <h1 style="font-family: 'Bebas Neue';">Queue</h1>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+      <form method="POST" style="margin: 0;">
+        <input type="text" class="music-form" name="query" placeholder="Add to queue">
+        <button type="submit" class="button" name="action" value="play"><i class="fas fa-plus"></i> Play</button>
+      </form>
+      <form method="POST" style="margin: 0;">
+        <button type="submit" class="button" name="action" value="clear"><i class="fas fa-trash-alt"></i> Clear queue</button>
+      </form>
+    </div>
+    <table class="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th style="width: 100%;">Song</th>
+          <th>Author</th>
+          <th>Duration</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
         <% for (var i = 1; i < queue.songs.length; i++) { %>
-          <tr>
-            <td><span class="text-nowrap"><%= i %></span></td>
-            <td><span class="text-nowrap"><%= queue.songs[i].name %></span></td>
-            <td><span class="text-nowrap"><%= queue.songs[i].author %></span></td>
-            <td><span class="text-nowrap"><%= queue.songs[i].duration %></span></td>
-            <td><span class="text-nowrap"><form method="POST"><input type="hidden" name="index" value="<%= i %>"><button type="submit" class="music-btn" name="action" value="remove"><i class="fas fa-trash-alt"></i></button><button type="submit" class="music-btn" name="action" value="skipto"><i class="fas fa-forward"></i></button></form></span></td>
-          </tr>
+        <tr>
+          <td><span class="text-nowrap"><%= i %></span></td>
+          <td><span class="text-nowrap"><%= queue.songs[i].name %></span></td>
+          <td><span class="text-nowrap"><%= queue.songs[i].author %></span></td>
+          <td><span class="text-nowrap"><%= queue.songs[i].duration %></span></td>
+          <td><span class="text-nowrap"><form method="POST"><input type="hidden" name="index" value="<%= i %>"><button type="submit" class="music-btn" name="action" value="remove"><i class="fas fa-trash-alt"></i></button><button type="submit" class="music-btn" name="action" value="skipto"><i class="fas fa-forward"></i></button></form></span></td>
+        </tr>
         <% } %>
-        </tbody>
-      </table>
+      </tbody>
+    </table>
     <% } else { %>
-      <div>Nothing currently playing!<br>Join a voice channel and type "/play" to get started!</div>
+    <div>Nothing currently playing!<br>Join a voice channel and type "/play" to get started!</div>
     <% } %>
   </div>
 </div>

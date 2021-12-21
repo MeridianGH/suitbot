@@ -292,6 +292,14 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
   })
 
+  // Admin endpoint.
+  app.get('/admin', checkAuth, async (req, res) => {
+    const adminId = process.env.adminId ? process.env.adminId : require('../config.json').adminId
+    if (req.user.id !== adminId) { return res.redirect('/') }
+
+    renderTemplate(req, res, 'admin.ejs')
+  })
+
   client.dashboard = app.listen(port, null, null, () => {
     console.log(`Dashboard is up and running on port ${port}.`)
     heartbeat()
