@@ -12,7 +12,7 @@
 
 It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https://discord-music-player.js.org/) for its main features.
 
-Head on over to the [dashboard](http://suitbot.xyz) for more information!
+Head on over to the [dashboard](https://suitbot.xyz) for more information!
 
 Join the [Discord server](https://discord.gg/qX2CBrrUpf) for information about updates and support or if you'd like to report a bug or leave a suggestion.
 
@@ -23,7 +23,7 @@ I'm currently hosting the bot myself, and it is publicly available with this inv
 
 [![invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=&labelColor=212121&message=Invite&color=212121)](https://discord.com/api/oauth2/authorize?client_id=887122733010411611&permissions=2167425024&scope=bot%20applications.commands)
 
-The dashboard is available here: [Dashboard](http://suitbot.xyz)\
+The dashboard is available here: [Dashboard](https://suitbot.xyz)\
 You can check the current status to the right under `Environments`.
 
 

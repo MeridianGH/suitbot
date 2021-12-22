@@ -15,7 +15,7 @@ module.exports = {
     if (queue.songs.length === 1) {
       // Format single page with no upcoming songs.
       let description = ''
-      description += 'Still using old and boring commands? Use the new [web dashboard](http://suitbot.xyz) instead!\n\n'
+      description += 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!\n\n'
       description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`
       const embed = new MessageEmbed()
         .setAuthor('Queue.', interaction.member.user.displayAvatarURL())
@@ -25,7 +25,7 @@ module.exports = {
     } else if (queue.songs.length > 1 && queue.songs.length <= 11) {
       // Format single page.
       let description = ''
-      description += 'Still using old and boring commands? Use the new [web dashboard](http://suitbot.xyz) instead!\n\n'
+      description += 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!\n\n'
       description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\nUp Next:\n`
       for (const song of queue.songs.slice(1)) {
         description += `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
@@ -43,7 +43,7 @@ module.exports = {
         const songs = queue.songs.slice(i, i + 10)
 
         let description = ''
-        description += 'Still using old and boring commands? Use the new [web dashboard](http://suitbot.xyz) instead!\n\n'
+        description += 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!\n\n'
         description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\nUp Next:\n`
         for (const song of songs) {
           description += `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
