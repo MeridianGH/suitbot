@@ -38,6 +38,7 @@ Command      | Description
 /dashboard   | Sends a link to the dashboard.
 /help        | Replies with help on how to use this bot.
 /info        | Shows info about the bot.
+/invite      | Sends an invite link for the bot.
 /ping        | Replies with the current latency.
 /serverinfo  | Shows info about the server.
 /userinfo    | Shows info about a user.
