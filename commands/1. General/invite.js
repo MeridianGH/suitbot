@@ -1,0 +1,18 @@
+const { SlashCommandBuilder } = require('@discordjs/builders')
+const { MessageEmbed } = require('discord.js')
+
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName('invite')
+    .setDescription('Sends an invite link for the bot.'),
+  async execute (interaction) {
+    const embed = new MessageEmbed()
+      .setAuthor('Invite', interaction.member.user.displayAvatarURL())
+      .setTitle('Invite SuitBot')
+      .setURL('https://discordapp.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024&response_type=code&redirect_uri=https://suitbotxyz.herokuapp.com/callback')
+      .setThumbnail(interaction.client.user.displayAvatarURL())
+      .setDescription('Click this link to invite SuitBot to your server!')
+      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+    await interaction.reply({ embeds: [embed] })
+  }
+}
