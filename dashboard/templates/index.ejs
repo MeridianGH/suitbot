@@ -5,7 +5,7 @@
     <div class="col" style="flex-shrink: 5;"><img src="suit.png" style="height: 500px; margin-top: 25px;"></div>
     <div class="col" style="flex-grow: 5;">
       <h1 style="font-family: 'Bebas Neue'; font-size: 100px;">SuitBot<br>Dashboard</h1>
-      <div style="font-size: 20px; margin-bottom: 20px;">Serving <b><%- bot.users.cache.size %></b> users in <b><%- bot.guilds.cache.size %></b> servers.</div>
+      <div style="font-size: 20px; margin-bottom: 20px;">Serving <b><%- bot.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) %></b> users in <b><%- bot.guilds.cache.size %></b> servers.</div>
       <a class="btn btn-lg mainbutton btn-secondary btn-block rounded-pill" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
     </div>
   </div>
