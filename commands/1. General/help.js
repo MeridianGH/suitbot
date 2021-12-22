@@ -7,10 +7,10 @@ module.exports = {
     .setName('help')
     .setDescription('Replies with help on how to use this bot.')
     .addStringOption(option => option.setName('category').setDescription('The category to display first.')
-      .addChoice('General', '1')
-      .addChoice('Music', '2')
-      .addChoice('Moderation', '3')
-      .addChoice('Feedback', '4')),
+      .addChoice('General', '2')
+      .addChoice('Music', '3')
+      .addChoice('Moderation', '4')
+      .addChoice('Feedback', '5')),
   async execute (interaction) {
     const folders = fs.readdirSync('./commands/').filter(function (file) { return fs.statSync('./commands/' + file).isDirectory() })
     const categories = {}
@@ -24,6 +24,17 @@ module.exports = {
 
     const pages = []
 
+    const embed = new MessageEmbed()
+      .setAuthor('Help', interaction.member.user.displayAvatarURL())
+      .setTitle('SuitBot Help Page')
+      .setDescription('This module lists every command SuitBot currently supports.\n\nTo use a command start by typing `/` followed by the command you want to execute. You can also use Discord\'s integrated auto-completion for commands.\n\n')
+      .addField('➕  Invite', '[Click here to invite](https://discordapp.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024&response_type=code&redirect_uri=https://suitbotxyz.herokuapp.com/callback)', true)
+      .addField('🌐  Website', '[suitbot.xyz](https://suitbot.xyz)', true)
+      .addField('<:github:923336812410306630>  Source code', '[GitHub](https://github.com/MeridianGH/suitbot)', true)
+      .addField('\u200b', 'Press the buttons below to switch between pages and display more info.')
+      .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, interaction.client.user.displayAvatarURL())
+    pages.push(embed)
+
     for (const [category, commands] of Object.entries(categories)) {
       let description = ''
       for (const command of commands) {
@@ -36,7 +47,7 @@ module.exports = {
         .setAuthor('Help', interaction.member.user.displayAvatarURL())
         .setTitle(category)
         .setDescription(description)
-        .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length}`, interaction.client.user.displayAvatarURL())
+        .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, interaction.client.user.displayAvatarURL())
       pages.push(embed)
     }
 
@@ -57,6 +68,9 @@ module.exports = {
     collector.on('collect', async buttonInteraction => {
       buttonInteraction.customId === 'previousHelp' ? (currentIndex -= 1) : (currentIndex += 1)
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
+    })
+    collector.on('end', async (collected) => {
+      await collected.first()?.message.edit({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
     })
   }
 }
