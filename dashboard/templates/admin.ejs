@@ -23,7 +23,7 @@
         <th>Guild</th>
         <th>Members</th>
         <th>Channels</th>
-        <th>Created</th>
+        <th>Joined</th>
       </tr>
       </thead>
       <tbody>
@@ -33,7 +33,7 @@
           <td class="align-middle" style="width: 60%"><span class="text-nowrap"><%= guild.name %></span></td>
           <td class="align-middle"><span class="text-nowrap"><%= guild.memberCount %></span></td>
           <td class="align-middle"><span class="text-nowrap"><%= guild.channels.channelCountWithoutThreads %></span></td>
-          <td class="align-middle" style="width: 1%"><span class="text-nowrap"><%= guild.createdAt.toUTCString() %></span></td>
+          <td class="align-middle" style="width: 1%"><span class="text-nowrap"><%= guild.joinedAt.toUTCString() %></span></td>
         </tr>
         <% }) %>
       </tbody>
