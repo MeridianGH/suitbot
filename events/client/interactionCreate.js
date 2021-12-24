@@ -1,10 +1,13 @@
+const { errorEmbed } = require('../../utilities')
+
 module.exports = {
   name: 'interactionCreate',
   execute (interaction) {
-    if (!interaction.isCommand()) return
+    if (!interaction.isCommand()) { return }
+    if (interaction.guild == null) { return interaction.reply(errorEmbed('Error', 'Commands are not supported in DMs.\nPlease use the bot in a server.')) }
 
     const command = interaction.client.commands.get(interaction.commandName)
-    if (!command) return
+    if (!command) { return }
 
     try {
       command.execute(interaction)
