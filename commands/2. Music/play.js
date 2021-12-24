@@ -28,10 +28,10 @@ module.exports = {
   async _playSong (interaction) {
     const guildQueue = interaction.client.player.getQueue(interaction.guild.id)
     const queue = interaction.client.player.createQueue(interaction.guild.id)
-    queue.lastTextChannel = interaction.channel
+    queue.setData({ channel: interaction.channel })
 
     await queue.join(interaction.member.voice.channel)
-    const song = await queue.play(interaction.options.getString('query')).catch(function () {
+    const song = await queue.play(interaction.options.getString('query'),{ requestedBy: interaction.member.displayName }).catch(function () {
       if (!guildQueue) {
         queue.stop()
       }
@@ -40,7 +40,6 @@ module.exports = {
     if (!song) {
       return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.'))
     }
-    song.requestedBy = interaction.member.displayName
 
     await interaction.editReply({
       embeds: [new MessageEmbed()
@@ -59,10 +58,10 @@ module.exports = {
   async _playPlaylist (interaction) {
     const guildQueue = interaction.client.player.getQueue(interaction.guild.id)
     const queue = interaction.client.player.createQueue(interaction.guild.id)
-    queue.lastTextChannel = interaction.channel
+    queue.setData({ channel: interaction.channel })
 
     await queue.join(interaction.member.voice.channel)
-    const playlist = await queue.playlist(interaction.options.getString('query')).catch(function () {
+    const playlist = await queue.playlist(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(function () {
       if (!guildQueue) {
         queue.stop()
       }
@@ -71,9 +70,6 @@ module.exports = {
     if (!playlist) {
       return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your playlist to the queue.'))
     }
-    playlist.songs.forEach(song => {
-      song.requestedBy = interaction.member.displayName
-    })
 
     await interaction.editReply({
       embeds: [new MessageEmbed()

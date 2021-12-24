@@ -246,15 +246,12 @@ module.exports = async (client) => {
         if (!query) { return }
         if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/.+$/i) ||
           query.match(/^https?:\/\/(?:www\.)?youtube\.com\/playlist\?list=.+$/i)) {
-          const playlist = await queue.playlist(query)
+          const playlist = await queue.playlist(query, { requestedBy: member.displayName })
           if (!playlist) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error when adding that playlist!', type: 'danger' }) }
-          playlist.songs.forEach(song => {
-            song.requestedBy = member.displayName
-          })
 
           alert = `Added playlist "${playlist.name}" by ${playlist.author.name || playlist.author} to the queue!`
 
-          queue.lastTextChannel.send({
+          queue.data.channel.send({
             embeds: [new MessageEmbed()
               .setAuthor('Added to queue.', member.user.displayAvatarURL())
               .setTitle(playlist.name)
@@ -267,13 +264,12 @@ module.exports = async (client) => {
             ]
           })
         } else {
-          const song = await queue.play(query)
+          const song = await queue.play(query, { requestedBy: member.displayName })
           if (!song) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error when adding that song!', type: 'danger' }) }
-          song.requestedBy = member.displayName
 
           alert = `Added "${song.name}" to the queue!`
 
-          queue.lastTextChannel.send({
+          queue.data.channel.send({
             embeds: [new MessageEmbed()
               .setAuthor('Added to queue.', member.user.displayAvatarURL())
               .setTitle(song.name)
