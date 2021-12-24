@@ -38,7 +38,7 @@ process.on('uncaughtException', error => {
   fs.appendFile('errors.txt', `${error.stack}\n\n`, (e) => { if (e) { console.log('Failed logging error.') } })
   console.log('Ignoring uncaught exception: ' + error)
 })
-process.on('SIGTERM', async () => {
+async function shutdown () {
   console.log(`Closing ${client.player.queues.size} queues.`)
   for (const entry of client.player.queues) {
     const queue = entry[1]
@@ -49,7 +49,9 @@ process.on('SIGTERM', async () => {
   client.dashboard.close()
   console.log('Received SIGTERM, shutting down.')
   process.exit(0)
-})
+}
+process.on('SIGTERM', shutdown)
+process.on('SIGINT', shutdown)
 
 // Login
 client.login(token)
