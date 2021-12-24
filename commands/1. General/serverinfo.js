@@ -11,7 +11,7 @@ module.exports = {
 `**Created:** ${guild.createdAt.toUTCString()}
 **Channels:** ${guild.channels.channelCountWithoutThreads}
 **Members:** ${guild.memberCount}
-**Boosts:** ${guild.premiumSubscriptionCount || 0}
+**Boosts:** ${guild.premiumSubscriptionCount ?? 0}
 **Owner:** ${await guild.fetchOwner().then(member => { return member.user.tag })}
 **ID:** ${guild.id}`
 

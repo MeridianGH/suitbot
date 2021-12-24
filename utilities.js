@@ -22,7 +22,7 @@ module.exports = {
   },
   getFilesRecursively: function getFilesRecursively (directory, files) {
     const contents = fs.readdirSync(directory)
-    files = files || []
+    files = files ?? []
     for (const file of contents) {
       const absolute = path.join(directory, file)
       if (fs.statSync(absolute).isDirectory()) {

@@ -11,8 +11,8 @@ const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args))
 
-const clientId = process.env.appId || require('../config.json').appId
-const clientSecret = process.env.clientSecret || require('../config.json').clientSecret
+const clientId = process.env.appId ?? require('../config.json').appId
+const clientSecret = process.env.clientSecret ?? require('../config.json').clientSecret
 
 module.exports = async (client) => {
   const dataDir = __dirname
@@ -21,7 +21,7 @@ module.exports = async (client) => {
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((obj, done) => done(null, obj))
 
-  const port = process.env.PORT || 80
+  const port = process.env.PORT ?? 80
   const domain = process.env.PORT ? 'https://suitbotxyz.herokuapp.com' : 'http://localhost'
   const callbackUrl = `${domain}/callback`
 
@@ -249,7 +249,7 @@ module.exports = async (client) => {
           const playlist = await queue.playlist(query, { requestedBy: member.displayName })
           if (!playlist) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error when adding that playlist!', type: 'danger' }) }
 
-          alert = `Added playlist "${playlist.name}" by ${playlist.author.name || playlist.author} to the queue!`
+          alert = `Added playlist "${playlist.name}" by ${playlist.author.name ?? playlist.author} to the queue!`
 
           queue.data.channel.send({
             embeds: [new MessageEmbed()
@@ -257,7 +257,7 @@ module.exports = async (client) => {
               .setTitle(playlist.name)
               .setURL(playlist.url)
               .setThumbnail(playlist.songs[0].thumbnail)
-              .addField('Author', playlist.author.name || playlist.author, true)
+              .addField('Author', playlist.author.name ?? playlist.author, true)
               .addField('Amount', `${playlist.songs.length} songs`, true)
               .addField('Position', `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, true)
               .setFooter('SuitBot Web Interface', client.user.displayAvatarURL())
