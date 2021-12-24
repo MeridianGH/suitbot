@@ -28,7 +28,7 @@ module.exports = {
       .setAuthor('Help', interaction.member.user.displayAvatarURL())
       .setTitle('SuitBot Help Page')
       .setDescription('This module lists every command SuitBot currently supports.\n\nTo use a command start by typing `/` followed by the command you want to execute. You can also use Discord\'s integrated auto-completion for commands.\n\n')
-      .addField('➕  Invite', '[Click here to invite](https://discordapp.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024&response_type=code&redirect_uri=https://suitbotxyz.herokuapp.com/callback)', true)
+      .addField('➕  Invite', '[Click here to invite](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)', true)
       .addField('🌐  Website', '[suitbot.xyz](https://suitbot.xyz)', true)
       .addField('<:github:923336812410306630>  Source code', '[GitHub](https://github.com/MeridianGH/suitbot)', true)
       .addField('\u200b', 'Press the buttons below to switch between pages and display more info.')

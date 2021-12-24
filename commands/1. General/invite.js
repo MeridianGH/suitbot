@@ -9,7 +9,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setAuthor('Invite', interaction.member.user.displayAvatarURL())
       .setTitle('Invite SuitBot')
-      .setURL('https://discordapp.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024&response_type=code&redirect_uri=https://suitbotxyz.herokuapp.com/callback')
+      .setURL('https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024')
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription('Click this link to invite SuitBot to your server!')
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
