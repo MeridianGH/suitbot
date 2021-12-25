@@ -5,15 +5,13 @@ const { simpleEmbed, errorEmbed } = require('../../utilities')
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Searches and plays a song or playlist from YouTube or Spotify.')
+    .setDescription('Plays a song or playlist from YouTube.')
     .addStringOption(option => option.setName('query').setDescription('The query to search for.').setRequired(true)),
   async execute (interaction) {
     const channel = interaction.member.voice.channel
     if (!channel) { return interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }
-
     const permissions = channel.permissionsFor(interaction.client.user)
     if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return interaction.reply(simpleEmbed('I do not have the correct permissions to play in your voice channel!', true))
-
     await interaction.deferReply()
 
     const query = interaction.options.getString('query')
@@ -31,15 +29,8 @@ module.exports = {
     queue.setData({ channel: interaction.channel })
 
     await queue.join(interaction.member.voice.channel)
-    const song = await queue.play(interaction.options.getString('query'),{ requestedBy: interaction.member.displayName }).catch(function () {
-      if (!guildQueue) {
-        queue.stop()
-      }
-    })
-
-    if (!song) {
-      return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.'))
-    }
+    const song = await queue.play(interaction.options.getString('query'),{ requestedBy: interaction.member.displayName }).catch(() => { if (!guildQueue) { queue.stop() } })
+    if (!song) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
 
     await interaction.editReply({
       embeds: [new MessageEmbed()
@@ -61,15 +52,8 @@ module.exports = {
     queue.setData({ channel: interaction.channel })
 
     await queue.join(interaction.member.voice.channel)
-    const playlist = await queue.playlist(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(function () {
-      if (!guildQueue) {
-        queue.stop()
-      }
-    })
-
-    if (!playlist) {
-      return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your playlist to the queue.'))
-    }
+    const playlist = await queue.playlist(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!guildQueue) { queue.stop() } })
+    if (!playlist) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your playlist to the queue.')) }
 
     await interaction.editReply({
       embeds: [new MessageEmbed()
