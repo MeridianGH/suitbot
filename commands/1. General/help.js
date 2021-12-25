@@ -64,7 +64,7 @@ module.exports = {
     const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
-    const collector = embedMessage.createMessageComponentCollector()
+    const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
     collector.on('collect', async buttonInteraction => {
       buttonInteraction.customId === 'previousHelp' ? (currentIndex -= 1) : (currentIndex += 1)
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
