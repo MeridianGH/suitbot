@@ -15,7 +15,8 @@
     <div><i class="fas fa-list"></i> Admin Panel</div>
   </header>
   <div class="card-body">
-    <h4><%= uptime(bot.uptime) %></h4>
+    <h5><%= uptime(bot.uptime) %></h5>
+    <h5>Playing in <%= bot.player.queues.size %> server(s).</h5>
     <table class="table table-dark table-striped">
       <thead>
       <tr>
