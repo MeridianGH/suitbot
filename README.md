@@ -54,6 +54,7 @@ Command      | Description
 /remove      | Removes the specified track from the queue.
 /repeat      | Sets the current repeat mode.
 /resume      | Resumes playback.
+/search      | Searches five songs from YouTube and lets you select one to play.
 /seek        | Skips to the specified point in the current track.
 /shuffle     | Shuffles the queue.
 /skip        | Skips the current song.
