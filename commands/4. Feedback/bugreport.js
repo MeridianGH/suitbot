@@ -19,7 +19,7 @@ module.exports = {
       .setDescription(bug)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
-    bugReportChannel.send({ embeds: [embed], fetchReply: true })
+    bugReportChannel?.send({ embeds: [embed], fetchReply: true })
 
     interaction.reply(simpleEmbed('Your bug report was sent successfully!'))
   }
