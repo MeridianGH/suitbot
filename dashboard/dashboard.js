@@ -237,8 +237,7 @@ module.exports = async (client) => {
         alert = `Removed track #${index}: "${queue.remove(index).name}".`
         break
       case 'skipto':
-        queue.songs = queue.songs.slice(index - 1)
-        queue.skip()
+        queue.skip(index - 1)
         alert = `Skipped to #${index}: "${queue.songs[1].name}".`
         await sleep(1)
         break
