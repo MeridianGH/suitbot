@@ -71,7 +71,7 @@ module.exports = {
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
     })
     collector.on('end', async (collected) => {
-      await collected.first()?.message.edit({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
+      await collected.first()?.message.edit({ embeds: [pages[0]], components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
     })
   }
 }
