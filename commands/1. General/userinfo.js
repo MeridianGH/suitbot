@@ -33,7 +33,7 @@ module.exports = {
       .setTitle(member.displayName)
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .addField('Full Name', member.user.tag, true)
-      .addField('Display Name', member.displayName, true)
+      .addField('Nickname', member.nickname ?? 'None', true)
       .addField('Bot', member.user.bot ? '✅' : '❌', true)
       .addField('ID', member.id, true)
       .addField('Profile', `<@${member.id}>`, true)
