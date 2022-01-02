@@ -21,6 +21,6 @@ module.exports = {
 
     bugReportChannel?.send({ embeds: [embed], fetchReply: true })
 
-    interaction.reply(simpleEmbed('Your bug report was sent successfully!'))
+    await interaction.reply(simpleEmbed('Your bug report was sent successfully!'))
   }
 }

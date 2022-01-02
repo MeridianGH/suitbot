@@ -9,9 +9,9 @@ module.exports = {
     .addStringOption(option => option.setName('query').setDescription('The query to search for.').setRequired(true)),
   async execute (interaction) {
     const channel = interaction.member.voice.channel
-    if (!channel) { return interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }
+    if (!channel) { return await interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }
     const permissions = channel.permissionsFor(interaction.client.user)
-    if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return interaction.reply(simpleEmbed('I do not have the correct permissions to play in your voice channel!', true))
+    if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return await interaction.reply(simpleEmbed('I do not have the correct permissions to play in your voice channel!', true))
     await interaction.deferReply()
 
     const query = interaction.options.getString('query')

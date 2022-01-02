@@ -23,7 +23,7 @@ module.exports = {
     const rest = new discordRest.REST({ version: '9' }).setToken(interaction.client.token)
 
     await rest.post(Routes.channelInvites(channel.id), { body: { target_application_id: interaction.options.getString('activity'), target_type: 2 } })
-      .then(response => interaction.reply(simpleEmbed(`[Click here to open Activity](https://discord.gg/${response.code})`)))
+      .then(async response => await interaction.reply(simpleEmbed(`[Click here to open Activity](https://discord.gg/${response.code})`)))
       .catch(error => console.log(error))
   }
 }

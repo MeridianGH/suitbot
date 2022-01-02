@@ -21,6 +21,6 @@ module.exports = {
 
     suggestionChannel?.send({ embeds: [embed], fetchReply: true }).then(async message => { await message.react('✅'); await message.react('❌') })
 
-    interaction.reply(simpleEmbed('Your suggestion was sent successfully!'))
+    await interaction.reply(simpleEmbed('Your suggestion was sent successfully!'))
   }
 }

@@ -10,7 +10,7 @@ module.exports = {
     let volume = interaction.options.getInteger('volume')
     volume = Math.min(Math.max(volume, 0), 200)
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.nowPlaying) { return interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     queue.setVolume(volume)
     await interaction.reply(simpleEmbed(`🔊 Set volume to ${volume}%.`))
   }
