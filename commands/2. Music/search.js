@@ -38,13 +38,13 @@ module.exports = {
         .setThumbnail(search[0].thumbnail)
         .setFooter('SuitBot | This embed expires in one minute.', interaction.client.user.displayAvatarURL())
       ],
-      components: [ new MessageActionRow({ components: [ selectMenu ] }) ],
+      components: [new MessageActionRow({ components: [selectMenu] })],
       fetchReply: true
     })
 
     const collector = embedMessage.createMessageComponentCollector({ time: 60000 })
     collector.on('collect', async menuInteraction => {
-      if ( menuInteraction.member.id !== interaction.member.id ) { return await menuInteraction.reply(errorEmbed('Error', 'Only the original user may select a song!', true)) }
+      if (menuInteraction.member.id !== interaction.member.id) { return await menuInteraction.reply(errorEmbed('Error', 'Only the original user may select a song!', true)) }
       await menuInteraction.deferUpdate()
 
       await queue.join(interaction.member.voice.channel)

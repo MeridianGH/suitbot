@@ -29,7 +29,7 @@ module.exports = {
     queue.setData({ channel: interaction.channel })
 
     await queue.join(interaction.member.voice.channel)
-    const song = await queue.play(interaction.options.getString('query'),{ requestedBy: interaction.member.displayName }).catch(() => { if (!guildQueue) { queue.stop() } })
+    const song = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!guildQueue) { queue.stop() } })
     if (!song) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
 
     await interaction.editReply({
