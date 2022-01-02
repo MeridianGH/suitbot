@@ -21,7 +21,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setAuthor('Moved User', interaction.member.user.displayAvatarURL())
       .setTitle(`${member.displayName} → ${channel.name}`)
-      .setThumbnail(member.user.displayAvatarURL({ format: 'png', size: 1024 }))
+      .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .setDescription(`Moved \`${member.displayName}\` to \`${channel.name}\`.`)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 

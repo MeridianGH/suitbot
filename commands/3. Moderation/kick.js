@@ -20,7 +20,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setAuthor('Kicked User', interaction.member.user.displayAvatarURL())
       .setTitle(member.displayName)
-      .setThumbnail(member.user.displayAvatarURL({ format: 'png', size: 1024 }))
+      .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .setDescription(`Reason: \`\`\`${reason}\`\`\``)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
