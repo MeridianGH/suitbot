@@ -20,6 +20,21 @@ module.exports = {
     const seconds = Math.floor(totalSeconds % 60).toString()
     return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
   },
+  timeSince: function timeSince (date) {
+    let seconds = Math.floor((new Date() - date) / 1000)
+
+    let interval = Math.floor(seconds / 31536000)
+    if (interval > 1) { return Math.floor(interval) + (interval === 1 ? ' year' : ' years') + ' ago' }
+    interval = seconds / 2592000;
+    if (interval > 1) { return Math.floor(interval) + (interval === 1 ? ' month' : ' months') + ' ago' }
+    interval = seconds / 86400;
+    if (interval > 1) { return Math.floor(interval) + (interval === 1 ? ' day' : ' days') + ' ago' }
+    interval = seconds / 3600;
+    if (interval > 1) { return Math.floor(interval) + (interval === 1 ? ' hour' : ' hours') + ' ago' }
+    interval = seconds / 60;
+    if (interval > 1) { return Math.floor(interval) + (interval === 1 ? ' minute' : ' minutes') + ' ago' }
+    return Math.floor(seconds) + (interval === 1 ? ' second' : ' seconds') + ' ago'
+  },
   getFilesRecursively: function getFilesRecursively (directory, files) {
     const contents = fs.readdirSync(directory)
     files = files ?? []
