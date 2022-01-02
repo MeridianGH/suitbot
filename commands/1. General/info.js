@@ -21,7 +21,7 @@ module.exports = {
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .addField('Servers', interaction.client.guilds.cache.size.toString(), true)
       .addField('Uptime', uptime, true)
-      .addField('Memory Usage', `heapUsed: ${process.memoryUsage().heapUsed / 1024 / 1024 * 100}MB | heapTotal: ${process.memoryUsage().heapTotal / 1024 / 1024 * 100}MB`)
+      .addField('Memory Usage', `heapUsed: ${Math.floor(process.memoryUsage().heapUsed / 1024 / 1024 * 100)}MB | heapTotal: ${Math.floor(process.memoryUsage().heapTotal / 1024 / 1024 * 100)}MB`)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
