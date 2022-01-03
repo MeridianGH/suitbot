@@ -2,4 +2,3 @@ node_modules/
 .idea/
 config.json
 package-lock.json
-errors.txt

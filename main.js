@@ -7,8 +7,7 @@ const token = process.env.token ? process.env.token : require('./config.json').t
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 
-const player = new Player(client, { volume: 50, leaveOnEnd: false })
-client.player = player
+client.player = new Player(client, { volume: 50, leaveOnEnd: false })
 
 // Add command files
 client.commands = new Collection()
@@ -19,25 +18,22 @@ for (const file of getFilesRecursively('./commands')) {
 }
 
 // Add event files
-const clientEventFiles = fs.readdirSync('./events/client').filter(file => file.endsWith('.js'))
-const playerEventFiles = fs.readdirSync('./events/player').filter(file => file.endsWith('.js'))
-
-for (const file of clientEventFiles) {
-  const event = require(`./events/client/${file}`)
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args))
-  } else {
-    client.on(event.name, (...args) => event.execute(...args))
+const eventObjects = { client: client, player: client.player, process: process }
+const folders = fs.readdirSync('./events', { withFileTypes: true }).filter(entry => entry.isDirectory()).map(entry => entry.name)
+for (const folder of folders) {
+  const path = `./events/${folder}`
+  const files = fs.readdirSync(path).filter(file => file.endsWith('.js'))
+  for (const file of files) {
+    const event = require(`${path}/${file}`)
+    if (event.once) {
+      eventObjects[folder].once(event.name, (...args) => event.execute(...args))
+    } else {
+      eventObjects[folder].on(event.name, (...args) => event.execute(...args))
+    }
   }
 }
-for (const file of playerEventFiles) {
-  const event = require(`./events/player/${file}`)
-  client.player.on(event.name, (...args) => event.execute(...args))
-}
-process.on('uncaughtException', error => {
-  fs.appendFile('errors.txt', `${error.stack}\n\n`, (e) => { if (e) { console.log('Failed logging error.') } })
-  console.log('Ignoring uncaught exception: ' + error)
-})
+
+// Shutdown Handling
 async function shutdown () {
   console.log(`Closing ${client.player.queues.size} queues.`)
   for (const entry of client.player.queues) {
