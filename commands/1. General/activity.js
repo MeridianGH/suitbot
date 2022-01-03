@@ -29,7 +29,7 @@ module.exports = {
     await rest.post(Routes.channelInvites(channel.id), { body: { target_application_id: interaction.options.getString('activity'), target_type: 2 } })
       .then(async response => {
         if (response.error || !response.code) { return interaction.reply(errorEmbed('Error', 'An error occurred while creating your activity!', true)) }
-        if (response.code === '50013') { return interaction.reply(simpleEmbed('The bot is missing permissions to that action.', true)) }
+        if (response.code === '50013') { return interaction.reply(simpleEmbed('The bot is missing permissions to perform that action.', true)) }
 
         const embed = new MessageEmbed()
           .setAuthor({ name: 'Activity', iconURL: interaction.member.user.displayAvatarURL() })
