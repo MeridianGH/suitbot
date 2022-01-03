@@ -12,7 +12,7 @@ module.exports = {
     const embed = new MessageEmbed()
       .setAuthor('Server Information', interaction.member.user.displayAvatarURL())
       .setTitle(guild.name)
-      .setThumbnail(guild.iconURL())
+      .setThumbnail(guild.iconURL({ dynamic: true, size: 1024 }))
       .addField('Members', guild.memberCount.toString(), true)
       .addField('Channels', guild.channels.channelCountWithoutThreads.toString(), true)
       .addField('Boosts', guild.premiumSubscriptionCount.toString() ?? '0', true)
