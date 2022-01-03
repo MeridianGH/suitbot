@@ -1,8 +1,7 @@
-const { simpleEmbed, sleep } = require('../../utilities')
+const { simpleEmbed } = require('../../utilities')
 module.exports = {
   name: 'channelEmpty',
-  async execute (queue) {
-    await sleep(30)
+  execute (queue) {
     queue.data.channel.send(simpleEmbed('Left the voice channel because it was empty.'))
   }
 }

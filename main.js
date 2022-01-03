@@ -7,7 +7,7 @@ const token = process.env.token ? process.env.token : require('./config.json').t
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 
-const player = new Player(client, { volume: 50, timeout: 30000 })
+const player = new Player(client, { volume: 50, leaveOnEnd: false })
 client.player = player
 
 // Add command files
@@ -44,7 +44,6 @@ async function shutdown () {
     const queue = entry[1]
     await queue.data.channel.send(errorEmbed('Server shutdown', 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'))
     queue.stop()
-    queue.connection.leave()
   }
   client.destroy()
   client.dashboard.close()
