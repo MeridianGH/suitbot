@@ -12,7 +12,7 @@ module.exports = {
       .addChoice('Moderation', '4')
       .addChoice('Feedback', '5')),
   async execute (interaction) {
-    const folders = fs.readdirSync('./commands/').filter(function (file) { return fs.statSync('./commands/' + file).isDirectory() })
+    const folders = fs.readdirSync('./commands/', { withFileTypes: true }).filter(entry => entry.isDirectory()).map(entry => entry.name)
     const categories = {}
     for (const folder of folders) {
       const commands = []
