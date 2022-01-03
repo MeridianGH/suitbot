@@ -19,11 +19,11 @@ module.exports = {
     await member.ban({ reason: reason }).catch(async () => await interaction.reply(simpleEmbed('There was an error when banning this user.', true)))
 
     const embed = new MessageEmbed()
-      .setAuthor('Banned User', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Banned User', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(member.displayName)
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .setDescription(`Reason: \`\`\`${reason}\`\`\``)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })
   }

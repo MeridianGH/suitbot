@@ -16,11 +16,11 @@ module.exports = {
     await interaction.channel.setRateLimitPerUser(seconds)
 
     const embed = new MessageEmbed()
-      .setAuthor('Set Slowmode', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Set Slowmode', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(`#${interaction.channel.name}`)
       .setThumbnail(interaction.guild.iconURL())
       .setDescription(`Set the rate limit of #${interaction.channel.name} to ${seconds}s.`)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })
   }

@@ -21,11 +21,11 @@ module.exports = {
     }
 
     const embed = new MessageEmbed()
-      .setAuthor('Moved All Users', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Moved All Users', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(`${channel1.name} → ${channel2.name}`)
       .setThumbnail(interaction.guild.iconURL())
       .setDescription(`Moved all users from \`${channel1.name}\` to \`${channel2.name}\`.`)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })
   }

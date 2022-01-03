@@ -14,10 +14,10 @@ module.exports = {
     const suggestionChannel = developerGuild.channels.cache.find(channel => (channel.name === 'suggestions') && channel.isText())
 
     const embed = new MessageEmbed()
-      .setAuthor('Suggestion received', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Suggestion received', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(`By \`${interaction.member.user.tag}\` in \`${interaction.guild.name}\``)
       .setDescription(suggestion)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     suggestionChannel?.send({ embeds: [embed], fetchReply: true }).then(async message => { await message.react('✅'); await message.react('❌') })
 

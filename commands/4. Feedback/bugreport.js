@@ -14,12 +14,12 @@ module.exports = {
     const bugReportChannel = developerGuild.channels.cache.find(channel => (channel.name === 'bug-reports') && channel.isText())
 
     const embed = new MessageEmbed()
-      .setAuthor('Bug report received', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Bug report received', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(`By \`${interaction.member.user.tag}\` in \`${interaction.guild.name}\``)
       .setDescription(bug)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
-    bugReportChannel?.send({ embeds: [embed], fetchReply: true })
+    bugReportChannel?.send({ embeds: [embed] })
 
     await interaction.reply(simpleEmbed('Your bug report was sent successfully!'))
   }

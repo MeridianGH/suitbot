@@ -25,7 +25,7 @@ module.exports = {
     const pages = []
 
     const embed = new MessageEmbed()
-      .setAuthor('Help', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Help', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('SuitBot Help Page')
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription('This module lists every command SuitBot currently supports.\n\nTo use a command start by typing `/` followed by the command you want to execute. You can also use Discord\'s integrated auto-completion for commands.\n\n')
@@ -33,7 +33,7 @@ module.exports = {
       .addField('🌐  Website', '[suitbot.xyz](https://suitbot.xyz)', true)
       .addField('<:github:923336812410306630>  Source code', '[GitHub](https://github.com/MeridianGH/suitbot)', true)
       .addField('\u200b', 'Press the buttons below to switch pages and display more info.')
-      .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, interaction.client.user.displayAvatarURL())
+      .setFooter({ text: `SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
     pages.push(embed)
 
     for (const [category, commands] of Object.entries(categories)) {
@@ -45,10 +45,10 @@ module.exports = {
       description = description + '\u2015'.repeat(34)
 
       const embed = new MessageEmbed()
-        .setAuthor('Help', interaction.member.user.displayAvatarURL())
+        .setAuthor({ name: 'Help', iconURL: interaction.member.user.displayAvatarURL() })
         .setTitle(category)
         .setDescription(description)
-        .setFooter(`SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, interaction.client.user.displayAvatarURL())
+        .setFooter({ text: `SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
       pages.push(embed)
     }
 

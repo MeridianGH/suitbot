@@ -252,14 +252,14 @@ module.exports = async (client) => {
 
           queue.data.channel.send({
             embeds: [new MessageEmbed()
-              .setAuthor('Added to queue.', member.user.displayAvatarURL())
+              .setAuthor({ name: 'Added to queue.', iconURL: member.user.displayAvatarURL() })
               .setTitle(playlist.name)
               .setURL(playlist.url)
               .setThumbnail(playlist.songs[0].thumbnail)
               .addField('Author', playlist.author.name ?? playlist.author, true)
               .addField('Amount', `${playlist.songs.length} songs`, true)
               .addField('Position', `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, true)
-              .setFooter('SuitBot Web Interface', client.user.displayAvatarURL())
+              .setFooter({ text: 'SuitBot Web Interface', iconURL: client.user.displayAvatarURL() })
             ]
           })
         } else {
@@ -270,14 +270,14 @@ module.exports = async (client) => {
 
           queue.data.channel.send({
             embeds: [new MessageEmbed()
-              .setAuthor('Added to queue.', member.user.displayAvatarURL())
+              .setAuthor({ name: 'Added to queue.', iconURL: member.user.displayAvatarURL() })
               .setTitle(song.name)
               .setURL(song.url)
               .setThumbnail(song.thumbnail)
               .addField('Channel', song.author, true)
               .addField('Duration', song.duration, true)
               .addField('Position', queue.songs.indexOf(song).toString(), true)
-              .setFooter('SuitBot Web Interface', client.user.displayAvatarURL())
+              .setFooter({ text: 'SuitBot Web Interface', iconURL: client.user.displayAvatarURL() })
             ]
           })
         }

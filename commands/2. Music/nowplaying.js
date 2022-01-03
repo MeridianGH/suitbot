@@ -14,13 +14,13 @@ module.exports = {
 
     await interaction.reply({
       embeds: [new MessageEmbed()
-        .setAuthor('Now Playing...', interaction.member.user.displayAvatarURL())
+        .setAuthor({ name: 'Now Playing...', iconURL: interaction.member.user.displayAvatarURL() })
         .setTitle(song.name)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
         .addField('Channel', song.author, true)
         .addField('Duration', `\`${progressBar}\``, true)
-        .setFooter(`SuitBot | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, interaction.client.user.displayAvatarURL())
+        .setFooter({ text: `SuitBot | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, icontURL: interaction.client.user.displayAvatarURL() })
       ]
     })
   }

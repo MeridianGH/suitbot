@@ -10,7 +10,7 @@ module.exports = {
     const guild = interaction.guild
 
     const embed = new MessageEmbed()
-      .setAuthor('Server Information', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Server Information', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(guild.name)
       .setThumbnail(guild.iconURL({ dynamic: true, size: 1024 }))
       .addField('Members', guild.memberCount.toString(), true)
@@ -20,7 +20,7 @@ module.exports = {
       .addField('Guild ID', guild.id, true)
       .addField('\u200b', '\u200b', true)
       .addField('Created', `${guild.createdAt.toUTCString()} (${timeSince(guild.createdAt)})`)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })
   }

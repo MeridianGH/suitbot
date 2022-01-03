@@ -33,10 +33,10 @@ module.exports = {
       ])
     const embedMessage = await interaction.editReply({
       embeds: [new MessageEmbed()
-        .setAuthor('Search Results.', interaction.member.user.displayAvatarURL())
+        .setAuthor({ name: 'Search Results.', iconURL: interaction.member.user.displayAvatarURL() })
         .setTitle(`Here are the search results for your search "\`${query}\`":`)
         .setThumbnail(search[0].thumbnail)
-        .setFooter('SuitBot | This embed expires in one minute.', interaction.client.user.displayAvatarURL())
+        .setFooter({ text: 'SuitBot | This embed expires in one minute.', iconURL: interaction.client.user.displayAvatarURL() })
       ],
       components: [new MessageActionRow({ components: [selectMenu] })],
       fetchReply: true
@@ -53,14 +53,14 @@ module.exports = {
 
       await menuInteraction.editReply({
         embeds: [new MessageEmbed()
-          .setAuthor('Added to queue.', interaction.member.user.displayAvatarURL())
+          .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
           .setTitle(song.name)
           .setURL(song.url)
           .setThumbnail(song.thumbnail)
           .addField('Channel', song.author, true)
           .addField('Duration', song.duration, true)
           .addField('Position', queue.songs.indexOf(song).toString(), true)
-          .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+          .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
         ],
         components: []
       })

@@ -6,16 +6,17 @@ module.exports = {
     .setName('ping')
     .setDescription('Replies with the current latency.'),
   async execute (interaction) {
-    const message = await interaction.reply({ embeds: [new MessageEmbed().setDescription('Pinging...')], fetchReply: true })
-    const ping = message.createdTimestamp - interaction.createdTimestamp
-
     const embed = new MessageEmbed()
-      .setAuthor('Ping', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Ping', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('Bot & API Latency')
       .setThumbnail(interaction.client.user.displayAvatarURL())
-      .setDescription(`Ping: ${ping}ms\nAPI Latency: ${Math.round(interaction.client.ws.ping)}ms`)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setDescription(`Ping: Pinging...\nAPI Latency: Pinging...`)
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
+    const message = await interaction.reply({ embeds: [embed], fetchReply: true })
+    const ping = message.createdTimestamp - interaction.createdTimestamp
+
+    embed.setDescription(`Ping: ${ping}ms\nAPI Latency: ${Math.round(interaction.client.ws.ping)}ms`)
     await interaction.editReply({ embeds: [embed] })
   }
 }

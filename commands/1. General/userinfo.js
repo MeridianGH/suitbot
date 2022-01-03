@@ -29,7 +29,7 @@ module.exports = {
     }
 
     const embed = new MessageEmbed()
-      .setAuthor('User Information', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'User Information', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(member.displayName)
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .addField('Full Name', member.user.tag, true)
@@ -41,7 +41,7 @@ module.exports = {
       .addField('Status', userStatus)
       .addField('Created', `${member.user.createdAt.toUTCString()} (${timeSince(member.user.createdAt)})`)
       .addField('Joined', `${member.joinedAt.toUTCString()} (${timeSince(member.joinedAt)})`)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })
   }

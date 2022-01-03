@@ -16,13 +16,13 @@ module.exports = {
     const uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`
 
     const embed = new MessageEmbed()
-      .setAuthor('Info', interaction.member.user.displayAvatarURL())
+      .setAuthor({ name: 'Info', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('Bot Information')
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .addField('Servers', interaction.client.guilds.cache.size.toString(), true)
       .addField('Uptime', uptime, true)
       .addField('Memory Usage', `heapUsed: ${Math.floor(process.memoryUsage().heapUsed / 1024 / 1024 * 100)}MB | heapTotal: ${Math.floor(process.memoryUsage().heapTotal / 1024 / 1024 * 100)}MB`)
-      .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })
   }
