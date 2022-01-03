@@ -10,7 +10,7 @@ module.exports = {
       .setAuthor({ name: 'Ping', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('Bot & API Latency')
       .setThumbnail(interaction.client.user.displayAvatarURL())
-      .setDescription(`Ping: Pinging...\nAPI Latency: Pinging...`)
+      .setDescription('Ping: Pinging...\nAPI Latency: Pinging...')
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     const message = await interaction.reply({ embeds: [embed], fetchReply: true })
