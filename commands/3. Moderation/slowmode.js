@@ -11,6 +11,7 @@ module.exports = {
     const seconds = interaction.options.getInteger('seconds')
 
     if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
+    if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(simpleEmbed('The bot is missing permissions to manage channels!', true)) }
 
     await interaction.channel.setRateLimitPerUser(seconds)
 

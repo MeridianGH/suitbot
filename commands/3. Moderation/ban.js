@@ -12,10 +12,11 @@ module.exports = {
     const member = interaction.options.getMentionable('user')
     const reason = interaction.options.getString('reason')
 
-    if (!member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
-    if (!(interaction.user instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
+    if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
+    if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
+    if (!member.bannable) { return await interaction.reply(simpleEmbed('The bot is missing permissions to ban that user!', true)) }
 
-    await member.ban({ reason: reason }).catch(async () => await interaction.reply(simpleEmbed('There was an error when banning this user.\nThe bot is possibly missing permissions.', true)))
+    await member.ban({ reason: reason }).catch(async () => await interaction.reply(simpleEmbed('There was an error when banning this user.', true)))
 
     const embed = new MessageEmbed()
       .setAuthor('Banned User', interaction.member.user.displayAvatarURL())

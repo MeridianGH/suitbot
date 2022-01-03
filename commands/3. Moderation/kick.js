@@ -14,8 +14,9 @@ module.exports = {
 
     if (!interaction.member.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) { return await interaction.reply(simpleEmbed('You do not have permission to execute this command!', true)) }
     if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
+    if (!member.kickable) { return await interaction.reply(simpleEmbed('The bot is missing permissions to kick that user!', true)) }
 
-    await member.kick(reason).catch(async () => await interaction.reply(simpleEmbed('There was an error when kicking this user.\nThe bot is possibly missing permissions.', true)))
+    await member.kick(reason).catch(async () => await interaction.reply(simpleEmbed('There was an error when kicking this user.', true)))
 
     const embed = new MessageEmbed()
       .setAuthor('Kicked User', interaction.member.user.displayAvatarURL())
