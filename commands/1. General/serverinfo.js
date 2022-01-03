@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js')
+const { timeSince } = require('../../utilities')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -7,19 +8,18 @@ module.exports = {
     .setDescription('Shows info about the server.'),
   async execute (interaction) {
     const guild = interaction.guild
-    const description =
-`**Created:** ${guild.createdAt.toUTCString()}
-**Channels:** ${guild.channels.channelCountWithoutThreads}
-**Members:** ${guild.memberCount}
-**Boosts:** ${guild.premiumSubscriptionCount ?? 0}
-**Owner:** ${await guild.fetchOwner().then(member => { return member.user.tag })}
-**ID:** ${guild.id}`
 
     const embed = new MessageEmbed()
       .setAuthor('Server Information', interaction.member.user.displayAvatarURL())
       .setTitle(guild.name)
       .setThumbnail(guild.iconURL())
-      .setDescription(description)
+      .addField('Members', guild.memberCount.toString(), true)
+      .addField('Channels', guild.channels.channelCountWithoutThreads.toString(), true)
+      .addField('Boosts', guild.premiumSubscriptionCount.toString() ?? '0', true)
+      .addField('Owner', `<@${guild.ownerId}>`, true)
+      .addField('Guild ID', guild.id, true)
+      .addField('\u200b', '\u200b', true)
+      .addField('Created', `${guild.createdAt.toUTCString()} (${timeSince(guild.createdAt)})`)
       .setFooter('SuitBot', interaction.client.user.displayAvatarURL())
 
     await interaction.reply({ embeds: [embed] })
