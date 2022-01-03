@@ -12,7 +12,7 @@ module.exports = {
     const channel = interaction.member.voice.channel
     if (!channel) { return await interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }
     const permissions = channel.permissionsFor(interaction.client.user)
-    if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return await interaction.reply(simpleEmbed('I do not have the correct permissions to play in your voice channel!', true))
+    if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true))
     await interaction.deferReply()
 
     const guildQueue = interaction.client.player.getQueue(interaction.guild.id)
