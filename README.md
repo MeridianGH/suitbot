@@ -34,7 +34,6 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 Command      | Description
 ------------ | ---
 /activity    | Creates a Discord activity.
-/avatar      | Gives information about a user's avatar.
 /dashboard   | Sends a link to the dashboard.
 /help        | Replies with help on how to use this bot.
 /info        | Shows info about the bot.
@@ -57,8 +56,7 @@ Command      | Description
 /search      | Searches five songs from YouTube and lets you select one to play.
 /seek        | Skips to the specified point in the current track.
 /shuffle     | Shuffles the queue.
-/skip        | Skips the current song.
-/skipto      | Skips to the specified song in the queue.
+/skip        | Skips the current song or to a specified track.
 /stop        | Stops playback.
 /volume      | Sets the volume of the music player.
 
