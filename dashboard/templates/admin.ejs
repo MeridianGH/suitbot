@@ -17,28 +17,30 @@
   <div class="card-body">
     <h5><%= uptime(bot.uptime) %></h5>
     <h5>Playing in <%= bot.player.queues.size %> server(s).</h5>
-    <table class="table table-dark table-striped">
-      <thead>
-      <tr>
-        <th>Icon</th>
-        <th>Guild</th>
-        <th>Members</th>
-        <th>Channels</th>
-        <th>Joined</th>
-      </tr>
-      </thead>
-      <tbody>
-        <% bot.guilds.cache.forEach(guild => { %>
+    <div class="table-responsive">
+      <table class="table table-dark table-striped">
+        <thead>
         <tr>
-          <td class="align-middle" style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" target="_blank"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 30px <%- bot.player.getQueue(guild.id) ? '; border: 2px solid #198754' : '' %> "></a></td>
-          <td class="align-middle" style="width: 60%"><span class="text-nowrap"><%= guild.name %></span></td>
-          <td class="align-middle"><span class="text-nowrap"><%= guild.memberCount %></span></td>
-          <td class="align-middle"><span class="text-nowrap"><%= guild.channels.channelCountWithoutThreads %></span></td>
-          <td class="align-middle" style="width: 1%"><span class="text-nowrap"><%= guild.joinedAt.toUTCString() %></span></td>
+          <th>Icon</th>
+          <th>Guild</th>
+          <th>Members</th>
+          <th>Channels</th>
+          <th>Joined</th>
         </tr>
-        <% }) %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% bot.guilds.cache.clone().sort((a, b) => { a.joinedAt.getTime() - b.joinedAt.getTime() }).forEach(guild => { %>
+          <tr>
+            <td class="align-middle" style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" target="_blank"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 30px <%- bot.player.getQueue(guild.id) ? '; border: 2px solid #198754' : '' %> "></a></td>
+            <td class="align-middle" style="width: 60%"><span class="text-nowrap"><%= guild.name %></span></td>
+            <td class="align-middle"><span class="text-nowrap"><%= guild.memberCount %></span></td>
+            <td class="align-middle"><span class="text-nowrap"><%= guild.channels.channelCountWithoutThreads %></span></td>
+            <td class="align-middle" style="width: 1%"><span class="text-nowrap"><%= guild.joinedAt.toUTCString() %></span></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
