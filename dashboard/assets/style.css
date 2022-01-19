@@ -8,6 +8,8 @@
     --button-hover: #212529;
 }
 
+@media (min-width: 992px) { h1.title { font-size: 100px !important; } }
+
 body {
     color: var(--text-color);
     background-color: var(--background);

@@ -1,11 +1,11 @@
 <%- include("partials/header", { bot, user, path, title: "SuitBot" }) %>
 
-<div class="container" style="margin: 0; padding: 0;">
+<div class="container" style="margin: 0; padding-top: 2%">
   <div class="row align-items-center">
-    <div class="col" style="flex-shrink: 5;"><img src="suit.png" style="height: 500px; margin-top: 25px;"></div>
-    <div class="col" style="flex-grow: 5;">
-      <h1 style="font-family: 'Bebas Neue'; font-size: 100px;">SuitBot<br>Dashboard</h1>
-      <div style="font-size: 20px; margin-bottom: 20px;">Serving <b><%- bot.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) %></b> users in <b><%- bot.guilds.cache.size %></b> servers.</div>
+    <div class="col" style="max-width: 500px"><img src="suit.png" style="width: 100%;"></div>
+    <div class="col">
+      <h1 class="title" style="font-family: 'Bebas Neue'; font-size: 50px">SuitBot<br>Dashboard</h1>
+      <div style="font-size: 20px; margin-bottom: 20px; white-space: nowrap">Serving <b><%- bot.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) %></b> users <br class="d-lg-none">in <b><%- bot.guilds.cache.size %></b> servers.</div>
       <a class="btn btn-lg mainbutton btn-secondary btn-block rounded-pill" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
     </div>
   </div>
