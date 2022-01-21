@@ -11,7 +11,7 @@ module.exports = {
     volume = Math.min(Math.max(volume, 0), 200)
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-    if (!(interaction.user.voice.channel === queue.connection.channel)) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
+    if (!(interaction.member.voice.channel === queue.connection.channel)) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
 
     queue.setVolume(volume)
     await interaction.reply(simpleEmbed(`🔊 Set volume to ${volume}%.`))
