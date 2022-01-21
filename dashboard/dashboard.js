@@ -212,6 +212,17 @@ module.exports = async (client) => {
     const query = req.body.query
     const index = req.body.index
     switch (req.body.action) {
+      case 'previous':
+        if (queue.connection.time > 5000) {
+          await queue.seek(0)
+          return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null })
+        }
+        if (!queue.data.previous) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'You can\'t use the "previous" command right now!', type: 'danger' }) }
+        await queue.play(queue.data.previous, { index: 0 })
+        await queue.play(queue.nowPlaying, { index: 1 })
+        queue.skip()
+        alert = '⏭ Skipped to previous song.'
+        break
       case 'pause':
         queue.setPaused(queue.paused !== true)
         alert = queue.paused === true ? 'Paused.' : 'Resumed.'
