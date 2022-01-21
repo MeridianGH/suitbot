@@ -12,7 +12,9 @@ module.exports = {
     const milliseconds = isNaN(time) ? Utils.timeToMs(time) : time * 1000
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!(interaction.user.voice.channel === queue.connection.channel)) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
     if (milliseconds < 0 || milliseconds > queue.nowPlaying.milliseconds) { return await interaction.reply(simpleEmbed(`You can only seek between 0:00-${queue.nowPlaying.duration}!`, true)) }
+
     await queue.seek(milliseconds)
     await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(milliseconds)}.`))
   }

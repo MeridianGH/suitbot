@@ -10,6 +10,8 @@ module.exports = {
     const track = interaction.options.getInteger('track')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!(interaction.user.voice.channel === queue.connection.channel)) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
+
     if (track < 1 || track > queue.songs.length - 1) { return await interaction.reply(simpleEmbed(`You can only specify a song number between 1-${queue.songs.length - 1}`, true)) }
     const song = queue.remove(track)
     await interaction.reply(simpleEmbed(`🗑️ Removed track \`#${track}\`: **${song.name}**.`))
