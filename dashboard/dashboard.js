@@ -253,7 +253,7 @@ module.exports = async (client) => {
         await sleep(1)
         break
       case 'play':
-        if (!query) { return }
+        if (!query) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null }) }
         if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/.+$/i) ||
           query.match(/^https?:\/\/(?:www\.)?youtube\.com\/playlist\?list=.+$/i)) {
           const playlist = await queue.playlist(query, { requestedBy: member.displayName })
@@ -295,7 +295,7 @@ module.exports = async (client) => {
         break
     }
 
-    renderTemplate(req, res, 'server.ejs', { guild, queue, alert, type: 'success' })
+    renderTemplate(req, res, 'server.ejs', { guild, queue, alert: alert, type: 'success' })
   })
 
   // Admin endpoint.

@@ -28,12 +28,13 @@
       const seconds = Math.floor(totalSeconds % 60).toString()
       return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
     }
-    let currentMS = <%= queue.connection.time %>;
+    let currentMS = <%= queue.connection.time %>
     const time = document.getElementById('time')
     const progress = document.getElementById('progress')
 
     function incrementSeconds () {
       currentMS += 1000
+      currentMS = Math.min(currentMS, <%= queue.songs[0].milliseconds %>)
       time.innerHTML = `${msToHMS(currentMS)} / <%= queue.songs[0].duration %>`
       progress.style.width = `${(currentMS / <%= queue.songs[0].milliseconds %> * 100)}%`
     }
@@ -60,8 +61,7 @@
         <li>
           <img src="<%- queue.songs[0].thumbnail %>" style="height: 200px; width: 356px; flex-shrink: 4; margin-right: 20px;">
           <div style="width: 356px; background-color: #373b3e">
-            <div id="progress" style="width: <%= queue.connection.time / queue.songs[0].milliseconds * 100 %>%; height: 5px; background-color: #ff0000">
-            </div>
+            <div id="progress" style="width: <%= queue.connection.time / queue.songs[0].milliseconds * 100 %>%; height: 5px; background-color: #ff0000"></div>
           </div>
         </li>
         <li>
@@ -89,28 +89,30 @@
         <button type="submit" class="button" name="action" value="clear"><i class="fas fa-trash-alt"></i> Clear queue</button>
       </form>
     </div>
-    <table class="table table-dark table-striped">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th style="width: 100%;">Song</th>
-          <th>Author</th>
-          <th>Duration</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (var i = 1; i < queue.songs.length; i++) { %>
-        <tr>
-          <td><span class="text-nowrap"><%= i %></span></td>
-          <td><span class="text-nowrap"><%= queue.songs[i].name %></span></td>
-          <td><span class="text-nowrap"><%= queue.songs[i].author %></span></td>
-          <td><span class="text-nowrap"><%= queue.songs[i].duration %></span></td>
-          <td><span class="text-nowrap"><form method="POST"><input type="hidden" name="index" value="<%= i %>"><button type="submit" class="music-btn" name="action" value="remove"><i class="fas fa-trash-alt"></i></button><button type="submit" class="music-btn" name="action" value="skipto"><i class="fas fa-forward"></i></button></form></span></td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="width: 100%;">Song</th>
+            <th>Author</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (var i = 1; i < queue.songs.length; i++) { %>
+          <tr>
+            <td><span class="text-nowrap"><%= i %></span></td>
+            <td><span class="text-nowrap"><%= queue.songs[i].name %></span></td>
+            <td><span class="text-nowrap"><%= queue.songs[i].author %></span></td>
+            <td><span class="text-nowrap"><%= queue.songs[i].duration %></span></td>
+            <td><span class="text-nowrap"><form method="POST"><input type="hidden" name="index" value="<%= i %>"><button type="submit" class="music-btn" name="action" value="remove"><i class="fas fa-trash-alt"></i></button><button type="submit" class="music-btn" name="action" value="skipto"><i class="fas fa-forward"></i></button></form></span></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
     <% } else { %>
     <div>Nothing currently playing!<br>Join a voice channel and type "/play" to get started!</div>
     <% } %>
