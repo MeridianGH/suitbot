@@ -20,7 +20,7 @@ module.exports = {
         .setThumbnail(song.thumbnail)
         .addField('Channel', song.author, true)
         .addField('Duration', `\`${progressBar}\``, true)
-        .setFooter({ text: `SuitBot | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, icontURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ text: `SuitBot | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
       ]
     })
   }
