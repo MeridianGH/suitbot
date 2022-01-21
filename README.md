@@ -49,6 +49,7 @@ Command      | Description
 /nowplaying  | Shows the currently playing song.
 /pause       | Pauses playback.
 /play        | Searches and plays a song or playlist from YouTube or Spotify.
+/previous    | Plays the previously played track again.
 /queue       | Displays the queue.
 /remove      | Removes the specified track from the queue.
 /repeat      | Sets the current repeat mode.
