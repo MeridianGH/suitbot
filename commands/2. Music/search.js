@@ -15,7 +15,6 @@ module.exports = {
     if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true))
     await interaction.deferReply()
 
-    const guildQueue = interaction.client.player.getQueue(interaction.guild.id)
     const queue = interaction.client.player.createQueue(interaction.guild.id)
     queue.setData({ channel: interaction.channel })
 
@@ -48,7 +47,7 @@ module.exports = {
       await menuInteraction.deferUpdate()
 
       await queue.join(interaction.member.voice.channel)
-      const song = await queue.play(search[Number(menuInteraction.values[0])]).catch(() => { if (!guildQueue) { queue.stop() } })
+      const song = await queue.play(search[Number(menuInteraction.values[0])]).catch(() => { if (!queue) { queue.stop() } })
       if (!song) { return await menuInteraction.update(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
 
       await menuInteraction.editReply({

@@ -24,12 +24,11 @@ module.exports = {
   },
 
   async _playSong (interaction) {
-    const guildQueue = interaction.client.player.getQueue(interaction.guild.id)
     const queue = interaction.client.player.createQueue(interaction.guild.id)
     queue.setData({ channel: interaction.channel })
 
     await queue.join(interaction.member.voice.channel)
-    const song = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!guildQueue) { queue.stop() } })
+    const song = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!queue) { queue.stop() } })
     if (!song) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
 
     await interaction.editReply({
@@ -47,12 +46,11 @@ module.exports = {
   },
 
   async _playPlaylist (interaction) {
-    const guildQueue = interaction.client.player.getQueue(interaction.guild.id)
     const queue = interaction.client.player.createQueue(interaction.guild.id)
     queue.setData({ channel: interaction.channel })
 
     await queue.join(interaction.member.voice.channel)
-    const playlist = await queue.playlist(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!guildQueue) { queue.stop() } })
+    const playlist = await queue.playlist(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!queue) { queue.stop() } })
     if (!playlist) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your playlist to the queue.')) }
 
     await interaction.editReply({
