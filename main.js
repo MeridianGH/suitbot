@@ -3,10 +3,9 @@ const { Client, Collection, Intents } = require('discord.js')
 const { Player } = require('discord-music-player')
 const { getFilesRecursively, errorEmbed } = require('./utilities')
 
-const token = process.env.token ? process.env.token : require('./config.json').token
+const token = process.env.token ?? require('./config.json').token
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
-
 client.player = new Player(client, { volume: 50, leaveOnEnd: false })
 
 // Add command files
