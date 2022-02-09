@@ -16,7 +16,7 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "body-parser": "^1.19.0",
     "discord-api-types": "^0.23.1",
-    "discord-music-player": "^8.3.0",
+    "discord-music-player": "^8.3.1",
     "discord.js": "13.5.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
