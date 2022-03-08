@@ -14,11 +14,14 @@
     if (content.data === 'refresh') { window.location.href = '' }
   }
   window.onload = function () {
+    // Alerts
     const alert = document.getElementById('alert')
     if (alert) {
       alert.addEventListener('transitioned', () => alert.remove())
       setTimeout(() => alert.style.opacity = '0', 5000)
     }
+
+    // Increment seconds
     <% if (queue && queue.songs[0] && !queue.connection.paused) { %>
     function msToHMS (ms) {
       let totalSeconds = (ms / 1000)
@@ -40,7 +43,32 @@
     }
     setInterval(incrementSeconds, 1000)
     <% } %>
+
+    // Media Session
+    <% if (queue && queue.songs[0]) { %>
+    if (navigator.userAgent.indexOf("Firefox") !== -1) {
+      const audio = document.createElement('audio')
+      audio.src = '/near-silence.mp3'
+      audio.volume = 0.00001
+      audio.play()
+      setTimeout(() => audio.pause(), 100)
+
+      function htmlDecode(input) { return (new DOMParser().parseFromString(input, "text/html")).documentElement.textContent }
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: htmlDecode('<%= queue.songs[0].name %>'),
+        artist: htmlDecode('<%= queue.songs[0].author %>'),
+        album: htmlDecode('<%= queue.songs[0].author %>'),
+        artwork: [{ src: htmlDecode('<%= queue.songs[0].thumbnail %>') }]
+      })
+      navigator.mediaSession.playbackState = '<%- queue.connection.paused ? 'paused' : 'playing' %>'
+
+      navigator.mediaSession.setActionHandler('play', () => { document.getElementById('pause').click() })
+      navigator.mediaSession.setActionHandler('pause', () => { document.getElementById('pause').click() })
+      navigator.mediaSession.setActionHandler('nexttrack', () => { document.getElementById('skip').click() })
+      navigator.mediaSession.setActionHandler('previoustrack', () => { document.getElementById('previous').click() })
+    }
   }
+  <% } %>
 </script>
 
 <div class="card col-sm-10 offset-sm-1">
@@ -69,9 +97,9 @@
           <h6><%= queue.songs[0].author %></h6>
           <h5 id="time"><%= msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
           <form method="POST" style="width: 100%; margin: 0;">
-            <button type="submit" class="button" name="action" value="previous"><i class="fas fa-backward"></i></button>
-            <button type="submit" class="button" name="action" value="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
-            <button type="submit" class="button" name="action" value="skip"><i class="fas fa-forward"></i></button>
+            <button type="submit" class="button" name="action" value="previous" id="previous"><i class="fas fa-backward"></i></button>
+            <button type="submit" class="button" name="action" value="pause" id="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
+            <button type="submit" class="button" name="action" value="skip" id="skip"><i class="fas fa-forward"></i></button>
             &nbsp;
             <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
             <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
