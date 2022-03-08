@@ -50,6 +50,7 @@
       const audio = document.createElement('audio')
       audio.src = '/near-silence.mp3'
       audio.volume = 0.00001
+      audio.load()
       audio.play()
       setTimeout(() => audio.pause(), 100)
 
@@ -67,8 +68,8 @@
       navigator.mediaSession.setActionHandler('nexttrack', () => { document.getElementById('skip').click() })
       navigator.mediaSession.setActionHandler('previoustrack', () => { document.getElementById('previous').click() })
     }
-  }
   <% } %>
+  }
 </script>
 
 <div class="card col-sm-10 offset-sm-1">
