@@ -4,6 +4,10 @@
 <a href="https://www.heroku.com"><img alt="Heroku" src="https://img.shields.io/static/v1?label=Hosted with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku" height=30></a>
 <a href="https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge" height=30></a>
 <a href="https://discord.gg/qX2CBrrUpf"><img alt="Discord" src="https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord" height=30></a>
+<br>
+<a href="https://www.npmjs.com/package/discord.js"><img alt="discord.js" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge"></a>
+<a href="https://www.npmjs.com/package/discord-player"><img alt="discord-player" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord-player?color=44b868&logo=npm&style=for-the-badge"></a>
+<a href="https://www.npmjs.com/package/play-dl"><img alt="play-dl" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/play-dl?color=44b868&logo=npm&style=for-the-badge"></a>
 </p>
 
 # SuitBot
@@ -49,7 +53,7 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 | /nowplaying | Shows the currently playing song.                                 |
 | /pause      | Pauses playback.                                                  |
 | /play       | Searches and plays a song or playlist from YouTube or Spotify.    |
-| /previous   | Plays the previously played track again.                          |
+| /previous   | Plays the previous track.                                         |
 | /queue      | Displays the queue.                                               |
 | /remove     | Removes the specified track from the queue.                       |
 | /repeat     | Sets the current repeat mode.                                     |
@@ -57,7 +61,7 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 | /search     | Searches five songs from YouTube and lets you select one to play. |
 | /seek       | Skips to the specified point in the current track.                |
 | /shuffle    | Shuffles the queue.                                               |
-| /skip       | Skips the current song or to a specified track.                   |
+| /skip       | Skips the current track or to a specified point in the queue.     |
 | /stop       | Stops playback.                                                   |
 | /volume     | Sets the volume of the music player.                              |
 
@@ -94,6 +98,7 @@ Rename `config_example.json` to `config.json` and replace the placeholders insid
   - While you're here, add `http://localhost/callback` to the `Redirects`.
 - The Guild ID of the server in which you want to test the bot. To get this ID, activate `Developer Mode` in Discord's options and right-click your server.
 - Your User ID of your Discord account which will be your Admin-Account for the bot. Right-click yourself with `Developer Mode` activated.
+- Get your YouTube cookie like described in this **[Guide](https://github.com/play-dl/play-dl/blob/main/instructions/README.md)**, but don't create any file. Just paste it in here.
 
 Use `node deploy-commands.js` to update and add commands in the guild you specified and `node deploy-commands-global.js` to update the commands in every guild the bot is in.\
 Guild commands are refreshed instantly while global commands can take up to an hour.
