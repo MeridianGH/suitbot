@@ -14,7 +14,7 @@
 
 > A lightweight music and general purpose bot with dashboard, that uses slash commands and buttons to be as user-friendly as possible!
 
-It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https://discord-music-player.js.org/) for its main features.
+It uses [discord.js](https://discord.js.org/) and [discord-player](https://discord-player.js.org/) for its main features.
 
 Head on over to the [dashboard](https://suitbot.xyz) for more information!
 
