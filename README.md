@@ -1,5 +1,5 @@
 ![logo](https://repository-images.githubusercontent.com/406747355/0c0fcbbd-8dab-4259-a5d6-d8cc5069ef37)
-<p align="center">
+<p>
 <a href="https://github.com/standard/standard"><img alt="JS Standard" src="https://cdn.rawgit.com/standard/standard/master/badge.svg" height=30></a>
 <a href="https://www.heroku.com"><img alt="Heroku" src="https://img.shields.io/static/v1?label=Hosted with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku" height=30></a>
 <a href="https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge" height=30></a>
@@ -31,54 +31,52 @@ You can check the current status to the right under `Environments`.
 SuitBot uses slash commands to integrate itself into the server. You can easily access its commands directly by typing `/` in your chat window.
 
 ### General
-Command      | Description
------------- | ---
-/activity    | Creates a Discord activity.
-/dashboard   | Sends a link to the dashboard.
-/help        | Replies with help on how to use this bot.
-/info        | Shows info about the bot.
-/invite      | Sends an invite link for the bot.
-/ping        | Replies with the current latency.
-/serverinfo  | Shows info about the server.
-/userinfo    | Shows info about a user.
+| Command     | Description                               |
+|-------------|-------------------------------------------|
+| /activity   | Creates a Discord activity.               |
+| /dashboard  | Sends a link to the dashboard.            |
+| /help       | Replies with help on how to use this bot. |
+| /info       | Shows info about the bot.                 |
+| /invite     | Sends an invite link for the bot.         |
+| /ping       | Replies with the current latency.         |
+| /serverinfo | Shows info about the server.              |
+| /userinfo   | Shows info about a user.                  |
 
 ### Music
-Command      | Description
------------- | ---
-/clear       | Clears the queue.
-/nowplaying  | Shows the currently playing song.
-/pause       | Pauses playback.
-/play        | Searches and plays a song or playlist from YouTube or Spotify.
-/previous    | Plays the previously played track again.
-/queue       | Displays the queue.
-/remove      | Removes the specified track from the queue.
-/repeat      | Sets the current repeat mode.
-/resume      | Resumes playback.
-/search      | Searches five songs from YouTube and lets you select one to play.
-/seek        | Skips to the specified point in the current track.
-/shuffle     | Shuffles the queue.
-/skip        | Skips the current song or to a specified track.
-/stop        | Stops playback.
-/volume      | Sets the volume of the music player.
+| Command     | Description                                                       |
+|-------------|-------------------------------------------------------------------|
+| /clear      | Clears the queue.                                                 |
+| /nowplaying | Shows the currently playing song.                                 |
+| /pause      | Pauses playback.                                                  |
+| /play       | Searches and plays a song or playlist from YouTube or Spotify.    |
+| /previous   | Plays the previously played track again.                          |
+| /queue      | Displays the queue.                                               |
+| /remove     | Removes the specified track from the queue.                       |
+| /repeat     | Sets the current repeat mode.                                     |
+| /resume     | Resumes playback.                                                 |
+| /search     | Searches five songs from YouTube and lets you select one to play. |
+| /seek       | Skips to the specified point in the current track.                |
+| /shuffle    | Shuffles the queue.                                               |
+| /skip       | Skips the current song or to a specified track.                   |
+| /stop       | Stops playback.                                                   |
+| /volume     | Sets the volume of the music player.                              |
 
 ### Moderation
-Command      | Description
------------- | ---
-/ban         | Bans a user.
-/kick        | Kicks a user.
-/move        | Moves the mentioned user to the specified channel.
-/moveall     | Moves all users from the first channel to the second channel.
-/purge       | Clears a specified amount of messages.
-/slowmode    | Sets the rate limit of the current channel.
+| Command   | Description                                                   |
+|-----------|---------------------------------------------------------------|
+| /ban      | Bans a user.                                                  |
+| /kick     | Kicks a user.                                                 |
+| /move     | Moves the mentioned user to the specified channel.            |
+| /moveall  | Moves all users from the first channel to the second channel. |
+| /purge    | Clears a specified amount of messages.                        |
+| /slowmode | Sets the rate limit of the current channel.                   |
 
 ### Feedback
-Command      | Description
------------- | ---
-/bugreport   | Reports a bug to the developer.
-/github      | Sends a link to the repo of this bot.
-/suggestion  | Sends a suggestion to the developer.
-
-
+| Command     | Description                           |
+|-------------|---------------------------------------|
+| /bugreport  | Reports a bug to the developer.       |
+| /github     | Sends a link to the repo of this bot. |
+| /suggestion | Sends a suggestion to the developer.  |
 
 ## Running the Bot
 You'll need Node.js v16.x and FFmpeg v4.4.\

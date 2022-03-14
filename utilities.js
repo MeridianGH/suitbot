@@ -22,7 +22,7 @@ module.exports = {
   },
   timeToMs: function (time) {
     const times = time.split(':')
-    let seconds = 0, secondsInUnit = 1
+    let seconds = 0; let secondsInUnit = 1
     while (times.length > 0) {
       seconds += secondsInUnit * parseInt(times.pop())
       secondsInUnit *= 60

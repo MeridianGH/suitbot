@@ -7,7 +7,7 @@ const token = process.env.token ?? require('./config.json').token
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 client.player = new Player(client, {
-  ytdlOptions: { requestOptions: { headers: { cookie: process.env.cookie ?? require('./config.json').cookie } } },
+  ytdlOptions: { requestOptions: { headers: { cookie: process.env.cookie ?? require('./config.json').cookie } } }
 })
 client.player.use('playdl', require('./extractor'))
 

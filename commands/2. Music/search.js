@@ -16,7 +16,7 @@ module.exports = {
 
     const searchResult = await interaction.client.player.search(interaction.options.getString('query'), { requestedBy: interaction.user, searchEngine: 'playdl' })
     if (!searchResult || !searchResult.tracks.length) { return await interaction.editReply(errorEmbed('Error', 'There was an error while searching for your query.')) }
-    if (searchResult.playlist) { return await interaction.editReply(simpleEmbed('This command doesn\'t support playlists.\nUse "\`/play\`" instead.', true)) }
+    if (searchResult.playlist) { return await interaction.editReply(simpleEmbed('This command doesn\'t support playlists.\nUse "`/play`" instead.', true)) }
     const tracks = searchResult.tracks
 
     // noinspection JSCheckFunctionSignatures
@@ -43,7 +43,7 @@ module.exports = {
     })
 
     // noinspection JSCheckFunctionSignatures
-    const collector = embedMessage.createMessageComponentCollector({ time: 60000, filter: async c => { await c.deferUpdate(); return c.user.id === interaction.user.id }})
+    const collector = embedMessage.createMessageComponentCollector({ time: 60000, filter: async c => { await c.deferUpdate(); return c.user.id === interaction.user.id } })
     collector.on('collect', async menuInteraction => {
       const queue = interaction.client.player.createQueue(interaction.guild.id, {
         initialVolume: 50,

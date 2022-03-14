@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js')
-const playdl = require('play-dl')
 const { simpleEmbed, errorEmbed } = require('../../utilities')
 
 module.exports = {

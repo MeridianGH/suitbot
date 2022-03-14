@@ -11,7 +11,7 @@ const { Strategy } = require('passport-discord')
 const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
-const fetch  = require('node-fetch')
+const fetch = require('node-fetch')
 
 const clientId = process.env.appId ?? require('../config.json').appId
 const clientSecret = process.env.clientSecret ?? require('../config.json').clientSecret
@@ -91,7 +91,7 @@ module.exports = async (client) => {
   // Queue update endpoint.
   const updates = {}
   app.get('/update/:guildID', (req, res) => {
-    const guildId = req.params['guildID']
+    const guildId = req.params.guildID
     const user = req.user
     if (!user) { return }
     if (updates[guildId]) {
@@ -185,7 +185,7 @@ module.exports = async (client) => {
 
   // Server endpoint.
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
-    const guild = client.guilds.cache.get(req.params['guildID'])
+    const guild = client.guilds.cache.get(req.params.guildID)
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -196,7 +196,7 @@ module.exports = async (client) => {
 
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
-    const guild = client.guilds.cache.get(req.params['guildID'])
+    const guild = client.guilds.cache.get(req.params.guildID)
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -209,50 +209,50 @@ module.exports = async (client) => {
     const query = req.body.query
     const index = req.body.index
     switch (req.body.action) {
-      case 'previous':
+      case 'previous': {
         if (queue.streamTime > 5000) {
           await queue.seek(0)
           return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null })
         }
         await queue.back()
         alert = `Playing previous track \`#0\`: **${queue.current.title}**.`
-        break
-      case 'pause':
+        break }
+      case 'pause': {
         queue.setPaused(!queue.connection.paused)
         alert = queue.connection.paused ? 'Paused.' : 'Resumed.'
-        break
-      case 'skip':
+        break }
+      case 'skip': {
         queue.skip()
         alert = 'Skipped.'
         await sleep(1)
-        break
-      case 'shuffle':
+        break }
+      case 'shuffle': {
         queue.shuffle()
         alert = 'Shuffled the queue.'
-        break
-      case 'repeat':
+        break }
+      case 'repeat': {
         queue.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1)
         alert = `Set repeat mode to "${queue.repeatMode === 0 ? 'None' : queue.repeatMode === 1 ? 'Track' : 'Queue'}"`
-        break
-      case 'clear':
+        break }
+      case 'clear': {
         queue.clear()
         alert = 'Cleared the queue.'
-        break
-      case 'remove':
+        break }
+      case 'remove': {
         alert = `Removed track #${index}: "${queue.remove(index).title}".`
-        break
-      case 'volume':
+        break }
+      case 'volume': {
         queue.setVolume(req.body.volume)
         alert = `Set volume to ${req.body.volume}%.`
         await sleep(1)
-        break
-      case 'skipto':
+        break }
+      case 'skipto': {
         const skipTo = queue.tracks[queue.getTrackPosition(index - 1)]
         queue.skipTo(index - 1)
         alert = `Skipped to #${index}: "${skipTo.title}".`
         await sleep(1)
-        break
-      case 'play':
+        break }
+      case 'play': {
         if (!query) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null }) }
         const searchResult = await client.player.search(query, { requestedBy: member.user, searchEngine: 'playdl' })
         if (!searchResult || !searchResult.tracks.length) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error while adding your song to the queue.', type: 'danger' }) }
@@ -294,7 +294,7 @@ module.exports = async (client) => {
             ]
           })
         }
-        break
+        break }
     }
 
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert: alert, type: 'success' })
