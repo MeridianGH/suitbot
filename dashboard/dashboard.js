@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 const express = require('express')
 const app = express()
 const session = require('express-session')
@@ -9,7 +11,7 @@ const { Strategy } = require('passport-discord')
 const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args))
+const fetch  = require('node-fetch')
 
 const clientId = process.env.appId ?? require('../config.json').appId
 const clientSecret = process.env.clientSecret ?? require('../config.json').clientSecret
@@ -27,12 +29,7 @@ module.exports = async (client) => {
 
   passport.use(
     new Strategy(
-      {
-        clientID: clientId,
-        clientSecret: clientSecret,
-        callbackURL: callbackUrl,
-        scope: ['identify', 'guilds']
-      },
+      { clientID: clientId, clientSecret: clientSecret, callbackURL: callbackUrl, scope: ['identify', 'guilds'] },
       (accessToken, refreshToken, profile, done) => {
         // On login we pass in profile with no logic.
         process.nextTick(() => done(null, profile))
@@ -94,7 +91,7 @@ module.exports = async (client) => {
   // Queue update endpoint.
   const updates = {}
   app.get('/update/:guildID', (req, res) => {
-    const guildId = req.params.guildID
+    const guildId = req.params['guildID']
     const user = req.user
     if (!user) { return }
     if (updates[guildId]) {
@@ -124,8 +121,8 @@ module.exports = async (client) => {
       delete updates[queue.guild.id]
     }
   }
-  client.player.on('songChanged', (queue) => update(queue))
-  client.player.on('queueEnd', (queue) => update(queue))
+  client.player.on('trackStart', update)
+  client.player.on('queueEnd', update)
   // Heartbeat to keep connection alive
   const updateHeartbeat = () => {
     setTimeout(() => {
@@ -146,7 +143,7 @@ module.exports = async (client) => {
       if (req.headers.referer) {
         const parsed = new URL(req.headers.referer)
         if (parsed.hostname === app.locals.domain) {
-          req.session.backURL = parsed.path
+          req.session.backURL = parsed.pathname
         }
       } else {
         req.session.backURL = '/'
@@ -188,7 +185,7 @@ module.exports = async (client) => {
 
   // Server endpoint.
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
-    const guild = client.guilds.cache.get(req.params.guildID)
+    const guild = client.guilds.cache.get(req.params['guildID'])
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -199,7 +196,7 @@ module.exports = async (client) => {
 
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
-    const guild = client.guilds.cache.get(req.params.guildID)
+    const guild = client.guilds.cache.get(req.params['guildID'])
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
     if (!member) { return res.redirect('/dashboard') }
@@ -213,19 +210,16 @@ module.exports = async (client) => {
     const index = req.body.index
     switch (req.body.action) {
       case 'previous':
-        if (queue.connection.time > 5000) {
+        if (queue.streamTime > 5000) {
           await queue.seek(0)
           return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null })
         }
-        if (!queue.data.previous) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'You can\'t use the "previous" command right now!', type: 'danger' }) }
-        await queue.play(queue.data.previous, { index: 0 })
-        await queue.play(queue.nowPlaying, { index: 1 })
-        queue.skip()
-        alert = '⏭ Skipped to previous song.'
+        await queue.back()
+        alert = `Playing previous track \`#0\`: **${queue.current.title}**.`
         break
       case 'pause':
-        queue.setPaused(queue.paused !== true)
-        alert = queue.paused === true ? 'Paused.' : 'Resumed.'
+        queue.setPaused(!queue.connection.paused)
+        alert = queue.connection.paused ? 'Paused.' : 'Resumed.'
         break
       case 'skip':
         queue.skip()
@@ -238,56 +232,64 @@ module.exports = async (client) => {
         break
       case 'repeat':
         queue.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1)
-        alert = `Set repeat mode to "${queue.repeatMode === 0 ? 'None' : queue.repeatMode === 1 ? 'Song' : 'Queue'}"`
+        alert = `Set repeat mode to "${queue.repeatMode === 0 ? 'None' : queue.repeatMode === 1 ? 'Track' : 'Queue'}"`
         break
       case 'clear':
-        queue.clearQueue()
+        queue.clear()
         alert = 'Cleared the queue.'
         break
       case 'remove':
-        alert = `Removed track #${index}: "${queue.remove(index).name}".`
+        alert = `Removed track #${index}: "${queue.remove(index).title}".`
+        break
+      case 'volume':
+        queue.setVolume(req.body.volume)
+        alert = `Set volume to ${req.body.volume}%.`
+        await sleep(1)
         break
       case 'skipto':
-        queue.skip(index - 1)
-        alert = `Skipped to #${index}: "${queue.songs[1].name}".`
+        const skipTo = queue.tracks[queue.getTrackPosition(index - 1)]
+        queue.skipTo(index - 1)
+        alert = `Skipped to #${index}: "${skipTo.title}".`
         await sleep(1)
         break
       case 'play':
         if (!query) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null }) }
-        if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/.+$/i) ||
-          query.match(/^https?:\/\/(?:www\.)?youtube\.com\/playlist\?list=.+$/i)) {
-          const playlist = await queue.playlist(query, { requestedBy: member.displayName })
-          if (!playlist) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error when adding that playlist!', type: 'danger' }) }
+        const searchResult = await client.player.search(query, { requestedBy: member.user, searchEngine: 'playdl' })
+        if (!searchResult || !searchResult.tracks.length) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error while adding your song to the queue.', type: 'danger' }) }
 
-          alert = `Added playlist "${playlist.name}" by ${playlist.author.name ?? playlist.author} to the queue!`
+        if (searchResult.playlist) {
+          const playlist = searchResult.playlist
+          queue.addTracks(playlist.tracks)
+          if (!queue.playing) { await queue.play() }
+          alert = `Added "${playlist.title}" to the queue!`
 
-          queue.data.channel.send({
+          queue.metadata.channel.send({
             embeds: [new MessageEmbed()
               .setAuthor({ name: 'Added to queue.', iconURL: member.user.displayAvatarURL() })
-              .setTitle(playlist.name)
+              .setTitle(playlist.title)
               .setURL(playlist.url)
-              .setThumbnail(playlist.songs[0].thumbnail)
+              .setThumbnail(playlist.thumbnail)
+              .addField('Amount', `${playlist.tracks.length} songs`, true)
               .addField('Author', playlist.author.name ?? playlist.author, true)
-              .addField('Amount', `${playlist.songs.length} songs`, true)
-              .addField('Position', `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, true)
+              .addField('Position', `${(queue.getTrackPosition(playlist.tracks[0]) + 1).toString()}-${(queue.getTrackPosition(playlist.tracks[playlist.tracks.length - 1]) + 1).toString()}`, true)
               .setFooter({ text: 'SuitBot Web Interface', iconURL: client.user.displayAvatarURL() })
             ]
           })
         } else {
-          const song = await queue.play(query, { requestedBy: member.displayName })
-          if (!song) { return renderTemplate(req, res, 'server.ejs', { guild, queue, alert: 'There was an error when adding that song!', type: 'danger' }) }
+          const track = searchResult.tracks[0]
+          queue.addTrack(track)
+          if (!queue.playing) { await queue.play() }
+          alert = `Added "${track.title}" to the queue!`
 
-          alert = `Added "${song.name}" to the queue!`
-
-          queue.data.channel.send({
+          queue.metadata.channel.send({
             embeds: [new MessageEmbed()
               .setAuthor({ name: 'Added to queue.', iconURL: member.user.displayAvatarURL() })
-              .setTitle(song.name)
-              .setURL(song.url)
-              .setThumbnail(song.thumbnail)
-              .addField('Channel', song.author, true)
-              .addField('Duration', song.duration, true)
-              .addField('Position', queue.songs.indexOf(song).toString(), true)
+              .setTitle(track.title)
+              .setURL(track.url)
+              .setThumbnail(track.thumbnail)
+              .addField('Duration', track.durationMS === 0 ? '🔴 Live' : track.duration, true)
+              .addField('Channel', track.author, true)
+              .addField('Position', (queue.getTrackPosition(track) + 1).toString(), true)
               .setFooter({ text: 'SuitBot Web Interface', iconURL: client.user.displayAvatarURL() })
             ]
           })

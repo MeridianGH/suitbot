@@ -22,7 +22,7 @@
     }
 
     // Increment seconds
-    <% if (queue && queue.songs[0] && !queue.connection.paused) { %>
+    <% if (queue && queue.current && !queue.connection.paused && queue.current.durationMS > 0) { %>
     function msToHMS (ms) {
       let totalSeconds = (ms / 1000)
       const hours = Math.floor(totalSeconds / 3600).toString()
@@ -31,21 +31,21 @@
       const seconds = Math.floor(totalSeconds % 60).toString()
       return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
     }
-    let currentMS = <%= queue.connection.time %>
+    let currentMS = Number(<%= queue.streamTime %>)
     const time = document.getElementById('time')
     const progress = document.getElementById('progress')
 
     function incrementSeconds () {
       currentMS += 1000
-      currentMS = Math.min(currentMS, <%= queue.songs[0].milliseconds %>)
-      time.innerHTML = `${msToHMS(currentMS)} / <%= queue.songs[0].duration %>`
-      progress.style.width = `${(currentMS / <%= queue.songs[0].milliseconds %> * 100)}%`
+      currentMS = Math.min(currentMS, <%= queue.current.durationMS %>)
+      time.innerHTML = `${msToHMS(currentMS)} / <%= queue.current.duration %>`
+      progress.style.width = `${(currentMS / Number(<%= queue.current.durationMS %>) * 100)}%`
     }
     setInterval(incrementSeconds, 1000)
     <% } %>
 
     // Media Session
-    <% if (queue && queue.songs[0]) { %>
+    <% if (queue && queue.current) { %>
     if (navigator.userAgent.indexOf("Firefox") !== -1) {
       const audio = document.createElement('audio')
       audio.src = '/near-silence.mp3'
@@ -56,10 +56,10 @@
 
       function htmlDecode(input) { return (new DOMParser().parseFromString(input, "text/html")).documentElement.textContent }
       navigator.mediaSession.metadata = new MediaMetadata({
-        title: htmlDecode('<%= queue.songs[0].name %>'),
-        artist: htmlDecode('<%= queue.songs[0].author %>'),
-        album: htmlDecode('<%= queue.songs[0].author %>'),
-        artwork: [{ src: htmlDecode('<%= queue.songs[0].thumbnail %>') }]
+        title: htmlDecode('<%= queue.current.title %>'),
+        artist: htmlDecode('<%= queue.current.author %>'),
+        album: htmlDecode('<%= queue.current.author %>'),
+        artwork: [{ src: htmlDecode('<%= queue.current.thumbnail %>') }]
       })
       navigator.mediaSession.playbackState = '<%- queue.connection.paused ? 'paused' : 'playing' %>'
 
@@ -78,9 +78,9 @@
   </header>
   <div class="card-body">
     <%- alert && type ? `<div class="alert alert-${type}" id="alert" style="color: #000000; opacity: 0.85; position: absolute; width: calc(100% - 2rem); margin: 0; transition: opacity 1s; pointer-events:none;"><i class="fas fa-info-circle"></i> ${alert}</div>` : '' %>
-    <% if(queue && queue.songs[0]) { %>
+    <% if(queue && queue.current) { %>
     <div style="display: flex; justify-content: space-between;">
-      <h1 style="font-family: 'Bebas Neue';">Now Playing</h1>
+      <h1 style="font-family: 'Bebas Neue', sans-serif;">Now Playing</h1>
       <form method="POST" style="margin: 0;">
         <button type="submit" class="button" name="action" value="reload"><i class="far fa-redo-alt"></i></button>
       </form>
@@ -88,16 +88,16 @@
     <div style="height: 200px; margin-bottom: 10px;">
       <ul class="horizontal-list">
         <li>
-          <img src="<%- queue.songs[0].thumbnail %>" style="height: 200px; width: 356px; flex-shrink: 4; margin-right: 20px;">
+          <img src="<%- queue.current.thumbnail %>" style="height: 200px; width: 356px; flex-shrink: 4; margin-right: 20px;">
           <div style="width: 356px; background-color: #373b3e">
-            <div id="progress" style="width: <%= queue.connection.time / queue.songs[0].milliseconds * 100 %>%; height: 5px; background-color: #ff0000"></div>
+            <div id="progress" style="width: <%= queue.streamTime / queue.current.durationMS * 100 %>%; height: 5px; background-color: #ff0000"></div>
           </div>
         </li>
         <li>
-          <h4><%= queue.songs[0].name %></h4>
-          <h6><%= queue.songs[0].author %></h6>
-          <h5 id="time"><%= msToHMS(queue.connection.time) %> / <%= queue.songs[0].duration %></h5>
-          <form method="POST" style="width: 100%; margin: 0;">
+          <h4><%= queue.current.title %></h4>
+          <h6><%= queue.current.author %></h6>
+          <h5 id="time"><%= queue.current.durationMS === 0 ? '🔴 Live' : `${msToHMS(queue.streamTime)} / ${queue.current.duration}` %></h5>
+          <form method="POST" style="width: 100%; margin: 0 0 10px 0;">
             <button type="submit" class="button" name="action" value="previous" id="previous"><i class="fas fa-backward"></i></button>
             <button type="submit" class="button" name="action" value="pause" id="pause"><%- queue.connection.paused ? '<i class="fas fa-play"></i>' : '<i class="fas fa-pause"></i>' %></button>
             <button type="submit" class="button" name="action" value="skip" id="skip"><i class="fas fa-forward"></i></button>
@@ -105,13 +105,18 @@
             <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
             <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
           </form>
+          <form id="volumeform" method="POST" style="width: 100%; margin: 0 0 0 0;">
+            <input type="hidden" name="action" value="volume">
+            <output id="volumeoutput"><%= queue.volume %></output>
+            <input type="range" id="volumeslider" name="volume" value="<%= queue.volume %>" step="10" min="0" max="100" oninput="volumeoutput.value = value" onmouseup="document.getElementById('volumeform').submit()">
+          </form>
         </li>
       </ul>
     </div>
-    <h1 style="font-family: 'Bebas Neue';">Queue</h1>
+    <h1 style="font-family: 'Bebas Neue', sans-serif;">Queue</h1>
     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <form method="POST" style="margin: 0;">
-        <input type="text" class="music-form" name="query" placeholder="Add to queue">
+        <input type="text" class="music-input" name="query" placeholder="Add to queue">
         <button type="submit" class="button" name="action" value="play"><i class="fas fa-plus"></i> Play</button>
       </form>
       <form method="POST" style="margin: 0;">
@@ -123,19 +128,19 @@
         <thead>
           <tr>
             <th>#</th>
-            <th style="width: 100%;">Song</th>
+            <th style="width: 100%;">Track</th>
             <th>Author</th>
             <th>Duration</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <% for (var i = 1; i < queue.songs.length; i++) { %>
+          <% for (var i = 0; i < queue.tracks.length; i++) { %>
           <tr>
-            <td><span class="text-nowrap"><%= i %></span></td>
-            <td><span class="text-nowrap"><%= queue.songs[i].name %></span></td>
-            <td><span class="text-nowrap"><%= queue.songs[i].author %></span></td>
-            <td><span class="text-nowrap"><%= queue.songs[i].duration %></span></td>
+            <td><span class="text-nowrap"><%= i + 1 %></span></td>
+            <td><span class="text-nowrap"><%= queue.tracks[i].title %></span></td>
+            <td><span class="text-nowrap"><%= queue.tracks[i].author %></span></td>
+            <td><span class="text-nowrap"><%= queue.tracks[i].durationMS === 0 ? '🔴 Live' : queue.tracks[i].duration %></span></td>
             <td><span class="text-nowrap"><form method="POST"><input type="hidden" name="index" value="<%= i %>"><button type="submit" class="music-btn" name="action" value="remove"><i class="fas fa-trash-alt"></i></button><button type="submit" class="music-btn" name="action" value="skipto"><i class="fas fa-forward"></i></button></form></span></td>
           </tr>
           <% } %>

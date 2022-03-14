@@ -7,12 +7,12 @@
   <div class="card-body">
     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
       <% user.guilds.forEach(guild => { if (!bot.guilds.cache.get(guild.id)) { return } %>
-      <div class="card <%= bot.player.getQueue(guild.id) ? 'border border-success border-4' : 'border-0' %>" style="width: 18rem; margin: 2rem; background-color: #ffffff; border-radius: 3px;">
+      <div class="card <%= bot.player.getQueue(guild.id) && bot.player.getQueue(guild.id).playing ? 'border border-success border-4' : 'border-0' %>" style="width: 18rem; margin: 2rem; background-color: #ffffff; border-radius: 3px;">
         <img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" class="card-img-top" style="max-width: 18rem;">
         <div class="card-body">
-          <%- bot.player.getQueue(guild.id) ? `<a href="/dashboard/${guild.id}" class="stretched-link"></a>` : '' %>
+          <%- bot.player.getQueue(guild.id) && bot.player.getQueue(guild.id).playing ? `<a href="/dashboard/${guild.id}" class="stretched-link"></a>` : '' %>
           <h5 class="card-title" style="color: #000000;"><%= guild.name %></h5>
-          <p class="card-text" style="color: #000000;"><%- bot.player.getQueue(guild.id) && bot.player.getQueue(guild.id).nowPlaying ? `Now Playing:<br>${bot.player.getQueue(guild.id).nowPlaying.name}` : 'Nothing playing on this server.' %></p>
+          <p class="card-text" style="color: #000000;"><%- bot.player.getQueue(guild.id) && bot.player.getQueue(guild.id).playing ? `Now Playing:<br>${bot.player.getQueue(guild.id).current.title}` : 'Nothing playing on this server.' %></p>
         </div>
       </div>
       <% }) %>
