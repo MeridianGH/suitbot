@@ -7,13 +7,13 @@ module.exports = {
     .setDescription('Removes the specified track from the queue.')
     .addIntegerOption(option => option.setName('track').setDescription('The track to remove.').setRequired(true)),
   async execute (interaction) {
-    const track = interaction.options.getInteger('track')
+    const index = interaction.options.getInteger('track')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
 
-    if (track < 1 || track > queue.songs.length - 1) { return await interaction.reply(simpleEmbed(`You can only specify a song number between 1-${queue.songs.length - 1}`, true)) }
-    const song = queue.remove(track)
-    await interaction.reply(simpleEmbed(`🗑️ Removed track \`#${track}\`: **${song.name}**.`))
+    if (index < 1 || index > queue.tracks.length) { return await interaction.reply(simpleEmbed(`You can only specify a song number between 1-${queue.tracks.length}`, true)) }
+    const track = queue.remove(index - 1)
+    await interaction.reply(simpleEmbed(`🗑️ Removed track \`#${index - 1}\`: **${track.title}**.`))
   }
 }

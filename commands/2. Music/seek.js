@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed, msToHMS } = require('../../utilities')
-const { Utils } = require('discord-music-player')
+const { simpleEmbed, msToHMS, timeToMs } = require('../../utilities')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,14 +7,14 @@ module.exports = {
     .setDescription('Skips to the specified point in the current track.')
     .addStringOption(option => option.setName('time').setDescription('The time to skip to. Can be seconds or HH:MM:SS.').setRequired(true)),
   async execute (interaction) {
-    const time = interaction.options.getString('time')
-    const milliseconds = isNaN(time) ? Utils.timeToMs(time) : time * 1000
+    const time = timeToMs(interaction.options.getString('time'))
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-    if (milliseconds < 0 || milliseconds > queue.nowPlaying.milliseconds) { return await interaction.reply(simpleEmbed(`You can only seek between 0:00-${queue.nowPlaying.duration}!`, true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
+    if (queue.current.durationMS === 0) { return await interaction.reply(simpleEmbed('You can\'t seek in a livestream!', true)) }
+    if (time < 0 || time > queue.current.durationMS) { return await interaction.reply(simpleEmbed(`You can only seek between 0:00-${queue.current.duration}!`, true)) }
 
-    await queue.seek(milliseconds)
-    await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(milliseconds)}.`))
+    await queue.seek(time)
+    await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(time)}.`))
   }
 }

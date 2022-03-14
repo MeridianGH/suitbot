@@ -3,5 +3,6 @@
 	"appId": "yourApplicationID",
 	"clientSecret": "yourClientSecret",
 	"guildId": "yourGuildID",
-	"adminId": "yourUserID"
+	"adminId": "yourUserID",
+	"cookie": "yourYTCookie"
 }

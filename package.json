@@ -1,7 +1,7 @@
 {
   "name": "suitbot",
   "version": "1.0.0",
-  "description": "A lightweight music and general purpose bot, that uses slash commands and buttons to be as user-friendly as possible! ",
+  "description": "A lightweight music and general purpose bot, that uses slash commands and buttons to be as user-friendly as possible!",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,16 +16,18 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "body-parser": "^1.19.0",
     "discord-api-types": "^0.23.1",
-    "discord-music-player": "^8.3.1",
+    "discord-player": "^5.2.2",
     "discord.js": "13.5.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "memorystore": "^1.6.6",
-    "node-fetch": "^3.0.0",
+    "node-fetch": "^2.6.7",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
-    "ytdl-core": "^4.10.0"
+    "play-dl": "^1.9.1",
+    "spotify-url-info": "^2.2.7",
+    "youtube-sr": "^4.1.15"
   },
   "devDependencies": {
     "ejs-lint": "^1.2.1",

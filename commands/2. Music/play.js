@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js')
+const playdl = require('play-dl')
 const { simpleEmbed, errorEmbed } = require('../../utilities')
 
 module.exports = {
@@ -14,56 +15,55 @@ module.exports = {
     if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true))
     await interaction.deferReply()
 
-    const query = interaction.options.getString('query')
-    if (query.match(/^https?:\/\/(?:open|play)\.spotify\.com\/playlist\/.+$/i) ||
-      query.match(/^https?:\/\/(?:www\.)?youtube\.com\/playlist\?list=.+$/i)) {
-      await this._playPlaylist(interaction)
+    const queue = interaction.client.player.createQueue(interaction.guild.id, {
+      initialVolume: 50,
+      autoSelfDeaf: false,
+      leaveOnEnd: false,
+      leaveOnEmpty: false,
+      leaveOnStop: true,
+      volumeSmoothness: 1,
+      metadata: { channel: interaction.channel }
+    })
+
+    const searchResult = await interaction.client.player.search(interaction.options.getString('query'), { requestedBy: interaction.user, searchEngine: 'playdl' })
+    if (!searchResult || !searchResult.tracks.length) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
+
+    if (searchResult.playlist) {
+      const playlist = searchResult.playlist
+      queue.addTracks(playlist.tracks)
+      if (!queue.connection) { await queue.connect(interaction.member.voice.channel) }
+      if (!queue.playing) { await queue.play() }
+
+      await interaction.editReply({
+        embeds: [new MessageEmbed()
+          .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
+          .setTitle(playlist.title)
+          .setURL(playlist.url)
+          .setThumbnail(playlist.thumbnail)
+          .addField('Amount', `${playlist.tracks.length} songs`, true)
+          .addField('Author', playlist.author.name ?? playlist.author, true)
+          .addField('Position', `${(queue.getTrackPosition(playlist.tracks[0]) + 1).toString()}-${(queue.getTrackPosition(playlist.tracks[playlist.tracks.length - 1]) + 1).toString()}`, true)
+          .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
+        ]
+      })
     } else {
-      await this._playSong(interaction)
+      const track = searchResult.tracks[0]
+      queue.addTrack(track)
+      if (!queue.connection) { await queue.connect(interaction.member.voice.channel) }
+      if (!queue.playing) { await queue.play() }
+
+      await interaction.editReply({
+        embeds: [new MessageEmbed()
+          .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
+          .setTitle(track.title)
+          .setURL(track.url)
+          .setThumbnail(track.thumbnail)
+          .addField('Duration', track.durationMS === 0 ? '🔴 Live' : track.duration, true)
+          .addField('Channel', track.author, true)
+          .addField('Position', (queue.getTrackPosition(track) + 1).toString(), true)
+          .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
+        ]
+      })
     }
-  },
-
-  async _playSong (interaction) {
-    const queue = interaction.client.player.createQueue(interaction.guild.id)
-    queue.setData({ channel: interaction.channel })
-
-    await queue.join(interaction.member.voice.channel)
-    const song = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!queue) { queue.stop() } })
-    if (!song) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
-
-    await interaction.editReply({
-      embeds: [new MessageEmbed()
-        .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
-        .setTitle(song.name)
-        .setURL(song.url)
-        .setThumbnail(song.thumbnail)
-        .addField('Channel', song.author, true)
-        .addField('Duration', song.duration, true)
-        .addField('Position', queue.songs.indexOf(song).toString(), true)
-        .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-      ]
-    })
-  },
-
-  async _playPlaylist (interaction) {
-    const queue = interaction.client.player.createQueue(interaction.guild.id)
-    queue.setData({ channel: interaction.channel })
-
-    await queue.join(interaction.member.voice.channel)
-    const playlist = await queue.playlist(interaction.options.getString('query'), { requestedBy: interaction.member.displayName }).catch(() => { if (!queue) { queue.stop() } })
-    if (!playlist) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your playlist to the queue.')) }
-
-    await interaction.editReply({
-      embeds: [new MessageEmbed()
-        .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
-        .setTitle(playlist.name)
-        .setURL(playlist.url)
-        .setThumbnail(playlist.songs[0].thumbnail)
-        .addField('Author', playlist.author.name ?? playlist.author, true)
-        .addField('Amount', `${playlist.songs.length} songs`, true)
-        .addField('Position', `${queue.songs.indexOf(playlist.songs[0]).toString()}-${queue.songs.indexOf(playlist.songs[playlist.songs.length - 1]).toString()}`, true)
-        .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-      ]
-    })
   }
 }

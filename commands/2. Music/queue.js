@@ -8,53 +8,53 @@ module.exports = {
     .setDescription('Displays the queue.'),
   async execute (interaction) {
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.nowPlaying) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
 
     const pages = []
 
-    if (queue.songs.length === 1) {
+    if (queue.tracks.length === 0) {
       // Format single page with no upcoming songs.
       let description = ''
       description += 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!\n\n'
-      description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\n`
+      description += `Now Playing:\n[${queue.current.title}](${queue.current.url}) | \`${queue.current.durationMS === 0 ? '🔴 Live' : queue.current.duration}\`\n\n`
       const embed = new MessageEmbed()
         .setAuthor({ name: 'Queue.', iconURL: interaction.member.user.displayAvatarURL() })
         .setDescription(description + `No upcoming songs.\nAdd songs with /play!\n${'\u2015'.repeat(34)}`)
-        .setFooter({ text: `SuitBot | Page 1/1 | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ text: `SuitBot | Page 1/1 | Repeat: ${{ 0: '❌', 1: '🔂 Track', 2: '🔁 Queue', 3: '⏩ Autoplay' }[queue.repeatMode]}`, iconURL: interaction.client.user.displayAvatarURL() })
       pages.push(embed)
-    } else if (queue.songs.length > 1 && queue.songs.length <= 11) {
+    } else if (queue.tracks.length >= 1 && queue.tracks.length <= 10) {
       // Format single page.
       let description = ''
       description += 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!\n\n'
-      description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\nUp Next:\n`
-      for (const song of queue.songs.slice(1)) {
-        description += `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
+      description += `Now Playing:\n[${queue.current.title}](${queue.current.url}) | \`${queue.current.durationMS === 0 ? '🔴 Live' : queue.current.duration}\`\n\nUp Next:\n`
+      for (const track of queue.tracks) {
+        description += `\`${(queue.getTrackPosition(track) + 1)}.\` [${track.title}](${track.url}) | \`${track.durationMS === 0 ? '🔴 Live' : track.duration}\`\n\n`
       }
-      description += `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.reduce(function (prev, cur) { return prev + cur.milliseconds }, 0))} total duration**\n${'\u2015'.repeat(34)}`
+      description += `**${queue.tracks.length} songs in queue | ${msToHMS(queue.totalTime)} total duration**\n${'\u2015'.repeat(34)}`
 
       const embed = new MessageEmbed()
         .setAuthor({ name: 'Queue.', iconURL: interaction.member.user.displayAvatarURL() })
         .setDescription(description)
-        .setFooter({ text: `SuitBot | Page 1/1 | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ text: `SuitBot | Page 1/1 | Repeat: ${{ 0: '❌', 1: '🔂 Track', 2: '🔁 Queue', 3: '⏩ Autoplay' }[queue.repeatMode]}`, iconURL: interaction.client.user.displayAvatarURL() })
       pages.push(embed)
     } else {
       // Format all pages.
-      for (let i = 1; i < queue.songs.length - 1; i += 10) {
-        const songs = queue.songs.slice(i, i + 10)
+      for (let i = 0; i < queue.tracks.length; i += 10) {
+        const tracks = queue.tracks.slice(i, i + 10)
 
         let description = ''
         description += 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!\n\n'
-        description += `Now Playing:\n[${queue.nowPlaying.name}](${queue.nowPlaying.url}) | \`${queue.nowPlaying.duration} Requested by: ${queue.nowPlaying.requestedBy}\`\n\nUp Next:\n`
-        for (const song of songs) {
-          description += `\`${queue.songs.indexOf(song)}.\` [${song.name}](${song.url}) | \`${song.duration} Requested by: ${song.requestedBy}\`\n\n`
+        description += `Now Playing:\n[${queue.current.title}](${queue.current.url}) | \`${queue.current.durationMS === 0 ? '🔴 Live' : queue.current.duration}\`\n\nUp Next:\n`
+        for (const track of tracks) {
+          description += `\`${(queue.getTrackPosition(track) + 1)}.\` [${track.title}](${track.url}) | \`${track.durationMS === 0 ? '🔴 Live' : track.duration}\`\n\n`
         }
-        description += `**${queue.songs.length - 1} songs in queue | ${msToHMS(queue.songs.slice(1, queue.songs.length).reduce(function (prev, cur) { return prev + cur.milliseconds }, 0))} total duration**\n${'\u2015'.repeat(34)}`
+        description += `**${queue.tracks.length} songs in queue | ${msToHMS(queue.totalTime)} total duration**\n${'\u2015'.repeat(34)}`
 
         const embed = new MessageEmbed()
           .setAuthor({ name: 'Queue.', iconURL: interaction.member.user.displayAvatarURL() })
           .setDescription(description)
-          .setFooter({ text: `SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.songs.length / 10)} | Loop: ${queue.repeatMode === 1 ? '✅' : '❌'} | Queue Loop: ${queue.repeatMode === 2 ? '✅' : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
+          .setFooter({ text: `SuitBot | Page ${pages.length + 1}/${Math.ceil(queue.tracks.length / 10)} | Repeat: ${{ 0: '❌', 1: '🔂 Track', 2: '🔁 Queue', 3: '⏩ Autoplay' }[queue.repeatMode]}`, iconURL: interaction.client.user.displayAvatarURL() })
         pages.push(embed)
       }
     }

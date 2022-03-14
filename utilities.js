@@ -12,7 +12,7 @@ module.exports = {
   sleep: function (seconds) {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000))
   },
-  msToHMS: function msToHMS (ms) {
+  msToHMS: function (ms) {
     let totalSeconds = (ms / 1000)
     const hours = Math.floor(totalSeconds / 3600).toString()
     totalSeconds %= 3600
@@ -20,7 +20,16 @@ module.exports = {
     const seconds = Math.floor(totalSeconds % 60).toString()
     return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
   },
-  timeSince: function timeSince (date) {
+  timeToMs: function (time) {
+    const times = time.split(':')
+    let seconds = 0, secondsInUnit = 1
+    while (times.length > 0) {
+      seconds += secondsInUnit * parseInt(times.pop())
+      secondsInUnit *= 60
+    }
+    return seconds * 1000
+  },
+  timeSince: function (date) {
     const seconds = Math.floor((new Date() - date) / 1000)
 
     let interval = Math.floor(seconds / 31536000)

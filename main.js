@@ -1,12 +1,15 @@
 const fs = require('fs')
 const { Client, Collection, Intents } = require('discord.js')
-const { Player } = require('discord-music-player')
+const { Player } = require('discord-player')
 const { getFilesRecursively, errorEmbed } = require('./utilities')
 
 const token = process.env.token ?? require('./config.json').token
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
-client.player = new Player(client, { volume: 50, leaveOnEnd: false })
+client.player = new Player(client, {
+  ytdlOptions: { requestOptions: { headers: { cookie: process.env.cookie ?? require('./config.json').cookie } } },
+})
+client.player.use('playdl', require('./extractor'))
 
 // Add command files
 client.commands = new Collection()
@@ -37,7 +40,7 @@ async function shutdown () {
   console.log(`Closing ${client.player.queues.size} queues.`)
   for (const entry of client.player.queues) {
     const queue = entry[1]
-    await queue.data.channel.send(errorEmbed('Server shutdown', 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'))
+    await queue.metadata.channel.send(errorEmbed('Server shutdown', 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'))
     queue.stop()
   }
   client.destroy()
