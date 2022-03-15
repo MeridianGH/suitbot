@@ -70,7 +70,7 @@ module.exports = {
         const info = await getPreview(query)
 
         const track = {
-          title: info.title,
+          title: info.artist + ' - ' + info.title,
           duration: (await getData(query)).duration_ms,
           thumbnail: info.image,
           async engine () { return (await playdl.stream(await playdl.search(`${info.artist} ${info.title} lyrics`, { limit: 1, unblurNSFWThumbnails: true }).then(result => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'), { discordPlayerCompatibility: true })).stream },
@@ -89,7 +89,7 @@ module.exports = {
         const tracks = trackList.map(track => {
           //noinspection JSUnresolvedVariable
           return {
-            title: track.name,
+            title: track.artists[0].name + ' - ' + track.name,
             duration: track.duration_ms,
             thumbnail: track.album?.images[0]?.url,
             async engine () { return (await playdl.stream(await playdl.search(`${track.artists[0].name} ${track.name} lyrics`, { limit: 1, unblurNSFWThumbnails: true }).then(result => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'), { discordPlayerCompatibility: true })).stream },
