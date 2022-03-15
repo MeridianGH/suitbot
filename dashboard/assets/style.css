@@ -150,17 +150,6 @@ input[type=range]::-webkit-slider-thumb, input[type=range]::-moz-range-thumb {
     background: var(--text-color);
 }
 
-output {
-    color: var(--text-color);
-    background: var(--button-color);
-    height: 30px;
-    width: 42px;
-    padding: 0 5px;
-    border: 2px solid var(--button-color);
-    border-radius: 5px;
-    outline: none;
-}
-
 ul.horizontal-list {
     padding: 0;
     margin: 0;
