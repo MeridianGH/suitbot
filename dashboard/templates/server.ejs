@@ -105,22 +105,22 @@
             <button type="submit" class="button" name="action" value="shuffle"><i class="fas fa-random"></i></button>
             <button type="submit" class="button" name="action" value="repeat"><%- queue.repeatMode === 0 ? '<i class="fad fa-repeat-alt"></i>' : queue.repeatMode === 1 ? '<i class="fas fa-repeat-1-alt"></i>' : '<i class="fas fa-repeat"></i>' %></button>
           </form>
-          <form id="volumeform" method="POST" style="width: 100%; margin: 0 0 0 0;">
-            <input type="hidden" name="action" value="volume">
-            <output id="volumeoutput"><%= queue.volume %></output>
-            <input type="range" id="volumeslider" name="volume" value="<%= queue.volume %>" step="10" min="0" max="100" oninput="volumeoutput.value = value" onmouseup="document.getElementById('volumeform').submit()">
-          </form>
         </li>
       </ul>
     </div>
-    <h1 style="font-family: 'Bebas Neue', sans-serif;">Queue</h1>
+    <form id="volumeform" method="POST" style="margin: 0 0 0 0; display: inline-block;">
+      <input type="hidden" name="action" value="volume">
+      <button class="button noFixedWidth" id="volumeButton" disabled="disabled" style="width: 65px;"><i class="fas fa-volume<%= queue.volume === 0 ? '-off' : queue.volume <= 33 ? '-down' : queue.volume <= 66 ? '' : '-up' %>"></i> <%= queue.volume %></button>
+      <input type="range" name="volume" value="<%= queue.volume %>" step="10" min="0" max="100" oninput="document.getElementById('volumeButton').innerHTML = `<i class=&quot;fas fa-volume${value == 0 ? '-off' : value <= 33 ? '-down' : value <= 66 ? '' : '-up'}&quot;></i> ${value}`" onmouseup="document.getElementById('volumeform').submit()">
+    </form>
+    <h1 style="font-family: 'Bebas Neue', sans-serif; margin-top: 20px">Queue</h1>
     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
       <form method="POST" style="margin: 0;">
         <input type="text" class="music-input" name="query" placeholder="Add to queue">
-        <button type="submit" class="button" name="action" value="play"><i class="fas fa-plus"></i> Play</button>
+        <button type="submit" class="button noFixedWidth" name="action" value="play"><i class="fas fa-plus"></i> Play</button>
       </form>
       <form method="POST" style="margin: 0;">
-        <button type="submit" class="button" name="action" value="clear"><i class="fas fa-trash-alt"></i> Clear queue</button>
+        <button type="submit" class="button noFixedWidth" name="action" value="clear"><i class="fas fa-trash-alt"></i> Clear queue</button>
       </form>
     </div>
     <div class="table-responsive">

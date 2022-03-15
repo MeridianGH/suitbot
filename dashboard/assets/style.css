@@ -22,6 +22,15 @@ body {
     text-align: left;
 }
 
+a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+a:hover {
+    color: var(--text-hover);
+    text-decoration: none;
+}
+
 .navbar-dark, .navbar-expand-lg .navbar-nav {
     border: 0;
     background-color: var(--background-light);
@@ -78,6 +87,7 @@ body {
     color: var(--text-color);
     background-color: var(--button-color);
     height: 30px;
+    width: 30px;
     padding-left: 5px;
     padding-right: 5px;
     border: 2px solid var(--button-color);
@@ -86,10 +96,18 @@ body {
     vertical-align: bottom;
     text-align: center;
 }
+.button.noFixedWidth {
+    width: auto;
+}
 .button:hover {
     background-color: var(--button-hover);
     border-color: var(--button-hover);
 }
+.button:disabled {
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+}
+
 .mainbutton {
     color: var(--text-color);
     background-color: transparent;
@@ -114,8 +132,9 @@ body {
 
 input[type=range] {
     -webkit-appearance: none;
-    margin-right: 10px;
-    height: 7px;
+    margin: 0 0 8px 0;
+    vertical-align: middle;
+    height: 10px;
     border-radius: 5px;
     cursor: pointer;
     background: var(--button-color);
