@@ -91,6 +91,7 @@ module.exports = async (client) => {
   // Queue update endpoint.
   const updates = {}
   app.get('/update/:guildID', (req, res) => {
+    // noinspection JSUnresolvedVariable
     const guildId = req.params.guildID
     const user = req.user
     if (!user) { return }
@@ -185,6 +186,7 @@ module.exports = async (client) => {
 
   // Server endpoint.
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
+    // noinspection JSUnresolvedVariable
     const guild = client.guilds.cache.get(req.params.guildID)
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
@@ -196,6 +198,7 @@ module.exports = async (client) => {
 
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
+    // noinspection JSUnresolvedVariable
     const guild = client.guilds.cache.get(req.params.guildID)
     if (!guild) { return res.redirect('/dashboard') }
     const member = guild.members.cache.get(req.user.id)
