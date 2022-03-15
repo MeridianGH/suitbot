@@ -68,7 +68,7 @@ module.exports = {
           .setURL(track.url)
           .setThumbnail(track.thumbnail)
           .addField('Duration', track.durationMS === 0 ? '🔴 Live' : track.duration, true)
-          .addField('Channel', track.author, true)
+          .addField('Author', track.author, true)
           .addField('Position', (queue.getTrackPosition(track) + 1).toString(), true)
           .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
         ],

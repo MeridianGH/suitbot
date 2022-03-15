@@ -21,7 +21,7 @@ module.exports = {
         .setURL(track.url)
         .setThumbnail(track.thumbnail)
         .addField('Duration', track.durationMS === 0 ? '🔴 Live' : `\`${progressBar}\``, true)
-        .addField('Channel', track.author, true)
+        .addField('Author', track.author, true)
         .addField('Requested By', track.requestedBy.toString(), true)
         .setFooter({ text: `SuitBot | Repeat: ${{ 0: '❌', 1: '🔂 Track', 2: '🔁 Queue', 3: '⏩ Autoplay' }[queue.repeatMode]}`, iconURL: interaction.client.user.displayAvatarURL() })
       ]
