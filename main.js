@@ -40,8 +40,9 @@ async function shutdown () {
   console.log(`Closing ${client.player.queues.size} queues.`)
   for (const entry of client.player.queues) {
     const queue = entry[1]
+    if (queue.destroyed) { continue }
     await queue.metadata.channel.send(errorEmbed('Server shutdown', 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'))
-    queue.stop()
+    queue.destroy()
   }
   client.destroy()
   client.dashboard.close()
