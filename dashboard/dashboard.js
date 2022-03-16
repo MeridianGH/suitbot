@@ -12,6 +12,7 @@ const { Permissions, MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
 const MemoryStore = require('memorystore')(session)
 const fetch = require('node-fetch')
+const { setupWebsocket } = require('./websocket')
 
 const clientId = process.env.appId ?? require('../config.json').appId
 const clientSecret = process.env.clientSecret ?? require('../config.json').clientSecret
@@ -311,10 +312,22 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'admin.ejs')
   })
 
+  // React endpoint.
+  app.get('/react/:guildId', checkAuth, (req, res) => {
+    const guild = client.guilds.cache.get(req.params.guildId)
+    if (!guild) { return res.redirect('/dashboard') }
+    renderTemplate(req, res, 'react.ejs', { guildId: guild.id })
+  })
+
   client.dashboard = app.listen(port, null, null, () => {
     console.log(`Dashboard is up and running on port ${port}.`)
     heartbeat()
   })
+
+  setupWebsocket(client, domain)
+  function updateQueue (queue) {
+    // client.dashboard.emit('update', queue)
+  }
 }
 
 // Copyright Notice: Most of the code in this folder (/dashboard) is heavily based on MrAugu's "simple-discordjs-dashboard" (https://github.com/MrAugu/simple-discordjs-dashboard).

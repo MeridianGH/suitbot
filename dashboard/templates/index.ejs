@@ -6,7 +6,7 @@
     <div class="col">
       <h1 class="title" style="font-family: 'Bebas Neue', sans-serif; font-size: 50px">SuitBot<br>Dashboard</h1>
       <div style="font-size: 20px; margin-bottom: 20px; white-space: nowrap">Serving <b><%- bot.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) %></b> users <br class="d-lg-none">in <b><%- bot.guilds.cache.size %></b> servers.</div>
-      <a class="btn btn-lg mainbutton btn-secondary btn-block rounded-pill" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
+      <a class="btn btn-lg dashboard-button btn-secondary btn-block rounded-pill" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
     </div>
   </div>
 </div>
@@ -84,7 +84,7 @@
   <hr>
   <div class="container">
     <span style="font-family: 'Bebas Neue', sans-serif; font-size: 25px;">For a complete list of commands see the description in the GitHub Repository:</span><br>
-    <a class="btn btn-lg mainbutton btn-secondary btn-block rounded-pill" href="https://github.com/MeridianGH/suitbot"><i class="fab fa-github"></i> GitHub</a>
+    <a style="font-size: 2em" href="https://github.com/MeridianGH/suitbot"><i class="fab fa-github"></i> GitHub</a>
   </div>
 </div>
 <footer style="margin-top: 60px;">

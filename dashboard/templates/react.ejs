@@ -1,0 +1,26 @@
+<%- include("partials/header", { bot, user, path, title: 'React' }) %>
+
+<link rel="stylesheet" href="/react/react.css">
+
+<div class="card col-sm-10 offset-sm-1">
+    <header class="card-header">
+        <div><i class="fas fa-list"></i> React App</div>
+    </header>
+    <div class="card-body">
+        <div id="loader" class="loader"><i class="fas fa-cog fa-spin"></i></div>
+        <div id="react-container">
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const guildId = '<%= guildId %>';
+    const userId = '<%= user.id %>';
+</script>
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel" src="/react/react.js"></script>
+
+<%- include("partials/footer") %>

@@ -26,7 +26,8 @@
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
     "play-dl": "^1.9.1",
-    "spotify-url-info": "^2.2.7"
+    "spotify-url-info": "^2.2.7",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "ejs-lint": "^1.2.1",

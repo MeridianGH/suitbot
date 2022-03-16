@@ -1,0 +1,122 @@
+.queue-title {
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+ul.horizontal-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+ul.horizontal-list li {
+    display: inline-block;
+}
+
+.nowplaying-container {
+    height: 200px;
+    margin-bottom: 10px;
+}
+
+.thumbnail-container {
+    height: 200px;
+    width: 356px;
+    margin-right: 20px;
+    position: relative;
+    overflow: hidden;
+}
+.thumbnail-backdrop {
+    height: 200px;
+    width: 356px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    filter: blur(10px);
+}
+.thumbnail {
+    height: 200px;
+    width: 356px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: scale-down;
+}
+
+.progress-container {
+    width: 356px;
+    background-color: #373b3e
+}
+.progress {
+    width: 0;
+    height: 5px;
+    background-color: #ff0000
+}
+
+.volume-display {
+    color: var(--text-color);
+    background-color: var(--button-color);
+    height: 30px;
+    width: 65px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 2px solid var(--button-color);
+    border-radius: 5px;
+    outline: none;
+    vertical-align: bottom;
+    text-align: center;
+}
+.volume-slider {
+    -webkit-appearance: none;
+    margin: 0 0 8px 0;
+    vertical-align: middle;
+    height: 10px;
+    width: 286px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: var(--button-color);
+}
+.volume-slider::-webkit-slider-thumb, .volume-slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    border-width: 5px;
+    border-color: var(--button-color);
+    background: var(--text-color);
+}
+
+.queue-button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.textfield {
+    color: var(--text-color);
+    background: var(--button-color);
+    width: 150px;
+    height: 30px;
+    margin-right: 5px;
+    padding: 0 5px;
+    border: 2px solid var(--button-color);
+    border-radius: 5px;
+    outline: none;
+}
+
+.table > :not(caption) > * > * {
+    color: var(--text-color);
+    background-color: var(--background-light);
+}
+td {
+    vertical-align: middle;
+}
+
+.loader {
+    width: 100%;
+    text-align: center;
+    font-size: 5em;
+    color: var(--background-light)
+}
+
