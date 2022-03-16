@@ -115,7 +115,7 @@
     <form id="volumeform" method="POST" style="margin: 0 0 0 0; display: inline-block;">
       <input type="hidden" name="action" value="volume">
       <button class="button noFixedWidth" id="volumeButton" disabled="disabled" style="width: 65px;"><i class="fas fa-volume<%= queue.volume === 0 ? '-off' : queue.volume <= 33 ? '-down' : queue.volume <= 66 ? '' : '-up' %>"></i> <%= queue.volume %></button>
-      <input type="range" name="volume" value="<%= queue.volume %>" step="10" min="0" max="100" oninput="document.getElementById('volumeButton').innerHTML = `<i class=&quot;fas fa-volume${value == 0 ? '-off' : value <= 33 ? '-down' : value <= 66 ? '' : '-up'}&quot;></i> ${value}`" onmouseup="document.getElementById('volumeform').submit()">
+      <input type="range" name="volume" value="<%= queue.volume %>" step="10" min="0" max="100" oninput="document.getElementById('volumeButton').innerHTML = `<i class=&quot;fas fa-volume${value === 0 ? '-off' : value <= 33 ? '-down' : value <= 66 ? '' : '-up'}&quot;></i> ${value}`" onmouseup="document.getElementById('volumeform').submit()">
     </form>
     <h1 style="font-family: 'Bebas Neue', sans-serif; margin-top: 20px">Queue</h1>
     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">

@@ -304,7 +304,7 @@ module.exports = async (client) => {
   })
 
   // Admin endpoint.
-  app.get('/admin', checkAuth, async (req, res) => {
+  app.get('/admin', checkAuth, (req, res) => {
     const adminId = process.env.adminId ? process.env.adminId : require('../config.json').adminId
     if (req.user.id !== adminId) { return res.redirect('/') }
 
