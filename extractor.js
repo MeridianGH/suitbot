@@ -12,7 +12,7 @@ module.exports = {
       await playdl.setToken({ youtube: { cookie: process.env.cookie ?? require('./config.json').cookie }, soundcloud: { client_id: await playdl.getFreeClientID() } })
 
       // Remove URL parameters
-      if (query.startsWith("https")) { query = query.split("&")[0] }
+      if (query.startsWith('https')) { query = query.split('&')[0] }
 
       // YouTube
       const youtubeType = playdl.yt_validate(query)
