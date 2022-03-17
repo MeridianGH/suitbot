@@ -45,7 +45,7 @@ module.exports = {
         const user = await client.users.cache.get(data.userId)
         if (!user) { return ws.close() }
         const queue = client.player.getQueue(guild)
-        if (!queue) { return ws.sendUTF(JSON.stringify({ empty: true })) }
+        if (!queue || !queue.playing) { return ws.sendUTF(JSON.stringify({ current: false })) }
 
         // TODO: Checks for user channel
 

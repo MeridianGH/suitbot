@@ -30,7 +30,7 @@ class App extends React.Component {
     })
 
     this.interval = setInterval(() => {
-      if (!this.state.empty && !this.state.paused) {
+      if (this.state.current && !this.state.paused && this.state.current.durationMS !== 0) {
         this.setState((state) => {
           if (state.streamTime >= state.current.durationMS) {
             clearInterval(this.interval)
@@ -48,7 +48,7 @@ class App extends React.Component {
 
   render () {
     if (!this.state) { return null }
-    if (this.state.empty) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
+    if (!this.state.current) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
     return html`
       <div>
         <${MediaSession} track=${this.state.current} paused=${this.state.paused} />
@@ -202,13 +202,13 @@ function Queue (props) {
 }
 
 function MediaSession (props) {
-  React.useEffect(() => {
+  React.useEffect(async () => {
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
       const audio = document.createElement('audio')
       audio.src = '/near-silence.mp3'
       audio.volume = 0.00001
       audio.load()
-      audio.play()
+      await audio.play()
       setTimeout(() => audio.pause(), 100)
     }
   }, [])
