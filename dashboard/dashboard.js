@@ -2,6 +2,7 @@
 
 const express = require('express')
 const app = express()
+const minify = require('express-minify')
 const ejs = require('ejs')
 
 const passport = require('passport')
@@ -25,7 +26,8 @@ module.exports = async (client) => {
   app.engine('ejs', ejs.renderFile)
   app.set('view engine', 'ejs')
 
-  // Use assets folder
+  // Minify and set files
+  app.use(minify())
   app.use('/', express.static(path.join(__dirname, 'assets')))
 
   // Passport Discord login
