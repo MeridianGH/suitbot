@@ -8,7 +8,11 @@ module.exports = {
   validate: () => true,
   getInfo: async (query) => {
     try {
-      await playdl.setToken({ youtube: { cookie: process.env.cookie ?? require('./config.json').cookie } })
+      // Setup cookies and soundcloud client
+      await playdl.setToken({ youtube: { cookie: process.env.cookie ?? require('./config.json').cookie }, soundcloud: { client_id: await playdl.getFreeClientID() } })
+
+      // Remove URL parameters
+      if (query.startsWith("https")) { query = query.split("&")[0] }
 
       // YouTube
       const youtubeType = playdl.yt_validate(query)
@@ -128,7 +132,7 @@ module.exports = {
           thumbnail: info.thumbnail,
           async engine () { return (await playdl.stream(info.url, { discordPlayerCompatibility: true })).stream },
           views: 0,
-          author: info.publisher?.name ?? info.publisher?.artist ?? info.publisher?.writer_composer ?? null,
+          author: info.publisher?.name ?? info.publisher?.artist ?? info.publisher?.writer_composer ?? 'Soundcloud',
           description: '',
           url: info.permalink,
           source: 'soundcloud-custom'
@@ -147,7 +151,7 @@ module.exports = {
             thumbnail: track.thumbnail,
             async engine () { return (await playdl.stream(track.url, { discordPlayerCompatibility: true })).stream },
             views: 0,
-            author: track.publisher?.name ?? track.publisher?.artist ?? track.publisher?.writer_composer ?? null,
+            author: track.publisher?.name ?? track.publisher?.artist ?? track.publisher?.writer_composer ?? 'Soundcloud',
             description: '',
             url: track.permalink,
             source: 'soundcloud-custom'
@@ -157,12 +161,12 @@ module.exports = {
         const playlist = {
           title: info.name,
           description: '',
-          thumbnail: null,
+          thumbnail: info.tracks[0].thumbnail,
           type: 'playlist',
           source: 'soundcloud-custom',
           author: info.user,
           id: info.id,
-          url: info.url,
+          url: `${info.user.url}/sets/${info.name}`,
           rawPlaylist: info
         }
 
