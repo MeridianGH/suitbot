@@ -81,7 +81,7 @@ function NowPlaying (props) {
           </div>
         </li>
         <li>
-          <a href={props.track.url} target='_blank'><h4>{props.track.title}</h4></a>
+          <a href={props.track.url} rel='noreferrer' target='_blank'><h4>{props.track.title}</h4></a>
           <h6>{props.track.author}</h6>
           <h5>{props.track.durationMS === 0 ? '🔴 Live' : `${msToHMS(props.streamTime)} / ${props.track.duration}`}</h5>
           <MusicControls paused={props.paused} repeatMode={props.repeatMode} />

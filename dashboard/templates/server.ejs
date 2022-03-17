@@ -98,7 +98,7 @@
           </div>
         </li>
         <li>
-          <a href="<%= queue.current.url %>" target="_blank"><h4><%= queue.current.title %></h4></a>
+          <a href="<%= queue.current.url %>" rel="noreferrer" target="_blank"><h4><%= queue.current.title %></h4></a>
           <h6><%= queue.current.author %></h6>
           <h5 id="time"><%= queue.current.durationMS === 0 ? '🔴 Live' : `${msToHMS(queue.streamTime)} / ${queue.current.duration}` %></h5>
           <form method="POST" style="width: 100%; margin: 0 0 10px 0;">
