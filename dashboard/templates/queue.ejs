@@ -1,6 +1,6 @@
-<%- include("partials/header", { bot, user, path, title: `React | ${guild.name}` }) %>
+<%- include("partials/header", { djsClient, user, path, title: `React | ${guild.name}` }) %>
 
-<link rel="stylesheet" href="/react/react.css">
+<link rel="stylesheet" href="/queue/queue.css">
 
 <div class="card col-sm-10 offset-sm-1">
     <header class="card-header">
@@ -22,6 +22,6 @@
     const guildId = '<%= guild.id %>'
     const userId = '<%= user.id %>'
 </script>
-<script type="module" src="/react/react.js"></script>
+<script type="module" src="/queue/queue.js"></script>
 
 <%- include("partials/footer") %>

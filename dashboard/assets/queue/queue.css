@@ -40,7 +40,7 @@ ul.horizontal-list li {
     position: absolute;
     top: 0;
     left: 0;
-    object-fit: scale-down;
+    object-fit: contain;
 }
 
 .progress-container {

@@ -32,5 +32,10 @@
   "devDependencies": {
     "ejs-lint": "^1.2.1",
     "standard": "^16.0.4"
+  },
+  "standard": {
+    "ignore": [
+      "/dashboard/assets/queue/queue.js"
+    ]
   }
 }

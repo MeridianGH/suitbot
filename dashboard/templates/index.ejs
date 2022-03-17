@@ -1,12 +1,12 @@
-<%- include("partials/header", { bot, user, path, title: "SuitBot" }) %>
+<%- include("partials/header", { djsClient, user, path, title: "SuitBot" }) %>
 
 <div class="container" style="margin: 0; padding-top: 2%">
   <div class="row align-items-center">
     <div class="col" style="max-width: 500px"><img src="/img/suit.png" style="width: 100%;"></div>
     <div class="col">
-      <h1 class="title" style="font-family: 'Bebas Neue', sans-serif; font-size: 50px">SuitBot<br>Dashboard</h1>
-      <div style="font-size: 20px; margin-bottom: 20px; white-space: nowrap">Serving <b><%- bot.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) %></b> users <br class="d-lg-none">in <b><%- bot.guilds.cache.size %></b> servers.</div>
-      <a class="btn btn-lg dashboard-button btn-secondary btn-block rounded-pill" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
+      <h1 class="title" style="font-family: 'Bebas Neue', sans-serif; font-size: 50px;">SuitBot<br>Dashboard</h1>
+      <div style="font-size: 20px; margin-bottom: 20px; white-space: nowrap">Serving <b><%- djsClient.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) %></b> users <br class="d-lg-none">in <b><%- djsClient.guilds.cache.size %></b> servers.</div>
+      <a class="dashboard-button btn btn-lg btn-secondary btn-block rounded-pill" href="/dashboard"><i class="fas fa-columns"></i> Dashboard</a>
     </div>
   </div>
 </div>
@@ -14,7 +14,7 @@
   <div style="font-family: 'Bebas Neue', sans-serif; font-size: 50px; text-align: center;">Features</div>
   <hr>
   <div class="container">
-    <span style="font-family: 'Bebas Neue', sans-serif; font-size: 25px;">Slash Commands</span>
+    <span class="category-title">Slash Commands</span>
     <ul>
       <li>Use every command with a simple interface</li>
       <li>No more guessing with variables</li>
@@ -27,7 +27,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 25px;">Music</span>
+        <span class="category-title">Music</span>
         <ul>
           <li>Add any song or playlist from YouTube via link or search</li>
           <li>Supports Spotify links and playlists</li>
@@ -44,7 +44,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 25px;">Activities</span>
+        <span class="category-title"">Activities</span>
         <ul>
           <li>Create invites for Discord Activities</li>
           <li>YouTube Together + 4 minigames</li>
@@ -60,7 +60,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 25px;">Basic Moderation</span>
+        <span class="category-title">Basic Moderation</span>
         <ul>
           <li>Info commands (User, Server, Avatar)</li>
           <li>Kick, Ban, Move, Slowmode and more commands</li>
@@ -74,7 +74,7 @@
   </div>
   <hr>
   <div class="container">
-    <span style="font-family: 'Bebas Neue', sans-serif; font-size: 25px;">More Features</span>
+    <span class="category-title">More Features</span>
     <ul>
       <li>Request any features you'd like to see with /suggestion</li>
       <li>Found a bug? Report it with /bugreport</li>
@@ -83,7 +83,7 @@
   </div>
   <hr>
   <div class="container">
-    <span style="font-family: 'Bebas Neue', sans-serif; font-size: 25px;">For a complete list of commands see the description in the GitHub Repository:</span><br>
+    <span class="category-title">For a complete list of commands see the description in the GitHub Repository:</span><br>
     <a style="font-size: 2em" href="https://github.com/MeridianGH/suitbot"><i class="fab fa-github"></i> GitHub</a>
   </div>
 </div>

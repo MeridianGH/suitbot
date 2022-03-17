@@ -17,7 +17,7 @@ function stringify (queue) {
 }
 
 module.exports = {
-  setupWebsocket: (client, domain) => {
+  setup: (client, domain) => {
     const wss = new WebsocketServer({ httpServer: client.dashboard })
 
     // noinspection JSUnresolvedFunction
@@ -29,7 +29,6 @@ module.exports = {
       ws.on('message', async message => {
         if (message.type !== 'utf8') { return }
         const data = JSON.parse(message.utf8Data)
-        console.log(data)
 
         // Add to client manager
         guildId = data.guildId
@@ -43,7 +42,7 @@ module.exports = {
         // Fetch guild, user and queue
         const guild = client.guilds.cache.get(data.guildId)
         if (!guild) { return ws.close() }
-        const user = await client.users.fetch(data.userId)
+        const user = await client.users.cache.get(data.userId)
         if (!user) { return ws.close() }
         const queue = client.player.getQueue(guild)
         if (!queue) { return ws.sendUTF(JSON.stringify({ empty: true })) }

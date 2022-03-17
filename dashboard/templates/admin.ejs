@@ -1,4 +1,4 @@
-<%- include("partials/header", { bot, user, path, title: 'Admin Panel' }) %>
+<%- include("partials/header", { djsClient, user, path, title: 'Admin Panel' }) %>
 <% function uptime (ms) {
   let totalSeconds = (ms / 1000)
   const days = Math.floor(totalSeconds / 86400)
@@ -15,8 +15,8 @@
     <div><i class="fas fa-list"></i> Admin Panel</div>
   </header>
   <div class="card-body">
-    <h5><%= uptime(bot.uptime) %></h5>
-    <h5>Playing in <%= bot.player.queues.size %> server(s).</h5>
+    <h5><%= uptime(djsClient.uptime) %></h5>
+    <h5>Playing in <%= djsClient.player.queues.size %> server(s).</h5>
     <div class="table-responsive">
       <table class="table table-dark table-striped">
         <thead>
@@ -29,9 +29,9 @@
         </tr>
         </thead>
         <tbody>
-          <% bot.guilds.cache.clone().sort((a, b) => { return a.joinedAt.getTime() - b.joinedAt.getTime() }).forEach(guild => { %>
+          <% djsClient.guilds.cache.clone().sort((a, b) => { return a.joinedAt.getTime() - b.joinedAt.getTime() }).forEach(guild => { %>
           <tr>
-            <td class="align-middle" style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : '/img/generic_server.png' %>" rel="noreferrer" target="_blank"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 30px <%- bot.player.getQueue(guild.id) ? '; border: 2px solid #198754' : '' %> "></a></td>
+            <td class="align-middle" style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : '/img/generic_server.png' %>" rel="noreferrer" target="_blank"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 30px <%- djsClient.player.getQueue(guild.id) ? '; border: 2px solid #198754' : '' %> "></a></td>
             <td class="align-middle" style="width: 60%"><span class="text-nowrap"><%= guild.name %></span></td>
             <td class="align-middle"><span class="text-nowrap"><%= guild.memberCount %></span></td>
             <td class="align-middle"><span class="text-nowrap"><%= guild.channels.channelCountWithoutThreads %></span></td>

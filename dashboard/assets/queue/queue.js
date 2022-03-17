@@ -1,5 +1,5 @@
-// import React from 'react'
 const html = htm.bind(React.createElement)
+
 const websocket = new WebSocket('ws://localhost')
 function send (data) {
   data.guildId = guildId
@@ -34,9 +34,9 @@ class App extends React.Component {
         this.setState((state) => {
           if (state.streamTime >= state.current.durationMS) {
             clearInterval(this.interval)
-            return { streamTime: state.streamTime = state.current.durationMS }
+            return { streamTime: (state.streamTime = state.current.durationMS) }
           }
-          return { streamTime: state.streamTime += 1000 }
+          return { streamTime: (state.streamTime += 1000) }
         })
       }
     }, 1000)
@@ -78,7 +78,7 @@ function NowPlaying (props) {
         <li>
           <${Thumbnail} image=${props.track.thumbnail} />
           <div className='progress-container'>
-            <div className='progress' style=${{ width: `${props.track.durationMS === 0 ? '100%' : props.streamTime / props.track.durationMS * 100 + '%' }` }} />
+            <div className='progress' style=${{ width: `${props.track.durationMS === 0 ? '100%' : props.streamTime / props.track.durationMS * 100 + '%'}` }} />
           </div>
         </li>
         <li>

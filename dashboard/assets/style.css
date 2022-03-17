@@ -118,3 +118,8 @@ a:hover {
     background-color: var(--text-color);
     border: 5px solid var(--text-color);
 }
+
+.category-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 25px;
+}
