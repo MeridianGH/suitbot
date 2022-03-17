@@ -19,14 +19,11 @@ class App extends React.Component {
 
   componentDidMount () {
     websocket.addEventListener('open', () => {
-      console.log('Websocket connected, requesting queue data...')
       send({ type: 'request' })
     })
     websocket.addEventListener('message', message => {
-      console.log('Received queue data:')
       loader.remove()
       this.setState(JSON.parse(message.data))
-      console.log(this.state)
     })
 
     this.interval = setInterval(() => {
