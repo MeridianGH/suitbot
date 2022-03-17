@@ -48,6 +48,7 @@ class App extends React.Component {
     if (this.state.empty) { return <div>Nothing currently playing!<br/>Join a voice channel and type "/play" to get started!</div> }
     return (
       <div>
+        <MediaSession track={this.state.current} paused={this.state.paused}/>
         <h1 className='queue-title'>Now Playing</h1>
         <NowPlaying track={this.state.current} paused={this.state.paused} streamTime={this.state.streamTime} repeatMode={this.state.repeatMode}/>
         <VolumeControl volume={this.state.volume}/>
@@ -192,6 +193,36 @@ function Queue (props) {
       </div>
     </div>
   )
+}
+
+function MediaSession (props) {
+  React.useEffect(() => {
+    if (navigator.userAgent.indexOf('Firefox') !== -1) {
+      const audio = document.createElement('audio')
+      audio.src = '/near-silence.mp3'
+      audio.volume = 0.00001
+      audio.load()
+      audio.play()
+      setTimeout(() => audio.pause(), 100)
+    }
+  }, [])
+  React.useEffect(() => {
+    function htmlDecode (input) { return (new DOMParser().parseFromString(input, 'text/html')).documentElement.textContent }
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: htmlDecode(props.track.title),
+      artist: htmlDecode(props.track.author),
+      album: htmlDecode(props.track.author),
+      artwork: [{ src: htmlDecode(props.track.thumbnail) }]
+    })
+    navigator.mediaSession.playbackState = props.paused ? 'paused' : 'playing'
+
+    navigator.mediaSession.setActionHandler('play', () => { send({ type: 'pause' }) })
+    navigator.mediaSession.setActionHandler('pause', () => { send({ type: 'pause' }) })
+    navigator.mediaSession.setActionHandler('nexttrack', () => { send({ type: 'skip' }) })
+    navigator.mediaSession.setActionHandler('previoustrack', () => { send({ type: 'previous' }) })
+  }, [props.track, props.paused])
+  return null
 }
 
 const domContainer = document.querySelector('#react-container')
