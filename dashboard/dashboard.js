@@ -89,6 +89,7 @@ module.exports = async (client) => {
     return next()
   })
 
+  // TODO: SWITCH TO REACT: Remove. Entirely.
   // Queue update endpoint.
   const updates = {}
   app.get('/update/:guildID', (req, res) => {
@@ -185,6 +186,7 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'dashboard.ejs', { perms: Permissions })
   })
 
+  // TODO: SWITCH TO REACT: Remove.
   // Server endpoint.
   app.get('/dashboard/:guildID', checkAuth, async (req, res) => {
     // noinspection JSUnresolvedVariable
@@ -197,6 +199,7 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'server.ejs', { guild, queue, alert: null, type: null })
   })
 
+  // TODO: SWITCH TO REACT: Remove.
   // Server post endpoint
   app.post('/dashboard/:guildID', checkAuth, async (req, res) => {
     // noinspection JSUnresolvedVariable
@@ -312,11 +315,12 @@ module.exports = async (client) => {
     renderTemplate(req, res, 'admin.ejs')
   })
 
+  // TODO: SWITCH TO REACT: Rename and move to proper place
   // React endpoint.
   app.get('/react/:guildId', checkAuth, (req, res) => {
     const guild = client.guilds.cache.get(req.params.guildId)
     if (!guild) { return res.redirect('/dashboard') }
-    renderTemplate(req, res, 'react.ejs', { guildId: guild.id })
+    renderTemplate(req, res, 'react.ejs', { guild: guild })
   })
 
   client.dashboard = app.listen(port, null, null, () => {
@@ -324,9 +328,12 @@ module.exports = async (client) => {
     heartbeat()
   })
 
+  // WebSocket
   setupWebsocket(client, domain)
+  // TODO: SWITCH TO REACT: Rename to "update"
+  // TODO: SWITCH TO REACT: Add to every command that should call this
   function updateQueue (queue) {
-    // client.dashboard.emit('update', queue)
+    client.dashboard.emit('update', queue)
   }
 }
 

@@ -87,7 +87,7 @@ module.exports = {
 
         const trackList = await getTracks(query)
         const tracks = trackList.map(track => {
-          //noinspection JSUnresolvedVariable
+          // noinspection JSUnresolvedVariable
           return {
             title: track.artists[0].name + ' - ' + track.name,
             duration: track.duration_ms,

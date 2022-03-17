@@ -1,4 +1,4 @@
-<%- include("partials/header", { bot, user, path, title: 'React' }) %>
+<%- include("partials/header", { bot, user, path, title: `React | ${guild.name}` }) %>
 
 <link rel="stylesheet" href="/react/react.css">
 
@@ -14,13 +14,14 @@
 </div>
 
 
-<script>
-    const guildId = '<%= guildId %>';
-    const userId = '<%= user.id %>';
-</script>
 <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+<script>
+    const guildId = '<%= guild.id %>'
+    const userId = '<%= user.id %>'
+</script>
 <script type="text/babel" src="/react/react.js"></script>
 
 <%- include("partials/footer") %>

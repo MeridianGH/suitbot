@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const { sleep } = require('../utilities')
-const websocketServer = require('websocket').server
+const WebsocketServer = require('websocket').server
 
 const clients = {}
 
@@ -18,7 +18,7 @@ function stringify (queue) {
 
 module.exports = {
   setupWebsocket: (client, domain) => {
-    const wss = new websocketServer({ httpServer: client.dashboard })
+    const wss = new WebsocketServer({ httpServer: client.dashboard })
 
     // noinspection JSUnresolvedFunction
     wss.on('request', request => {
@@ -47,6 +47,8 @@ module.exports = {
         if (!user) { return ws.close() }
         const queue = client.player.getQueue(guild)
         if (!queue) { return ws.sendUTF(JSON.stringify({ empty: true })) }
+
+        // TODO: Checks for user channel
 
         switch (data.type) {
           // TODO: Feedback messages
@@ -152,7 +154,7 @@ module.exports = {
         // Remove from client manager
         if (!guildId || !userId) { return }
         delete clients[guildId][userId]
-        if (Object.keys(clients[guildId]).length === 0) { delete clients[guildId]}
+        if (Object.keys(clients[guildId]).length === 0) { delete clients[guildId] }
       })
     })
 
