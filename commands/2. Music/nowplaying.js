@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { MessageEmbed } = require('discord.js')
-const { simpleEmbed, msToHMS } = require('../../utilities')
+const { simpleEmbed } = require('../../utilities')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -11,8 +11,8 @@ module.exports = {
     if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
 
-    const track = queue.current
-    const progressBar = queue.createProgressBar({ line: '▬', indicator: '🔘' }) + `\n${msToHMS(queue.streamTime)} | ${queue.current.duration}`
+    const track = queue.nowPlaying
+    const progressBar = queue.createProgressBar('▬', '🔘')
 
     await interaction.reply({
       embeds: [new MessageEmbed()
@@ -20,10 +20,10 @@ module.exports = {
         .setTitle(track.title)
         .setURL(track.url)
         .setThumbnail(track.thumbnail)
-        .addField('Duration', track.durationMS === 0 ? '🔴 Live' : `\`${progressBar}\``, true)
+        .addField('Duration', track.live ? '🔴 Live' : `\`${progressBar}\``, true)
         .addField('Author', track.author, true)
         .addField('Requested By', track.requestedBy.toString(), true)
-        .setFooter({ text: `SuitBot | Repeat: ${{ 0: '❌', 1: '🔂 Track', 2: '🔁 Queue', 3: '⏩ Autoplay' }[queue.repeatMode]}`, iconURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ text: `SuitBot | Repeat: ${{ 0: '❌', 1: '🔂 Track', 2: '🔁 Queue' }[queue.repeatMode]}`, iconURL: interaction.client.user.displayAvatarURL() })
       ]
     })
   }

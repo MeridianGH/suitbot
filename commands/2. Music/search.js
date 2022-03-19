@@ -14,6 +14,9 @@ module.exports = {
     if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true))
     await interaction.deferReply()
 
+    return await interaction.reply('not available')
+    // TODO: Search
+
     const searchResult = await interaction.client.player.search(interaction.options.getString('query'), { requestedBy: interaction.user, searchEngine: 'playdl' })
     if (!searchResult || !searchResult.tracks.length) { return await interaction.editReply(errorEmbed('Error', 'There was an error while searching for your query.')) }
     if (searchResult.playlist) { return await interaction.editReply(simpleEmbed('This command doesn\'t support playlists.\nUse "`/play`" instead.', true)) }

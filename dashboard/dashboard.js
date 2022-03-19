@@ -18,7 +18,7 @@ const websocket = require('./websocket')
 const clientId = process.env.appId ?? require('../config.json').appId
 const clientSecret = process.env.clientSecret ?? require('../config.json').clientSecret
 
-module.exports = async (client) => {
+module.exports = function startDashboard (client) {
   const port = process.env.PORT ?? 80
   const domain = process.env.PORT ? 'https://suitbotxyz.herokuapp.com' : 'http://localhost'
 

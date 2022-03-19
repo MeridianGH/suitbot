@@ -9,7 +9,6 @@ module.exports = {
       .addChoice('None', 0)
       .addChoice('Track', 1)
       .addChoice('Queue', 2)
-      // .addChoice('Autoplay', 3)
     ),
   async execute (interaction) {
     const mode = interaction.options.getInteger('mode')
@@ -18,6 +17,6 @@ module.exports = {
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
 
     queue.setRepeatMode(mode)
-    await interaction.reply(simpleEmbed(`Set repeat mode to ${{ 0: 'None ▶', 1: 'Track 🔂', 2: 'Queue 🔁', 3: 'Autoplay ⏩' }[mode]}`))
+    await interaction.reply(simpleEmbed(`Set repeat mode to ${{ 0: 'None ▶', 1: 'Track 🔂', 2: 'Queue 🔁' }[mode]}`))
   }
 }

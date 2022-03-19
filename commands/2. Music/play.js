@@ -14,55 +14,33 @@ module.exports = {
     if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true))
     await interaction.deferReply()
 
-    const queue = interaction.client.player.createQueue(interaction.guild.id, {
-      initialVolume: 50,
-      autoSelfDeaf: false,
-      leaveOnEnd: false,
-      leaveOnEmpty: false,
-      leaveOnStop: true,
-      volumeSmoothness: 1,
-      metadata: { channel: interaction.channel }
-    })
+    const queue = interaction.client.player.createQueue(interaction.guild.id)
 
-    const searchResult = await interaction.client.player.search(interaction.options.getString('query'), { requestedBy: interaction.user, searchEngine: 'playdl' })
-    if (!searchResult || !searchResult.tracks.length) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
+    await queue.join(channel)
+    queue.setChannel(interaction.channel)
 
-    if (searchResult.playlist) {
-      const playlist = searchResult.playlist
-      queue.addTracks(playlist.tracks)
-      if (!queue.connection) { await queue.connect(interaction.member.voice.channel) }
-      if (!queue.playing) { await queue.play() }
+    const result = await queue.play(interaction.options.getString('query'))
+    if (!result) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
 
-      await interaction.editReply({
-        embeds: [new MessageEmbed()
-          .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
-          .setTitle(playlist.title)
-          .setURL(playlist.url)
-          .setThumbnail(playlist.thumbnail)
-          .addField('Amount', `${playlist.tracks.length} songs`, true)
-          .addField('Author', playlist.author.name ?? playlist.author, true)
-          .addField('Position', `${(queue.getTrackPosition(playlist.tracks[0]) + 1).toString()}-${(queue.getTrackPosition(playlist.tracks[playlist.tracks.length - 1]) + 1).toString()}`, true)
-          .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-        ]
-      })
+    const baseEmbed = new MessageEmbed()
+      .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
+      .setTitle(result.title)
+      .setURL(result.url)
+      .setThumbnail(result.thumbnail)
+      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
+
+    if (result.playlist) {
+      baseEmbed
+        .addField('Amount', `${result.tracks.length} songs`, true)
+        .addField('Author', result.author, true)
+        .addField('Position', `${queue.tracks.indexOf(result.tracks[0]).toString()}-${queue.tracks.indexOf(result.tracks[result.tracks.length - 1]).toString()}`, true)
     } else {
-      const track = searchResult.tracks[0]
-      queue.addTrack(track)
-      if (!queue.connection) { await queue.connect(interaction.member.voice.channel) }
-      if (!queue.playing) { await queue.play() }
-
-      await interaction.editReply({
-        embeds: [new MessageEmbed()
-          .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
-          .setTitle(track.title)
-          .setURL(track.url)
-          .setThumbnail(track.thumbnail)
-          .addField('Duration', track.durationMS === 0 ? '🔴 Live' : track.duration, true)
-          .addField('Author', track.author, true)
-          .addField('Position', (queue.getTrackPosition(track) + 1).toString(), true)
-          .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-        ]
-      })
+      baseEmbed
+        .addField('Duration', result.live ? '🔴 Live' : result.duration, true)
+        .addField('Author', result.author, true)
+        .addField('Position', queue.tracks.indexOf(result).toString(), true)
     }
+
+    await interaction.editReply({ embeds: [baseEmbed] })
   }
 }

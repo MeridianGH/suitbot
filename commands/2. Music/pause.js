@@ -11,6 +11,6 @@ module.exports = {
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
 
     queue.setPaused(!queue.connection.paused)
-    await interaction.reply(simpleEmbed(queue.connection.paused ? '⏸ Paused.' : '▶ Resumed.'))
+    await interaction.reply(simpleEmbed(queue.paused ? '⏸ Paused.' : '▶ Resumed.'))
   }
 }
