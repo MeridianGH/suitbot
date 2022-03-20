@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "express-minify": "^1.0.0",
     "express-session": "^1.17.2",
+    "libsodium-wrappers": "^0.7.9",
     "memorystore": "^1.6.6",
     "node-fetch": "^2.6.7",
     "passport": "^0.4.1",

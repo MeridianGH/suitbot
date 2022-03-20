@@ -13,12 +13,12 @@ module.exports = class Queue {
     this.previous = []
     this.playing = false
     this.repeatMode = 0
+    this.queueVolume = 50
     this.channel = undefined
     this.destroyed = false
   }
 
   async join (channelId) {
-    console.log('join')
     if (this.destroyed) { return }
     if (this.connection) { return }
 
@@ -80,7 +80,6 @@ module.exports = class Queue {
   }
 
   async play (query, options) {
-    console.log('play', query, options)
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!query) { return null }
@@ -89,7 +88,7 @@ module.exports = class Queue {
       query.seekTime = options?.seek ?? 0
       const stream = await playdl.stream(query.streamURL, { seek: query.seekTime / 1000 })
       const resource = this.connection.createAudioStream(stream)
-      await this.connection.playAudioStream(resource).then(() => { this.setVolume(this.volume) })
+      await this.connection.playAudioStream(resource).then(() => { this.setVolume(this.queueVolume) })
 
       return query
     }
@@ -116,7 +115,7 @@ module.exports = class Queue {
           url: info.url,
           streamURL: info.url,
           thumbnail: `https://i.ytimg.com/vi/${info.id}/maxresdefault.jpg`,
-          requestedBy: options?.requestedBy ?? null,
+          requestedBy: options?.requestedBy ?? 'null',
           duration: msToHMS(info.durationInSec * 1000),
           milliseconds: info.durationInSec * 1000,
           seekTime: 0,
@@ -137,7 +136,7 @@ module.exports = class Queue {
             url: track.url,
             streamURL: track.url,
             thumbnail: `https://i.ytimg.com/vi/${track.id}/maxresdefault.jpg`,
-            requestedBy: options?.requestedBy,
+            requestedBy: options?.requestedBy ?? 'null',
             duration: msToHMS(track.durationInSec * 1000),
             milliseconds: track.durationInSec * 1000,
             seekTime: 0,
@@ -171,7 +170,7 @@ module.exports = class Queue {
           url: info.link,
           streamURL: await playdl.search(`${info.artist} ${info.title} lyrics`, { limit: 1 }).then(result => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
           thumbnail: info.image,
-          requestedBy: options?.requestedBy,
+          requestedBy: options?.requestedBy ?? 'null',
           duration: msToHMS(data.duration_ms),
           milliseconds: data.duration_ms,
           seekTime: 0,
@@ -193,7 +192,7 @@ module.exports = class Queue {
             url: track.external_urls.spotify,
             streamURL: await playdl.search(`${track.artists[0].name} ${track.name} lyrics`, { limit: 1 }).then(result => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
             thumbnail: track.album?.images[0]?.url,
-            requestedBy: options?.requestedBy,
+            requestedBy: options?.requestedBy ?? 'null',
             duration: msToHMS(track.duration_ms),
             milliseconds: track.duration_ms,
             seekTime: 0,
@@ -226,7 +225,7 @@ module.exports = class Queue {
           url: info.permalink,
           streamURL: info.url,
           thumbnail: info.thumbnail,
-          requestedBy: options?.requestedBy,
+          requestedBy: options?.requestedBy ?? 'null',
           duration: msToHMS(info.durationInMs),
           milliseconds: info.durationInMs,
           seekTime: 0,
@@ -247,7 +246,7 @@ module.exports = class Queue {
             url: info.permalink,
             streamURL: info.url,
             thumbnail: info.thumbnail,
-            requestedBy: options?.requestedBy,
+            requestedBy: options?.requestedBy ?? 'null',
             duration: msToHMS(info.durationInMs),
             milliseconds: info.durationInMs,
             seekTime: 0,
@@ -278,7 +277,7 @@ module.exports = class Queue {
           url: info.url,
           streamURL: info.url,
           thumbnail: `https://i.ytimg.com/vi/${info.id}/maxresdefault.jpg`,
-          requestedBy: options?.requestedBy,
+          requestedBy: options?.requestedBy ?? 'null',
           duration: msToHMS(info.durationInSec * 1000),
           milliseconds: info.durationInSec * 1000,
           seekTime: 0,
@@ -293,7 +292,7 @@ module.exports = class Queue {
       const track = this.tracks[0]
       const stream = await playdl.stream(track.streamURL)
       const resource = this.connection.createAudioStream(stream)
-      await this.connection.playAudioStream(resource).then(() => { this.setVolume(this.volume) })
+      await this.connection.playAudioStream(resource).then(() => { this.setVolume(this.queueVolume) })
     }
 
     return added
@@ -302,7 +301,6 @@ module.exports = class Queue {
   // TODO: Search command that returns five songs
 
   async seek (time) {
-    console.log('seek', time)
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.playing) { throw new Error('Nothing playing') }
 
@@ -313,7 +311,6 @@ module.exports = class Queue {
   }
 
   skip (index = 0) {
-    console.log('skip')
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
 
@@ -322,7 +319,6 @@ module.exports = class Queue {
   }
 
   stop () {
-    console.log('stop')
     if (this.destroyed) { return }
     this.destroyed = true
     this.connection?.leave()
@@ -330,7 +326,6 @@ module.exports = class Queue {
   }
 
   shuffle () {
-    console.log('shuffle')
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (this.tracks.length <= 2) { return }
     for (let i = this.tracks.length - 1; i > 1; --i) {
@@ -390,7 +385,6 @@ module.exports = class Queue {
   }
 
   setPaused (state) {
-    console.log('setPaused')
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!this.playing) { throw new Error('Nothing playing') }
@@ -405,9 +399,9 @@ module.exports = class Queue {
   }
 
   setVolume (volume) {
-    console.log('setVolume', volume)
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
+    this.queueVolume = volume
     return this.connection.setVolume(volume)
   }
 

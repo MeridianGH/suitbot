@@ -17,7 +17,6 @@ module.exports = class Player {
   }
 
   createQueue (guildId) {
-    console.log('createQueue')
     const guild = this.client.guilds.resolve(guildId)
     if (!guild) { return null }
     if (this.queues.has(guildId) && !this.queues.get(guildId).destroyed) { return this.queues.get(guildId) }
@@ -28,17 +27,14 @@ module.exports = class Player {
   }
 
   getQueue (guildId) {
-    console.log('getQueue')
     return this.queues.get(guildId)
   }
 
   deleteQueue (guildId) {
-    console.log('deleteQueue')
     this.queues.delete(guildId)
   }
 
   _voiceUpdate (oldState, newState) {
-    console.log('_voiceUpdate')
     const queue = this.queues.get(oldState.guild.id)
     if (!queue) { return }
 

@@ -68,7 +68,6 @@ module.exports = class StreamConnection extends EventEmitter {
   }
 
   async playAudioStream (resource) {
-    console.log('connection playAudioStream')
     if (!resource) { throw new Error('No resource available') }
     if (!this.resource) { this.resource = resource }
 
@@ -78,7 +77,6 @@ module.exports = class StreamConnection extends EventEmitter {
   }
 
   setPaused (state) {
-    console.log('connection setPaused')
     if (state) {
       this.player.pause()
       this.paused = true
@@ -91,18 +89,19 @@ module.exports = class StreamConnection extends EventEmitter {
   }
 
   stop () {
-    console.log('connection stop')
     this.player.stop()
   }
 
   leave () {
-    console.log('connection leave')
     this.player.stop()
-    this.connection.destroy()
+    try {
+      this.connection.destroy()
+    } catch {
+      // Connection already destroyed
+    }
   }
 
   setVolume (volume) {
-    console.log('connection setVolume', volume)
     if (!this.resource) { throw new Error('No resource available') }
     this.resource.volume.setVolumeLogarithmic(volume / 100)
   }
