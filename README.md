@@ -14,6 +14,10 @@ It uses [discord.js](https://discord.js.org/) and [Discord Music Player](https:/
 
 Head on over to the [dashboard](https://suitbot.xyz) for more information!
 
+&nbsp;
+
+Check out the [Progress Board](https://github.com/MeridianGH/suitbot/projects/1) if you're interested in the current progress in development!
+
 Join the [Discord server](https://discord.gg/qX2CBrrUpf) for information about updates and support or if you'd like to report a bug or leave a suggestion.
 
 ## Availability
