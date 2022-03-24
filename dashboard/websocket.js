@@ -7,12 +7,12 @@ const clients = {}
 function stringify (queue) {
   return JSON.stringify({
     guild: queue.guild.id,
-    current: queue.current,
-    tracks: queue.tracks.map(track => track.toJSON()),
-    paused: queue.connection.paused,
+    nowPlaying: queue.nowPlaying,
+    tracks: queue.tracks,
+    paused: queue.paused,
     volume: queue.volume,
     repeatMode: queue.repeatMode,
-    streamTime: queue.streamTime
+    currentTime: queue.currentTime
   })
 }
 
@@ -56,12 +56,12 @@ module.exports = {
             return
           }
           case 'previous': {
-            if (queue.streamTime > 5000) {
+            if (queue.currentTime > 5000) {
               await queue.seek(0)
               break
             }
             try {
-              await queue.back()
+              await queue.previous()
             } catch (e) {
               await queue.seek(0)
             }
@@ -91,43 +91,26 @@ module.exports = {
           }
           case 'play': {
             if (!data.query) { return }
-            const searchResult = await client.player.search(data.query, { requestedBy: user, searchEngine: 'playdl' })
-            if (!searchResult || !searchResult.tracks.length) { return } // TODO: Error message: There was an error while adding your song to the queue.
+            const result = await queue.play(data.query, { requestedBy: user })
+            if (!result) { return } // TODO: Error message: There was an error while adding your song to the queue.
 
-            if (searchResult.playlist) {
-              const playlist = searchResult.playlist
-              queue.addTracks(playlist.tracks)
-              if (!queue.playing) { await queue.play() }
+            const embed = new MessageEmbed()
+              .setAuthor({ name: 'Added to queue.', iconURL: user.displayAvatarURL() })
+              .setTitle(result.title)
+              .setURL(result.url)
+              .setThumbnail(result.thumbnail)
+              .setFooter({ text: 'SuitBot', iconURL: client.user.displayAvatarURL() })
 
-              queue.metadata.channel.send({
-                embeds: [new MessageEmbed()
-                  .setAuthor({ name: 'Added to queue.', iconURL: user.displayAvatarURL() })
-                  .setTitle(playlist.title)
-                  .setURL(playlist.url)
-                  .setThumbnail(playlist.thumbnail)
-                  .addField('Amount', `${playlist.tracks.length} songs`, true)
-                  .addField('Author', playlist.author.name ?? playlist.author, true)
-                  .addField('Position', `${(queue.getTrackPosition(playlist.tracks[0]) + 1).toString()}-${(queue.getTrackPosition(playlist.tracks[playlist.tracks.length - 1]) + 1).toString()}`, true)
-                  .setFooter({ text: 'SuitBot Web Interface', iconURL: client.user.displayAvatarURL() })
-                ]
-              })
+            if (result.playlist) {
+              embed
+                .addField('Amount', `${result.tracks.length} songs`, true)
+                .addField('Author', result.author, true)
+                .addField('Position', `${queue.tracks.indexOf(result.tracks[0]).toString()}-${queue.tracks.indexOf(result.tracks[result.tracks.length - 1]).toString()}`, true)
             } else {
-              const track = searchResult.tracks[0]
-              queue.addTrack(track)
-              if (!queue.playing) { await queue.play() }
-
-              queue.metadata.channel.send({
-                embeds: [new MessageEmbed()
-                  .setAuthor({ name: 'Added to queue.', iconURL: user.displayAvatarURL() })
-                  .setTitle(track.title)
-                  .setURL(track.url)
-                  .setThumbnail(track.thumbnail)
-                  .addField('Duration', track.durationMS === 0 ? '🔴 Live' : track.duration, true)
-                  .addField('Author', track.author, true)
-                  .addField('Position', (queue.getTrackPosition(track) + 1).toString(), true)
-                  .setFooter({ text: 'SuitBot Web Interface', iconURL: client.user.displayAvatarURL() })
-                ]
-              })
+              embed
+                .addField('Duration', result.live ? '🔴 Live' : result.duration, true)
+                .addField('Author', result.author, true)
+                .addField('Position', queue.tracks.indexOf(result).toString(), true)
             }
             await sleep(2)
             break
@@ -141,7 +124,7 @@ module.exports = {
             break
           }
           case 'skipto': {
-            queue.skipTo(data.index)
+            queue.skip(data.index)
             await sleep(2)
             break
           }

@@ -27,13 +27,13 @@ class App extends React.Component {
     })
 
     this.interval = setInterval(() => {
-      if (this.state.current && !this.state.paused && this.state.current.durationMS !== 0) {
+      if (this.state.nowPlaying && !this.state.paused && !this.state.nowPlaying.live) {
         this.setState((state) => {
-          if (state.streamTime >= state.current.durationMS) {
+          if (state.currentTime >= state.nowPlaying.milliseconds) {
             clearInterval(this.interval)
-            return { streamTime: (state.streamTime = state.current.durationMS) }
+            return { currentTime: (state.currentTime = state.nowPlaying.milliseconds) }
           }
-          return { streamTime: (state.streamTime += 1000) }
+          return { currentTime: (state.currentTime += 1000) }
         })
       }
     }, 1000)
@@ -45,12 +45,12 @@ class App extends React.Component {
 
   render () {
     if (!this.state) { return null }
-    if (!this.state.current) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
+    if (!this.state.nowPlaying) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
     return html`
       <div>
-        <${MediaSession} track=${this.state.current} paused=${this.state.paused} />
+        <${MediaSession} track=${this.state.nowPlaying} paused=${this.state.paused} />
         <h1 className='queue-title'>Now Playing</h1>
-        <${NowPlaying} track=${this.state.current} paused=${this.state.paused} streamTime=${this.state.streamTime} repeatMode=${this.state.repeatMode} />
+        <${NowPlaying} track=${this.state.nowPlaying} paused=${this.state.paused} currentTime=${this.state.currentTime} repeatMode=${this.state.repeatMode} />
         <${VolumeControl} volume=${this.state.volume} />
         <div style=${{ marginBottom: '20px' }} />
         <h1 className='queue-title'>Queue</h1>
@@ -75,13 +75,13 @@ function NowPlaying (props) {
         <li>
           <${Thumbnail} image=${props.track.thumbnail} />
           <div className='progress-container'>
-            <div className='progress' style=${{ width: `${props.track.durationMS === 0 ? '100%' : props.streamTime / props.track.durationMS * 100 + '%'}` }} />
+            <div className='progress' style=${{ width: `${props.track.live ? '100%' : props.currentTime / props.track.milliseconds * 100 + '%'}` }} />
           </div>
         </li>
         <li>
           <a href=${props.track.url} rel='noreferrer' target='_blank'><h4>${props.track.title}</h4></a>
           <h6>${props.track.author}</h6>
-          <h5>${props.track.durationMS === 0 ? '🔴 Live' : `${msToHMS(props.streamTime)} / ${props.track.duration}`}</h5>
+          <h5>${props.track.live ? '🔴 Live' : `${msToHMS(props.currentTime)} / ${props.track.duration}`}</h5>
           <${MusicControls} paused=${props.paused} repeatMode=${props.repeatMode} />
         </li>
       </ul>
@@ -164,13 +164,13 @@ function Queue (props) {
     send({ type: action, index: index })
   }
   const rows = []
-  for (let i = 0; i < props.tracks.length; i++) {
+  for (let i = 1; i < props.tracks.length; i++) {
     rows.push(html`
       <tr key=${i}>
-        <td><span className='text-nowrap'>${i + 1}</span></td>
+        <td><span className='text-nowrap'>${i}</span></td>
         <td><span className='text-nowrap'>${props.tracks[i].title}</span></td>
         <td><span className='text-nowrap'>${props.tracks[i].author}</span></td>
-        <td><span className='text-nowrap'>${props.tracks[i].durationMS === 0 ? '🔴 Live' : props.tracks[i].duration}</span></td>
+        <td><span className='text-nowrap'>${props.tracks[i].live ? '🔴 Live' : props.tracks[i].duration}</span></td>
         <td><span className='text-nowrap'><button className='button square transparent' onClick=${onClick.bind(this, 'remove', i)}><i className='fas fa-trash-alt' /></button><button className='button square transparent' onClick=${onClick.bind(this, 'skipto', i)}><i className='fas fa-forward' /></button></span></td>
       </tr>
     `)
