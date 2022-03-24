@@ -198,6 +198,11 @@ function Queue (props) {
   `
 }
 
+function Toast (props) {
+  if (!props.type || !props.message) { return null }
+
+}
+
 function MediaSession (props) {
   React.useEffect(async () => {
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
@@ -205,7 +210,7 @@ function MediaSession (props) {
       audio.src = '/near-silence.mp3'
       audio.volume = 0.00001
       audio.load()
-      await audio.play()
+      await audio.play().catch(() => console.log('Autoplay seems to be disabled. Enable Media Autoplay to use media buttons to control the music bot!'))
       setTimeout(() => audio.pause(), 100)
     }
   }, [])
