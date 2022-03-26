@@ -109,7 +109,6 @@ module.exports = class Queue {
         if (!info) { return null }
 
         added = {
-          queue: this,
           title: info.title,
           author: info.channel.name,
           url: info.url,
@@ -130,7 +129,6 @@ module.exports = class Queue {
 
         const tracks = (await info.all_videos()).map(track => {
           return {
-            queue: this,
             title: track.title,
             author: track.channel.name,
             url: track.url,
@@ -146,7 +144,6 @@ module.exports = class Queue {
         })
 
         added = {
-          queue: this,
           title: info.title,
           author: info.channel.name,
           url: info.url,
@@ -164,7 +161,6 @@ module.exports = class Queue {
         const data = await getData(query)
 
         added = {
-          queue: this,
           title: info.artist + ' - ' + info.title,
           author: info.artist,
           url: info.link,
@@ -186,7 +182,6 @@ module.exports = class Queue {
         const tracks = (await getTracks(query)).map(async track => {
           // noinspection JSUnresolvedVariable
           return {
-            queue: this,
             title: track.artists[0].name + ' - ' + track.name,
             author: track.artists[0].name,
             url: track.external_urls.spotify,
@@ -202,7 +197,6 @@ module.exports = class Queue {
         })
 
         added = {
-          queue: this,
           title: info.title,
           author: info.artist,
           url: info.link,
@@ -219,7 +213,6 @@ module.exports = class Queue {
         if (!info) { return null }
 
         added = {
-          queue: this,
           title: info.name,
           author: info.publisher?.name ?? info.publisher?.artist ?? info.publisher?.writer_composer ?? 'Soundcloud',
           url: info.permalink,
@@ -240,7 +233,6 @@ module.exports = class Queue {
 
         const tracks = (await info.all_tracks()).map(track => {
           return {
-            queue: this,
             title: track.name,
             author: track.publisher?.name ?? track.publisher?.artist ?? track.publisher?.writer_composer ?? 'Soundcloud',
             url: info.permalink,
@@ -256,7 +248,6 @@ module.exports = class Queue {
         })
 
         added = {
-          queue: this,
           title: info.name,
           author: info.user,
           url: info.permalink,
@@ -271,7 +262,6 @@ module.exports = class Queue {
         const info = (await playdl.search(query, { limit: 1 }))[0]
         if (!info) { return null }
         added = {
-          queue: this,
           title: info.title,
           author: info.channel.name,
           url: info.url,
