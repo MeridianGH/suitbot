@@ -186,15 +186,16 @@ function Toast (props) {
     setToast(props.toast)
     setOpacity(1)
 
-    const timeout = setTimeout(() => {
+    const timeouts = []
+    timeouts.push(setTimeout(() => {
       setOpacity(0)
-      setTimeout(() => {
+      timeouts.push(setTimeout(() => {
         setToast(undefined)
-      }, 1000)
-    }, 5000)
+      }, 1000))
+    }, 5000))
 
     return () => {
-      clearTimeout(timeout)
+      timeouts.forEach(timeout => { clearTimeout(timeout) })
     }
   }, [props.toast])
 
