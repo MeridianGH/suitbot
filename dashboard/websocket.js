@@ -15,8 +15,8 @@ function simplifyQueue (queue) {
   }
 }
 
-function send (ws, ...objects) {
-  ws.sendUTF(JSON.stringify(Object.assign({}, ...objects)))
+function send (ws, data) {
+  ws.sendUTF(JSON.stringify(Object.assign({}, data)))
 }
 
 module.exports = {
@@ -52,7 +52,7 @@ module.exports = {
 
         if (data.type !== 'request') {
           const channel = guild.members.cache.get(user.id)?.voice.channel
-          if (!channel || guild.me.voice.channel && (channel !== guild.me.voice.channel)) { return send(ws, simplifyQueue(queue), { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
+          if (!channel || guild.me.voice.channel && (channel !== guild.me.voice.channel)) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
         }
 
         const toast = { message: null, type: 'info' }
@@ -144,7 +144,7 @@ module.exports = {
             break
           }
         }
-        send(ws, simplifyQueue(queue), { toast: toast })
+        send(ws, { toast: toast })
         client.dashboard.emit('update', queue)
       })
 
