@@ -12,7 +12,7 @@
         <div class="card-body">
           <%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `<a href="/dashboard/${guild.id}" class="stretched-link"></a>` : '' %>
           <h5 class="card-title" style="color: #000000;"><%= guild.name %></h5>
-          <p class="card-text" style="color: #000000;"><%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `Now Playing:<br>${djsClient.player.getQueue(guild.id).current.title}` : 'Nothing playing on this server.' %></p>
+          <p class="card-text" style="color: #000000;"><%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `Now Playing:<br>${djsClient.player.getQueue(guild.id).nowPlaying.title}` : 'Nothing playing on this server.' %></p>
         </div>
       </div>
       <% }) %>
