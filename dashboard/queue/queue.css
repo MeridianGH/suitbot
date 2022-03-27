@@ -3,7 +3,8 @@
 }
 
 .alert {
-    width: 25%;
+    min-width: 25%;
+    max-width: 75%;
     position: absolute;
     right: 1rem;
     transition: opacity 1s;

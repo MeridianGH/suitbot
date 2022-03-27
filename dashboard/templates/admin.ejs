@@ -31,7 +31,7 @@
         <tbody>
           <% djsClient.guilds.cache.clone().sort((a, b) => { return a.joinedAt.getTime() - b.joinedAt.getTime() }).forEach(guild => { %>
           <tr>
-            <td class="align-middle" style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : '/img/generic_server.png' %>" rel="noreferrer" target="_blank"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : 'generic_server.png' %>" style="height: 30px <%- djsClient.player.getQueue(guild.id) ? '; border: 2px solid #198754' : '' %> "></a></td>
+            <td class="align-middle" style="width: 1%"><a href="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : '/assets/img/generic_server.png' %>" rel="noreferrer" target="_blank"><img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : '/assets/img/generic_server.png' %>" style="height: 30px <%- djsClient.player.getQueue(guild.id) ? '; border: 2px solid #198754' : '' %> "></a></td>
             <td class="align-middle" style="width: 60%"><span class="text-nowrap"><%= guild.name %></span></td>
             <td class="align-middle"><span class="text-nowrap"><%= guild.memberCount %></span></td>
             <td class="align-middle"><span class="text-nowrap"><%= guild.channels.channelCountWithoutThreads %></span></td>

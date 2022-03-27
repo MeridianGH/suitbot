@@ -28,7 +28,8 @@ module.exports = function startDashboard (client) {
 
   // Minify and set files
   app.use(minify())
-  app.use('/', express.static(path.join(__dirname, 'assets')))
+  app.use('/assets', express.static(path.join(__dirname, 'assets')))
+  app.use('/queue', express.static(path.join(__dirname, 'queue')))
 
   // Passport Discord login
   passport.serializeUser((user, done) => done(null, user))
