@@ -202,7 +202,7 @@ function Toast (props) {
   if (!toast) { return null }
   return html`
     <div className="alert alert-${toast.type}" style=${{ opacity: opacity }}>
-      <i className="far fa-${toast.type === 'danger' ? 'exclamation' : toast.type === 'success' ? 'check' : 'info'}-circle fa-2x"></i><span style=${{ fontSize: '1.2em', marginLeft: '5px' }}>${toast.message}</span>
+      <span><i style=${{ fontSize: '2em', color: 'currentColor' }} className="fas fa-${toast.type === 'danger' ? 'exclamation' : toast.type === 'success' ? 'check' : 'info'}-circle"></i></span><span style=${{ fontSize: '1.2em', marginLeft: '5px' }}>${toast.message}</span>
     </div>
   `
 }
