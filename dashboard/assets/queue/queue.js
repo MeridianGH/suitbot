@@ -27,7 +27,7 @@ class App extends React.Component {
     })
 
     this.interval = setInterval(() => {
-      if (this.state.nowPlaying && !this.state.paused && !this.state.nowPlaying.live) {
+      if (this.state && this.state.nowPlaying && !this.state.paused && !this.state.nowPlaying.live) {
         this.setState((state) => {
           if (state.currentTime >= state.nowPlaying.milliseconds) {
             clearInterval(this.interval)
@@ -49,11 +49,8 @@ class App extends React.Component {
     return html`
       <div>
         <${MediaSession} track=${this.state.nowPlaying} paused=${this.state.paused} />
-        <h1 className='queue-title'>Now Playing</h1>
-        <${NowPlaying} track=${this.state.nowPlaying} paused=${this.state.paused} currentTime=${this.state.currentTime} repeatMode=${this.state.repeatMode} />
-        <${VolumeControl} volume=${this.state.volume} />
-        <div style=${{ marginBottom: '20px' }} />
-        <h1 className='queue-title'>Queue</h1>
+        <${NowPlaying} track=${this.state.nowPlaying} paused=${this.state.paused} currentTime=${this.state.currentTime} repeatMode=${this.state.repeatMode} volume=${this.state.volume} />
+          <div style=${{ marginBottom: '20px' }} />
         <${Queue} tracks=${this.state.tracks} />
       </div>
     `
@@ -70,6 +67,7 @@ function NowPlaying (props) {
     return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
   }
   return html`
+    <h1 className='queue-title'>Now Playing</h1>
     <div className='nowplaying-container'>
       <ul className='horizontal-list'>
         <li>
@@ -86,6 +84,7 @@ function NowPlaying (props) {
         </li>
       </ul>
     </div>
+    <${VolumeControl} volume=${props.volume} />
   `
 }
 
@@ -99,43 +98,27 @@ function Thumbnail (props) {
 }
 
 function MusicControls (props) {
-  const onClick = (action) => {
-    send({ type: action })
-  }
   return html`
     <div>
-      <button className='button square' onClick=${onClick.bind(this, 'previous')}><i className='fas fa-backward' /></button>
-      <button className='button square' onClick=${onClick.bind(this, 'pause')}><i className=${props.paused ? 'fas fa-play' : 'fas fa-pause'} /></button>
-      <button className='button square' onClick=${onClick.bind(this, 'skip')}><i className='fas fa-forward' /></button>
+      <button className='button square' onClick=${() => { send({ type: 'previous' }) }}><i className='fas fa-backward' /></button>
+      <button className='button square' onClick=${() => { send({ type: 'pause' }) }}><i className=${props.paused ? 'fas fa-play' : 'fas fa-pause'} /></button>
+      <button className='button square' onClick=${() => { send({ type: 'skip' }) }}><i className='fas fa-forward' /></button>
       <span style=${{ marginRight: '10px' }}></span>
-      <button className='button square' onClick=${onClick.bind(this, 'shuffle')}><i className='fas fa-random' /></button>
-      <button className='button square' onClick=${onClick.bind(this, 'repeat')}><i className=${props.repeatMode === 0 ? 'fad fa-repeat-alt' : props.repeatMode === 1 ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
+      <button className='button square' onClick=${() => { send({ type: 'shuffle' }) }}><i className='fas fa-random' /></button>
+      <button className='button square' onClick=${() => { send({ type: 'repeat' }) }}><i className=${props.repeatMode === 0 ? 'fad fa-repeat-alt' : props.repeatMode === 1 ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
     </div>
   `
 }
 
-class VolumeControl extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = { volume: props.volume }
-  }
+function VolumeControl (props) {
+  const [volume, setVolume] = React.useState(props.volume)
 
-  changeVolume (event) {
-    this.setState({ volume: event.target.value })
-  }
-
-  setVolume (event) {
-    send({ type: 'volume', volume: event.target.value })
-  }
-
-  render () {
-    return html`
-      <div>
-        <button className='volume-display' disabled><i className=${this.state.volume === 0 ? 'fas fa-volume-off' : this.state.volume <= 33 ? 'fas fa-volume-down' : this.state.volume <= 66 ? 'fas fa-volume' : 'fas fa-volume-up'} /> ${this.state.volume}</button>
-        <input className='volume-slider' type='range' defaultValue=${this.state.volume} step='10' min='0' max='100' onInput=${this.changeVolume.bind(this)} onMouseUp=${this.setVolume.bind(this)} />
-      </div>
-    `
-  }
+  return html`
+    <div>
+      <button className='volume-display' disabled><i className=${volume === 0 ? 'fas fa-volume-off' : volume <= 33 ? 'fas fa-volume-down' : volume <= 66 ? 'fas fa-volume' : 'fas fa-volume-up'} /> ${volume}</button>
+      <input className='volume-slider' type='range' defaultValue=${volume} step='10' min='0' max='100' onInput=${event => { setVolume(event.target.value) }} onMouseUp=${(event => { send({ type: 'volume', volume: event.target.value }) })} />
+    </div>
+  `
 }
 
 function QueueButtons () {
@@ -145,24 +128,18 @@ function QueueButtons () {
     send({ type: 'play', query: input.current.value })
     input.current.value = ''
   }
-  const handleClear = () => {
-    send({ type: 'clear' })
-  }
   return html`
     <div className='queue-button-container'>
       <form onSubmit=${handlePlay}>
         <input type='text' className='textfield' placeholder='Add to queue' ref=${input} />
         <button className='button'><i className='fas fa-plus' /> Play</button>
       </form>
-      <button className='button' onClick=${handleClear}><i className='fas fa-trash-alt' /> Clear queue</button>
+      <button className='button' style=${{ marginRight: 0 }} onClick=${() => { send({ type: 'clear' }) }}><i className='fas fa-trash-alt' /> Clear queue</button>
     </div>
   `
 }
 
 function Queue (props) {
-  const onClick = (action, index) => {
-    send({ type: action, index: index })
-  }
   const rows = []
   for (let i = 1; i < props.tracks.length; i++) {
     rows.push(html`
@@ -171,12 +148,13 @@ function Queue (props) {
         <td><span className='text-nowrap'>${props.tracks[i].title}</span></td>
         <td><span className='text-nowrap'>${props.tracks[i].author}</span></td>
         <td><span className='text-nowrap'>${props.tracks[i].live ? '🔴 Live' : props.tracks[i].duration}</span></td>
-        <td><span className='text-nowrap'><button className='button square transparent' onClick=${onClick.bind(this, 'remove', i)}><i className='fas fa-trash-alt' /></button><button className='button square transparent' onClick=${onClick.bind(this, 'skipto', i)}><i className='fas fa-forward' /></button></span></td>
+        <td><span className='text-nowrap'><button className='button square transparent' onClick=${() => { send({ type: 'remove', index: i }) }}><i className='fas fa-trash-alt' /></button><button className='button square transparent' onClick=${() => { send({ type: 'skipto', index: i }) }}><i className='fas fa-forward' /></button></span></td>
       </tr>
     `)
   }
   return html`
     <div>
+      <h1 className='queue-title'>Queue</h1>
       <${QueueButtons} />
       <div className='table-responsive'>
         <table className='table table-dark table-striped'>
