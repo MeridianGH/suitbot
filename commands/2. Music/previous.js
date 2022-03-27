@@ -14,5 +14,6 @@ module.exports = {
     if (!track) { return await interaction.reply(simpleEmbed('You can\'t use the command  `previous` right now!', true)) }
 
     await interaction.reply(simpleEmbed(`⏮ Playing previous track \`#0\`: **${queue.nowPlaying.title}**.`))
+    interaction.client.dashboard.update(queue)
   }
 }

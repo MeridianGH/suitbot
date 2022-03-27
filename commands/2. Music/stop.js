@@ -12,5 +12,6 @@ module.exports = {
 
     queue.stop()
     await interaction.reply(simpleEmbed('⏹ Stopped.'))
+    interaction.client.dashboard.update(queue)
   }
 }

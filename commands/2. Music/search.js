@@ -64,6 +64,7 @@ module.exports = {
         ],
         components: []
       })
+      interaction.client.dashboard.update(queue)
 
       collector.stop()
     })

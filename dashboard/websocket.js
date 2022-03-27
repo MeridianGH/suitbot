@@ -145,7 +145,7 @@ module.exports = {
           }
         }
         send(ws, { toast: toast })
-        client.dashboard.emit('update', queue)
+        client.dashboard.update(queue)
       })
 
       ws.on('close', () => {

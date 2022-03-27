@@ -12,5 +12,6 @@ module.exports = {
 
     queue.setPaused(!queue.connection.paused)
     await interaction.reply(simpleEmbed(queue.paused ? '⏸ Paused.' : '▶ Resumed.'))
+    interaction.client.dashboard.update(queue)
   }
 }
