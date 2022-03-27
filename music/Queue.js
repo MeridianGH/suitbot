@@ -10,7 +10,7 @@ module.exports = class Queue {
     this.guild = guild
     this.connection = undefined
     this.tracks = []
-    this.previous = []
+    this.previousTracks = []
     this.playing = false
     this.repeatMode = 0
     this.queueVolume = 50
@@ -58,8 +58,8 @@ module.exports = class Queue {
       this.playing = false
 
       const oldSong = this.tracks.shift()
-      this.previous.push(oldSong)
-      this.previous = this.previous.slice(1, 11)
+      this.previousTracks.push(oldSong)
+      this.previousTracks = this.previousTracks.slice(-10)
 
       if (this.tracks.length === 0 && this.repeatMode === 0) {
         // Queue empty
@@ -306,6 +306,16 @@ module.exports = class Queue {
 
     this.tracks.splice(1, index)
     this.connection.stop()
+  }
+
+  previous () {
+    if (this.destroyed) { throw new Error('Queue destroyed') }
+    if (!this.connection) { throw new Error('Connection unavailable') }
+
+    if (this.previousTracks.length === 0) { return null }
+    this.tracks.splice(1, 0, this.previousTracks.pop(), this.nowPlaying)
+    this.connection.stop()
+    return this.nowPlaying
   }
 
   stop () {

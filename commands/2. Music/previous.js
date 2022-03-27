@@ -10,15 +10,9 @@ module.exports = {
     if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
 
-    return await interaction.reply('not available')
-    // TODO: Previous
+    const track = queue.previous()
+    if (!track) { return await interaction.reply(simpleEmbed('You can\'t use the command  `previous` right now!', true)) }
 
-    try {
-      await queue.back()
-    } catch (e) {
-      return await interaction.reply(simpleEmbed('You can\'t use the command  `previous` right now!', true))
-    }
-
-    await interaction.reply(simpleEmbed(`⏮ Playing previous track \`#0\`: **${queue.current.title}**.`))
+    await interaction.reply(simpleEmbed(`⏮ Playing previous track \`#0\`: **${queue.nowPlaying.title}**.`))
   }
 }
