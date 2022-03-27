@@ -1,6 +1,7 @@
 const { Collection } = require('discord.js')
 const playdl = require('play-dl')
 const Queue = require('./Queue')
+const { simpleEmbed } = require('../utilities')
 
 // noinspection JSIgnoredPromiseFromCall
 module.exports = class Player {
@@ -59,6 +60,9 @@ module.exports = class Player {
     }
 
     // Channel empty
-    if (queue.connection?.channel.members.size <= 1) { return queue.stop() }
+    if (queue.connection?.channel.members.size <= 1) {
+      queue.channel.send(simpleEmbed('Left the voice channel because it was empty.'))
+      return queue.stop()
+    }
   }
 }
