@@ -11,52 +11,52 @@ const loader = document.getElementById('loader')
 
 'use strict'
 
-class App extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = null
-  }
+function App () {
+  const [queue, setQueue] = React.useState(null)
+  const [toast, setToast] = React.useState(null)
 
-  componentDidMount () {
+  React.useEffect(() => {
     websocket.addEventListener('open', () => {
       send({ type: 'request' })
     })
     websocket.addEventListener('message', message => {
       loader.remove()
-      this.setState(JSON.parse(message.data))
-      // console.log(JSON.parse(message.data).toast)
+      const data = JSON.parse(message.data)
+      if (data.toast) {
+        setToast(data.toast)
+      } else {
+        setQueue(data)
+      }
     })
-
-    this.interval = setInterval(() => {
-      if (this.state && this.state.nowPlaying && !this.state.paused && !this.state.nowPlaying.live) {
-        this.setState((state) => {
-          if (state.currentTime >= state.nowPlaying.milliseconds) {
-            clearInterval(this.interval)
-            return { currentTime: (state.currentTime = state.nowPlaying.milliseconds) }
-          }
-          return { currentTime: (state.currentTime += 1000) }
-        })
+  }, [])
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (queue && queue.nowPlaying && !queue.paused && !queue.nowPlaying.live) {
+        if (queue.currentTime >= queue.nowPlaying.milliseconds) {
+          clearInterval(interval)
+          setQueue({ ...queue, currentTime: queue.nowPlaying.milliseconds })
+        } else {
+          setQueue({ ...queue, currentTime: (queue.currentTime += 1000) })
+        }
       }
     }, 1000)
-  }
 
-  componentWillUnmount () {
-    clearInterval(this.interval)
-  }
+    return () => {
+      clearInterval(interval)
+    }
+  }, [queue])
 
-  render () {
-    if (!this.state) { return null }
-    if (!this.state.nowPlaying) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
-    return html`
-      <div>
-        <${MediaSession} track=${this.state.nowPlaying} paused=${this.state.paused} />
-        <${Toast} toast=${this.state.toast} />
-        <${NowPlaying} track=${this.state.nowPlaying} paused=${this.state.paused} currentTime=${this.state.currentTime} repeatMode=${this.state.repeatMode} volume=${this.state.volume} />
-          <div style=${{ marginBottom: '20px' }} />
-        <${Queue} tracks=${this.state.tracks} />
-      </div>
-    `
-  }
+  if (!queue) { return null }
+  if (!queue.nowPlaying) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
+  return html`
+    <div>
+      <${MediaSession} track=${queue.nowPlaying} paused=${queue.paused} />
+      <${Toast} toast=${toast} />
+      <${NowPlaying} track=${queue.nowPlaying} paused=${queue.paused} currentTime=${queue.currentTime} repeatMode=${queue.repeatMode} volume=${queue.volume} />
+        <div style=${{ marginBottom: '20px' }} />
+      <${Queue} tracks=${queue.tracks} />
+    </div>
+  `
 }
 
 function NowPlaying ({ track, currentTime, paused, repeatMode, volume }) {
