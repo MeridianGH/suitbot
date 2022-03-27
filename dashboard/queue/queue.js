@@ -211,10 +211,16 @@ function MediaSession ({ track, paused }) {
   React.useEffect(async () => {
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
       const audio = document.createElement('audio')
-      audio.src = '/near-silence.mp3'
+      audio.src = '/assets/near-silence.mp3'
       audio.volume = 0.00001
       audio.load()
-      await audio.play().catch(() => console.log('Autoplay seems to be disabled. Enable Media Autoplay to use media buttons to control the music bot!'))
+      await audio.play().catch(() => {
+        const div = document.getElementById('autoplay-alert')
+        div.classList.add('alert', 'alert-danger', 'alert-dismissible', 'fade', 'show')
+        div.setAttribute('role',  'alert')
+        div.style.cssText = 'position: fixed; right: 1em; bottom: 0;'
+        div.innerHTML = '<i class="far fa-exclamation-triangle fa-1.5x"></i><span style="font-size: 1em; margin-left: 5px">Autoplay seems to be disabled. Enable Media Autoplay to use media buttons to control the music bot!<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'
+      })
       setTimeout(() => audio.pause(), 100)
     }
   }, [])
@@ -234,7 +240,7 @@ function MediaSession ({ track, paused }) {
     navigator.mediaSession.setActionHandler('nexttrack', () => { send({ type: 'skip' }) })
     navigator.mediaSession.setActionHandler('previoustrack', () => { send({ type: 'previous' }) })
   }, [track, paused])
-  return null
+  return html`<div id="autoplay-alert"></div>`
 }
 
 const domContainer = document.querySelector('#react-container')
