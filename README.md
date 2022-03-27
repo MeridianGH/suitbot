@@ -100,6 +100,7 @@ Rename `config_example.json` to `config.json` and replace the placeholders insid
   - While you're here, add `http://localhost/callback` to the `Redirects`.
 - The Guild ID of the server in which you want to test the bot. To get this ID, activate `Developer Mode` in Discord's options and right-click your server.
 - Your User ID of your Discord account which will be your Admin-Account for the bot. Right-click yourself with `Developer Mode` activated.
+- On the developer guild, create channels `suggestions` and `bug-reports` to receive them from bot users, also make sure the bot has access to them!
 
 Use `node deploy-commands.js` to update and add commands in the guild you specified and `node deploy-commands-global.js` to update the commands in every guild the bot is in.\
 Guild commands are refreshed instantly while global commands can take up to an hour.
