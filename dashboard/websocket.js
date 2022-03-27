@@ -53,8 +53,7 @@ module.exports = {
 
         if (data.type !== 'request') {
           const channel = guild.members.cache.get(user.id)?.voice.channel
-          if (!channel || guild.me.voice.channel && (channel !== guild.me.voice.channel)) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'error' } }) }
-          if (!guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return send(ws, { toast: { message: 'The bot does not have the correct permissions to play in your voice channel!', type: 'error' } }) }
+          if (!channel || guild.me.voice.channel && (channel !== guild.me.voice.channel)) { return send(ws, simplifyQueue(queue), { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'error' } }) }
         }
 
         const toast = { message: null, type: 'info' }
