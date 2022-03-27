@@ -259,7 +259,7 @@ module.exports = class Queue {
       }
 
       if (youtubeType === 'search') {
-        const info = (await playdl.search(query, { limit: 1 }))[0]
+        const info = (await playdl.search(query, { source: { youtube: 'video' }, limit: 1 }))[0]
         if (!info) { return null }
         added = {
           title: info.title,
@@ -288,7 +288,30 @@ module.exports = class Queue {
     return added
   }
 
-  // TODO: Search command that returns five songs
+  async search (query, options) {
+    if (this.destroyed) { throw new Error('Queue destroyed') }
+    if (!this.connection) { throw new Error('Connection unavailable') }
+    if (!query) { return null }
+
+    const info = await playdl.search(query, { source: { youtube: 'video' }, limit: 5 })
+    if (!info) { return null }
+
+    return info.map(track => {
+      return {
+        title: track.title,
+        author: track.channel.name,
+        url: track.url,
+        streamURL: track.url,
+        thumbnail: `https://i.ytimg.com/vi/${track.id}/maxresdefault.jpg`,
+        requestedBy: options?.requestedBy ?? 'null',
+        duration: msToHMS(track.durationInSec * 1000),
+        milliseconds: track.durationInSec * 1000,
+        seekTime: 0,
+        live: track.live,
+        track: true
+      }
+    })
+  }
 
   async seek (time) {
     if (this.destroyed) { throw new Error('Queue destroyed') }

@@ -15,9 +15,9 @@ module.exports = {
     await interaction.deferReply()
 
     const queue = interaction.client.player.createQueue(interaction.guild.id)
+    queue.setChannel(interaction.channel)
 
     await queue.join(channel)
-    queue.setChannel(interaction.channel)
 
     const result = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.user })
     if (!result) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
