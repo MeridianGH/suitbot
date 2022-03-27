@@ -16,8 +16,8 @@ function simplifyQueue (queue) {
   }
 }
 
-function send (ws, message) {
-  ws.sendUTF(JSON.stringify(message))
+function send (ws, ...objects) {
+  ws.sendUTF(JSON.stringify(Object.assign({}, ...objects)))
 }
 
 module.exports = {
@@ -48,8 +48,8 @@ module.exports = {
         if (!guild) { return ws.close() }
         const user = await client.users.cache.get(data.userId)
         if (!user) { return ws.close() }
-        const queue = client.player.getQueue(guild)
-        if (!queue || !queue.playing) { return ws.sendUTF(JSON.stringify({ current: false })) }
+        const queue = client.player.getQueue(guild.id)
+        if (!queue || !queue.playing) { return send(ws, { nowPlaying: false }) }
 
         if (data.type !== 'request') {
           const channel = guild.members.cache.get(user.id)?.voice.channel
@@ -150,7 +150,7 @@ module.exports = {
             break
           }
         }
-        send(ws, { toast: toast })
+        send(ws, simplifyQueue(queue), { toast: toast })
         client.dashboard.emit('update', queue)
       })
 
@@ -166,7 +166,7 @@ module.exports = {
       if (clients[queue.guild.id]) {
         for (const user in clients[queue.guild.id]) {
           const ws = clients[queue.guild.id][user]
-          ws.sendUTF(simplifyQueue(queue))
+          send(ws, simplifyQueue(queue))
         }
       }
     })
