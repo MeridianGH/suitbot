@@ -24,6 +24,7 @@ class App extends React.Component {
     websocket.addEventListener('message', message => {
       loader.remove()
       this.setState(JSON.parse(message.data))
+      // console.log(JSON.parse(message.data).toast)
     })
 
     this.interval = setInterval(() => {
@@ -49,6 +50,7 @@ class App extends React.Component {
     return html`
       <div>
         <${MediaSession} track=${this.state.nowPlaying} paused=${this.state.paused} />
+        <${Toast} toast=${this.state.toast} />
         <${NowPlaying} track=${this.state.nowPlaying} paused=${this.state.paused} currentTime=${this.state.currentTime} repeatMode=${this.state.repeatMode} volume=${this.state.volume} />
           <div style=${{ marginBottom: '20px' }} />
         <${Queue} tracks=${this.state.tracks} />
@@ -57,7 +59,7 @@ class App extends React.Component {
   }
 }
 
-function NowPlaying (props) {
+function NowPlaying ({ track, currentTime, paused, repeatMode, volume }) {
   const msToHMS = (ms) => {
     let totalSeconds = (ms / 1000)
     const hours = Math.floor(totalSeconds / 3600).toString()
@@ -71,41 +73,41 @@ function NowPlaying (props) {
     <div className='nowplaying-container'>
       <ul className='horizontal-list'>
         <li>
-          <${Thumbnail} image=${props.track.thumbnail} />
+          <${Thumbnail} image=${track.thumbnail} />
           <div className='progress-container'>
-            <div className='progress' style=${{ width: `${props.track.live ? '100%' : props.currentTime / props.track.milliseconds * 100 + '%'}` }} />
+            <div className='progress' style=${{ width: `${track.live ? '100%' : currentTime / track.milliseconds * 100 + '%'}` }} />
           </div>
         </li>
         <li>
-          <a href=${props.track.url} rel='noreferrer' target='_blank'><h4>${props.track.title}</h4></a>
-          <h6>${props.track.author}</h6>
-          <h5>${props.track.live ? '🔴 Live' : `${msToHMS(props.currentTime)} / ${props.track.duration}`}</h5>
-          <${MusicControls} paused=${props.paused} repeatMode=${props.repeatMode} />
+          <a href=${track.url} rel='noreferrer' target='_blank'><h4>${track.title}</h4></a>
+          <h6>${track.author}</h6>
+          <h5>${track.live ? '🔴 Live' : `${msToHMS(currentTime)} / ${track.duration}`}</h5>
+          <${MusicControls} paused=${paused} repeatMode=${repeatMode} />
         </li>
       </ul>
     </div>
-    <${VolumeControl} volume=${props.volume} />
+    <${VolumeControl} volume=${volume} />
   `
 }
 
-function Thumbnail (props) {
+function Thumbnail ({ image }) {
   return html`
     <div className='thumbnail-container'>
-      <img className='thumbnail-backdrop' src=${props.image} />
-      <img className='thumbnail' src=${props.image} />
+      <img className='thumbnail-backdrop' src=${image} />
+      <img className='thumbnail' src=${image} />
     </div>
   `
 }
 
-function MusicControls (props) {
+function MusicControls ({ paused, repeatMode }) {
   return html`
     <div>
       <button className='button square' onClick=${() => { send({ type: 'previous' }) }}><i className='fas fa-backward' /></button>
-      <button className='button square' onClick=${() => { send({ type: 'pause' }) }}><i className=${props.paused ? 'fas fa-play' : 'fas fa-pause'} /></button>
+      <button className='button square' onClick=${() => { send({ type: 'pause' }) }}><i className=${paused ? 'fas fa-play' : 'fas fa-pause'} /></button>
       <button className='button square' onClick=${() => { send({ type: 'skip' }) }}><i className='fas fa-forward' /></button>
       <span style=${{ marginRight: '10px' }}></span>
       <button className='button square' onClick=${() => { send({ type: 'shuffle' }) }}><i className='fas fa-random' /></button>
-      <button className='button square' onClick=${() => { send({ type: 'repeat' }) }}><i className=${props.repeatMode === 0 ? 'fad fa-repeat-alt' : props.repeatMode === 1 ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
+      <button className='button square' onClick=${() => { send({ type: 'repeat' }) }}><i className=${repeatMode === 0 ? 'fad fa-repeat-alt' : repeatMode === 1 ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
     </div>
   `
 }
@@ -139,15 +141,15 @@ function QueueButtons () {
   `
 }
 
-function Queue (props) {
+function Queue ({ tracks }) {
   const rows = []
-  for (let i = 1; i < props.tracks.length; i++) {
+  for (let i = 1; i < tracks.length; i++) {
     rows.push(html`
       <tr key=${i}>
         <td><span className='text-nowrap'>${i}</span></td>
-        <td><span className='text-nowrap'>${props.tracks[i].title}</span></td>
-        <td><span className='text-nowrap'>${props.tracks[i].author}</span></td>
-        <td><span className='text-nowrap'>${props.tracks[i].live ? '🔴 Live' : props.tracks[i].duration}</span></td>
+        <td><span className='text-nowrap'>${tracks[i].title}</span></td>
+        <td><span className='text-nowrap'>${tracks[i].author}</span></td>
+        <td><span className='text-nowrap'>${tracks[i].live ? '🔴 Live' : tracks[i].duration}</span></td>
         <td><span className='text-nowrap'><button className='button square transparent' onClick=${() => { send({ type: 'remove', index: i }) }}><i className='fas fa-trash-alt' /></button><button className='button square transparent' onClick=${() => { send({ type: 'skipto', index: i }) }}><i className='fas fa-forward' /></button></span></td>
       </tr>
     `)
@@ -177,11 +179,34 @@ function Queue (props) {
 }
 
 function Toast (props) {
-  if (!props.type || !props.message) { return null }
+  const [toast, setToast] = React.useState(props.toast)
+  const [opacity, setOpacity] = React.useState(1)
+  React.useEffect(() => {
+    if (!props.toast || !props.toast.message) { return }
+    setToast(props.toast)
+    setOpacity(1)
 
+    const timeout = setTimeout(() => {
+      setOpacity(0)
+      setTimeout(() => {
+        setToast(undefined)
+      }, 1000)
+    }, 5000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [props.toast])
+
+  if (!toast) { return null }
+  return html`
+    <div className="alert alert-${toast.type}" style=${{ opacity: opacity }}>
+      <i className="far fa-${toast.type === 'danger' ? 'exclamation' : toast.type === 'success' ? 'check' : 'info'}-circle fa-2x"></i><span style=${{ fontSize: '1.2em', marginLeft: '5px' }}>${toast.message}</span>
+    </div>
+  `
 }
 
-function MediaSession (props) {
+function MediaSession ({ track, paused }) {
   React.useEffect(async () => {
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
       const audio = document.createElement('audio')
@@ -196,18 +221,18 @@ function MediaSession (props) {
     function htmlDecode (input) { return (new DOMParser().parseFromString(input, 'text/html')).documentElement.textContent }
 
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: htmlDecode(props.track.title),
-      artist: htmlDecode(props.track.author),
-      album: htmlDecode(props.track.author),
-      artwork: [{ src: htmlDecode(props.track.thumbnail) }]
+      title: htmlDecode(track.title),
+      artist: htmlDecode(track.author),
+      album: htmlDecode(track.author),
+      artwork: [{ src: htmlDecode(track.thumbnail) }]
     })
-    navigator.mediaSession.playbackState = props.paused ? 'paused' : 'playing'
+    navigator.mediaSession.playbackState = paused ? 'paused' : 'playing'
 
     navigator.mediaSession.setActionHandler('play', () => { send({ type: 'pause' }) })
     navigator.mediaSession.setActionHandler('pause', () => { send({ type: 'pause' }) })
     navigator.mediaSession.setActionHandler('nexttrack', () => { send({ type: 'skip' }) })
     navigator.mediaSession.setActionHandler('previoustrack', () => { send({ type: 'previous' }) })
-  }, [props.track, props.paused])
+  }, [track, paused])
   return null
 }
 

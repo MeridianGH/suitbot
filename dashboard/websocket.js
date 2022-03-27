@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js')
-const { sleep } = require('../utilities')
 const WebsocketServer = require('websocket').server
 
 const clients = {}
@@ -53,12 +52,11 @@ module.exports = {
 
         if (data.type !== 'request') {
           const channel = guild.members.cache.get(user.id)?.voice.channel
-          if (!channel || guild.me.voice.channel && (channel !== guild.me.voice.channel)) { return send(ws, simplifyQueue(queue), { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'error' } }) }
+          if (!channel || guild.me.voice.channel && (channel !== guild.me.voice.channel)) { return send(ws, simplifyQueue(queue), { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
         }
 
         const toast = { message: null, type: 'info' }
         switch (data.type) {
-          // TODO: Feedback messages
           case 'request': {
             send(ws, simplifyQueue(queue))
             return
@@ -74,7 +72,6 @@ module.exports = {
             } catch (e) {
               await queue.seek(0)
             }
-            await sleep(3)
             break
           }
           case 'pause': {
@@ -85,7 +82,6 @@ module.exports = {
           case 'skip': {
             queue.skip()
             toast.message = 'Skipped.'
-            await sleep(2)
             break
           }
           case 'shuffle': {
@@ -106,7 +102,7 @@ module.exports = {
           case 'play': {
             if (!data.query) { return }
             const result = await queue.play(data.query, { requestedBy: user })
-            if (!result) { return send(ws, { toast: { message: 'There was an error while adding your song/playlist to the queue.', type: 'error' } }) }
+            if (!result) { return send(ws, { toast: { message: 'There was an error while adding your song/playlist to the queue.', type: 'danger' } }) }
 
             const embed = new MessageEmbed()
               .setAuthor({ name: 'Added to queue.', iconURL: user.displayAvatarURL() })
@@ -128,8 +124,8 @@ module.exports = {
                 .addField('Author', result.author, true)
                 .addField('Position', queue.tracks.indexOf(result).toString(), true)
             }
+            toast.type = 'success'
             queue.channel.send({ embeds: [embed] })
-            await sleep(2)
             break
           }
           case 'clear': {
@@ -145,7 +141,6 @@ module.exports = {
           case 'skipto': {
             queue.skip(data.index)
             toast.message = `Skipped to #${data.index}: "${queue.tracks[1].title}"`
-            await sleep(2)
             break
           }
         }

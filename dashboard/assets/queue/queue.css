@@ -2,6 +2,15 @@
     font-family: 'Bebas Neue', sans-serif;
 }
 
+.alert {
+    width: 25%;
+    position: absolute;
+    right: 1rem;
+    transition: opacity 1s;
+    display: flex;
+    align-items: center;
+}
+
 ul.horizontal-list {
     padding: 0;
     margin: 0;
