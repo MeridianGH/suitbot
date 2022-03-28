@@ -1,6 +1,6 @@
 const html = htm.bind(React.createElement)
 
-const websocket = new WebSocket(location.origin.replace(/(http)(s)?:\/\//, 'wss://'))
+const websocket = new WebSocket('ws://suitbotxyz.herokuapp.com')
 function send (data) {
   data.guildId = guildId
   data.userId = userId
