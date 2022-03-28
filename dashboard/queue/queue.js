@@ -1,6 +1,6 @@
 const html = htm.bind(React.createElement)
 
-const websocket = new WebSocket('ws://localhost')
+const websocket = new WebSocket(location.origin.replace(/(http)(s)?:\/\//, 'ws://'))
 function send (data) {
   data.guildId = guildId
   data.userId = userId
