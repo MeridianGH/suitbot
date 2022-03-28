@@ -14,6 +14,5 @@ module.exports = {
 
     queue.setVolume(volume)
     await interaction.reply(simpleEmbed(`🔊 Set volume to ${volume}%.`))
-    interaction.client.dashboard.update(queue)
   }
 }

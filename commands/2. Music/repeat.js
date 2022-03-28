@@ -18,6 +18,5 @@ module.exports = {
 
     queue.setRepeatMode(mode)
     await interaction.reply(simpleEmbed(`Set repeat mode to ${{ 0: 'None ▶', 1: 'Track 🔂', 2: 'Queue 🔁' }[mode]}`))
-    interaction.client.dashboard.update(queue)
   }
 }

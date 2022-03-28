@@ -16,6 +16,5 @@ module.exports = {
 
     await queue.seek(time)
     await interaction.reply(simpleEmbed(`⏩ Skipped to ${msToHMS(time)}.`))
-    interaction.client.dashboard.update(queue)
   }
 }

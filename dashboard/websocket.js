@@ -4,6 +4,7 @@ const WebsocketServer = require('websocket').server
 const clients = {}
 
 function simplifyQueue (queue) {
+  if (!queue || !queue.playing) { return {} }
   return {
     guild: queue.guild.id,
     nowPlaying: queue.nowPlaying,
@@ -48,7 +49,7 @@ module.exports = {
         const user = await client.users.cache.get(data.userId)
         if (!user) { return ws.close() }
         const queue = client.player.getQueue(guild.id)
-        if (!queue || !queue.playing) { return send(ws, { nowPlaying: false }) }
+        if (!queue || !queue.playing) { return send(ws, {}) }
 
         if (data.type === 'request') { return send(ws, simplifyQueue(queue)) }
 
@@ -104,7 +105,7 @@ module.exports = {
               .setTitle(result.title)
               .setURL(result.url)
               .setThumbnail(result.thumbnail)
-              .setFooter({ text: 'SuitBot', iconURL: client.user.displayAvatarURL() })
+              .setFooter({ text: 'SuitBot Web Dashboard', iconURL: client.user.displayAvatarURL() })
 
             if (result.playlist) {
               toast.message = `Added playlist "${result.title}" to the queue.`
@@ -140,7 +141,6 @@ module.exports = {
           }
         }
         send(ws, { toast: toast })
-        client.dashboard.update(queue)
       })
 
       ws.on('close', () => {

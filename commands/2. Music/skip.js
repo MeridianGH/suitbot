@@ -20,6 +20,5 @@ module.exports = {
       queue.skip()
       await interaction.reply(simpleEmbed('⏭ Skipped.'))
     }
-    interaction.client.dashboard.update(queue)
   }
 }

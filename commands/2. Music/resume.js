@@ -13,6 +13,5 @@ module.exports = {
 
     queue.setPaused(false)
     await interaction.reply(simpleEmbed('▶ Resumed.'))
-    interaction.client.dashboard.update(queue)
   }
 }

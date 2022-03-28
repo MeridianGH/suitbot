@@ -12,6 +12,5 @@ module.exports = {
 
     queue.shuffle()
     await interaction.reply(simpleEmbed('🔀 Shuffled the queue.'))
-    interaction.client.dashboard.update(queue)
   }
 }

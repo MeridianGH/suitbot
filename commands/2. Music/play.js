@@ -42,6 +42,5 @@ module.exports = {
     }
 
     await interaction.editReply({ embeds: [embed] })
-    interaction.client.dashboard.update(queue)
   }
 }

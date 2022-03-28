@@ -12,6 +12,5 @@ module.exports = {
 
     queue.clear()
     await interaction.reply(simpleEmbed('🗑️ Cleared the queue.'))
-    interaction.client.dashboard.update(queue)
   }
 }

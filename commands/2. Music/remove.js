@@ -15,6 +15,5 @@ module.exports = {
     if (index < 1 || index > queue.tracks.length) { return await interaction.reply(simpleEmbed(`You can only specify a song number between 1-${queue.tracks.length}`, true)) }
     const track = queue.remove(index)
     await interaction.reply(simpleEmbed(`🗑️ Removed track \`#${index}\`: **${track.title}**.`))
-    interaction.client.dashboard.update(queue)
   }
 }

@@ -51,6 +51,7 @@ module.exports = class Queue {
 
     this.connection.on('start', () => {
       this.playing = true
+      this.player.client.dashboard.update(this)
     })
 
     this.connection.on('end', () => {
@@ -88,7 +89,7 @@ module.exports = class Queue {
       query.seekTime = options?.seek ?? 0
       const stream = await playdl.stream(query.streamURL, { seek: query.seekTime / 1000 })
       const resource = this.connection.createAudioStream(stream)
-      await this.connection.playAudioStream(resource).then(() => { this.setVolume(this.queueVolume) })
+      await this.connection.playAudioStream(resource).then(() => { this.connection.setVolume(this.queueVolume) })
 
       return query
     }
@@ -285,12 +286,12 @@ module.exports = class Queue {
       await this.connection.playAudioStream(resource).then(() => { this.setVolume(this.queueVolume) })
     }
 
+    this.player.client.dashboard.update(this)
     return added
   }
 
   async search (query, options) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
-    if (!this.connection) { throw new Error('Connection unavailable') }
     if (!query) { return null }
 
     const info = await playdl.search(query, { source: { youtube: 'video' }, limit: 5 })
@@ -321,6 +322,7 @@ module.exports = class Queue {
     if (time >= this.nowPlaying.milliseconds) { return this.skip() }
 
     await this.play(this.nowPlaying, { immediate: true, seek: time })
+    this.player.client.dashboard.update(this)
   }
 
   skip (index = 0) {
@@ -343,6 +345,7 @@ module.exports = class Queue {
 
   stop () {
     if (this.destroyed) { return }
+    this.player.client.dashboard.update({ guild: this.guild })
     this.destroyed = true
     this.connection?.leave()
     this.player.deleteQueue(this.guild.id)
@@ -355,16 +358,20 @@ module.exports = class Queue {
       const j = 1 + Math.floor(Math.random() * i);
       [this.tracks[i], this.tracks[j]] = [this.tracks[j], this.tracks[i]]
     }
+    this.player.client.dashboard.update(this)
   }
 
   remove (index) {
-    return this.tracks.splice(index, 1)[0]
+    const removed = this.tracks.splice(index, 1)[0]
+    this.player.client.dashboard.update(this)
+    return removed
   }
 
   clear () {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     const nowPlaying = this.tracks.shift()
     this.tracks = [nowPlaying]
+    this.player.client.dashboard.update(this)
   }
 
   createProgressBar (body, head) {
@@ -379,6 +386,7 @@ module.exports = class Queue {
   setRepeatMode (mode) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     this.repeatMode = mode
+    this.player.client.dashboard.update(this)
   }
 
   setChannel (channel) {
@@ -411,7 +419,8 @@ module.exports = class Queue {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!this.playing) { throw new Error('Nothing playing') }
-    return this.connection.setPaused(state)
+    this.connection.setPaused(state)
+    this.player.client.dashboard.update(this)
   }
 
   get paused () {
@@ -425,7 +434,8 @@ module.exports = class Queue {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     this.queueVolume = volume
-    return this.connection.setVolume(volume)
+    this.connection.setVolume(volume)
+    this.player.client.dashboard.update(this)
   }
 
   get volume () {
