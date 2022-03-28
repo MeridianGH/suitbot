@@ -38,7 +38,7 @@
   },
   "standard": {
     "ignore": [
-      "/dashboard/assets/queue/queue.js"
+      "/dashboard/queue/queue.js"
     ]
   }
 }

@@ -125,7 +125,6 @@ module.exports = function startDashboard (client) {
 
   // WebSocket
   websocket.setup(client, domain)
-  // TODO: Add to every command that should call this
   client.dashboard.update = function (queue) {
     client.dashboard.emit('update', queue)
   }

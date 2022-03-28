@@ -50,17 +50,12 @@ module.exports = {
         const queue = client.player.getQueue(guild.id)
         if (!queue || !queue.playing) { return send(ws, { nowPlaying: false }) }
 
-        if (data.type !== 'request') {
-          const channel = guild.members.cache.get(user.id)?.voice.channel
-          if (!channel || guild.me.voice.channel && (channel !== guild.me.voice.channel)) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
-        }
+        if (data.type === 'request') { return send(ws, simplifyQueue(queue)) }
+
+        if (guild.members.cache.get(user.id)?.voice.channel !== guild.me.voice.channel) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
 
         const toast = { message: null, type: 'info' }
         switch (data.type) {
-          case 'request': {
-            send(ws, simplifyQueue(queue))
-            return
-          }
           case 'previous': {
             if (queue.currentTime > 5000) {
               await queue.seek(0)
