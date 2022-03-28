@@ -60,6 +60,7 @@ module.exports = {
           .addField('Duration', track.live ? '🔴 Live' : track.duration, true)
           .addField('Author', track.author, true)
           .addField('Position', queue.tracks.indexOf(track).toString(), true)
+          .addField('⚠ WARNING', 'The bot is using a new experimental music system.\nPlease report any bugs you encounter while using music commands or the dashboard!')
           .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
         ],
         components: []

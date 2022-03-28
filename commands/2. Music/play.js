@@ -40,6 +40,7 @@ module.exports = {
         .addField('Author', result.author, true)
         .addField('Position', queue.tracks.indexOf(result).toString(), true)
     }
+    embed.addField('⚠ WARNING', 'The bot is using a new experimental music system.\nPlease report any bugs you encounter while using music commands or the dashboard!')
 
     await interaction.editReply({ embeds: [embed] })
   }
