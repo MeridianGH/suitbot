@@ -6,7 +6,6 @@
 <a href="https://discord.gg/qX2CBrrUpf"><img alt="Discord" src="https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord" height=30></a>
 <br>
 <a href="https://www.npmjs.com/package/discord.js"><img alt="discord.js" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge"></a>
-<a href="https://www.npmjs.com/package/discord-player"><img alt="discord-player" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord-player?color=44b868&logo=npm&style=for-the-badge"></a>
 <a href="https://www.npmjs.com/package/play-dl"><img alt="play-dl" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/play-dl?color=44b868&logo=npm&style=for-the-badge"></a>
 </p>
 
@@ -14,7 +13,7 @@
 
 > A lightweight music and general purpose bot with dashboard, that uses slash commands and buttons to be as user-friendly as possible!
 
-It uses [discord.js](https://discord.js.org/) and [discord-player](https://discord-player.js.org/) for its main features.
+It uses [discord.js](https://discord.js.org/) and [play-dl](https://github.com/play-dl/play-dl) for its main features.
 
 Head on over to the [dashboard](https://suitbot.xyz) for more information!
 
