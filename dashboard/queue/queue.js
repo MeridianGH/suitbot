@@ -53,7 +53,7 @@ function App () {
       <${MediaSession} track=${queue.nowPlaying} paused=${queue.paused} />
       <${Toast} toast=${toast} />
       <${NowPlaying} track=${queue.nowPlaying} paused=${queue.paused} currentTime=${queue.currentTime} repeatMode=${queue.repeatMode} volume=${queue.volume} />
-        <div style=${{ marginBottom: '20px' }} />
+      <div style=${{ marginBottom: '20px' }} />
       <${Queue} tracks=${queue.tracks} />
     </div>
   `
@@ -114,6 +114,9 @@ function MusicControls ({ paused, repeatMode }) {
 
 function VolumeControl (props) {
   const [volume, setVolume] = React.useState(props.volume)
+  React.useEffect(() => {
+    setVolume(props.volume)
+  }, [props.volume])
 
   return html`
     <div>
