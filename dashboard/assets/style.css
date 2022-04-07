@@ -1,11 +1,11 @@
 :root {
-    --background: #212529;
-    --background-light: #373b3e;
-    --background-lighter: #44494d;
-    --text-color: #ffffff;
-    --text-hover: #bbbbbb;
-    --button-color: #373b3e;
-    --button-hover: #212529;
+    --background: #0a0a0a;
+    --background-light: #111111;
+    --background-lighter: #212121;
+    --text-color: #eeeeee;
+    --text-hover: #aaaaaa;
+    --button-color: #232323;
+    --button-hover: #ff0000;
 }
 
 @media (min-width: 992px) { h1.title { font-size: 100px !important; } }
@@ -26,6 +26,7 @@ body {
 a {
     color: var(--text-color);
     text-decoration: none;
+    transition: color 0.5s;
 }
 a:hover {
     color: var(--text-hover);
@@ -58,16 +59,23 @@ a:hover {
 
 /* Card */
 .card {
-    background-color: var(--background-lighter);
+    background-color: var(--background-light);
+    border: 1px solid var(--button-color);
     margin-top: 50px;
     margin-bottom: 50px;
 }
 .card-header {
-    background-color: var(--background-light);
-    color: var(--text-color);
+    background-color: var(--background);
+    border-color: var(--text-color) !important;
 }
 .card-img-top {
     border-radius: 0;
+}
+.server-card {
+    background-color: var(--background-lighter);
+    width: 18rem;
+    margin: 2rem;
+    border-radius: 3px;
 }
 
 /* Buttons */
@@ -77,41 +85,52 @@ a:hover {
     height: 30px;
     margin-right: 5px;
     padding: 0 5px 0 5px;
-    border: 2px solid var(--button-color);
+    border: none;
     border-radius: 5px;
     outline: none;
     vertical-align: middle;
     text-align: center;
+    transition: background-color 0.5s;
 }
 .button:hover {
     background-color: var(--button-hover);
-    border-color: var(--button-hover);
 }
 .button:disabled {
     background-color: var(--button-color);
-    border-color: var(--button-color);
 }
-.button.square {
+.button.icon {
     width: 30px;
-}
-.button.transparent {
     color: var(--text-color);
     background: inherit;
     height: 30px;
     font-size: 20px;
     padding: 0 5px 0 5px;
-    border: 0;
+    border: none;
     outline: none;
     vertical-align: middle;
+    transition: color 0.5s;
 }
-.button.transparent:hover {
+.button.icon:hover {
     color: var(--text-hover);
+}
+
+/* Table */
+.table > :not(caption) > * > * {
+    color: var(--text-color);
+    background-color: var(--background-light);
+}
+th {
+    color: #ff0000 !important;
+}
+td {
+    vertical-align: middle;
 }
 
 .dashboard-button {
     color: var(--text-color);
     background-color: transparent;
     border: 5px solid var(--text-color);
+    transition: background-color 0.5s;
 }
 .dashboard-button:hover {
     color: var(--background);
@@ -122,4 +141,5 @@ a:hover {
 .category-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 25px;
+    color: var(--button-hover);
 }

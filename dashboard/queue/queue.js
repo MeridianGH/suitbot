@@ -1,6 +1,6 @@
 const html = htm.bind(React.createElement)
 
-const websocket = new WebSocket('wss://suitbotxyz.herokuapp.com')
+const websocket = new WebSocket(location.hostname === 'localhost' ? 'ws://localhost' : `wss://${location.hostname}`)
 function send (data) {
   data.guildId = guildId
   data.userId = userId
@@ -102,12 +102,12 @@ function Thumbnail ({ image }) {
 function MusicControls ({ paused, repeatMode }) {
   return html`
     <div>
-      <button className='button square' onClick=${() => { send({ type: 'previous' }) }}><i className='fas fa-backward' /></button>
-      <button className='button square' onClick=${() => { send({ type: 'pause' }) }}><i className=${paused ? 'fas fa-play' : 'fas fa-pause'} /></button>
-      <button className='button square' onClick=${() => { send({ type: 'skip' }) }}><i className='fas fa-forward' /></button>
+      <button className='button icon' onClick=${() => { send({ type: 'previous' }) }}><i className='fas fa-backward' /></button>
+      <button className='button icon' onClick=${() => { send({ type: 'pause' }) }}><i className=${paused ? 'fas fa-play' : 'fas fa-pause'} /></button>
+      <button className='button icon' onClick=${() => { send({ type: 'skip' }) }}><i className='fas fa-forward' /></button>
       <span style=${{ marginRight: '10px' }}></span>
-      <button className='button square' onClick=${() => { send({ type: 'shuffle' }) }}><i className='fas fa-random' /></button>
-      <button className='button square' onClick=${() => { send({ type: 'repeat' }) }}><i className=${repeatMode === 0 ? 'fad fa-repeat-alt' : repeatMode === 1 ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
+      <button className='button icon' onClick=${() => { send({ type: 'shuffle' }) }}><i className='fas fa-random' /></button>
+      <button className='button icon' onClick=${() => { send({ type: 'repeat' }) }}><i className=${repeatMode === 0 ? 'fad fa-repeat-alt' : repeatMode === 1 ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
     </div>
   `
 }
@@ -121,7 +121,7 @@ function VolumeControl (props) {
   return html`
     <div>
       <button className='volume-display' disabled><i className=${volume === 0 ? 'fas fa-volume-off' : volume <= 33 ? 'fas fa-volume-down' : volume <= 66 ? 'fas fa-volume' : 'fas fa-volume-up'} /> ${volume}</button>
-      <input className='volume-slider' type='range' defaultValue=${volume} step='10' min='0' max='100' onInput=${event => { setVolume(event.target.value) }} onMouseUp=${(event => { send({ type: 'volume', volume: event.target.value }) })} />
+      <input className='volume-slider' type='range' defaultValue=${volume} step='1' min='0' max='100' onInput=${event => { setVolume(event.target.value) }} onMouseUp=${(event => { send({ type: 'volume', volume: event.target.value }) })} />
     </div>
   `
 }
@@ -153,7 +153,7 @@ function Queue ({ tracks }) {
         <td><span className='text-nowrap'>${tracks[i].title}</span></td>
         <td><span className='text-nowrap'>${tracks[i].author}</span></td>
         <td><span className='text-nowrap'>${tracks[i].live ? '🔴 Live' : tracks[i].duration}</span></td>
-        <td><span className='text-nowrap'><button className='button square transparent' onClick=${() => { send({ type: 'remove', index: i }) }}><i className='fas fa-trash-alt' /></button><button className='button square transparent' onClick=${() => { send({ type: 'skipto', index: i }) }}><i className='fas fa-forward' /></button></span></td>
+        <td><span className='text-nowrap'><button className='button icon' onClick=${() => { send({ type: 'remove', index: i }) }}><i className='fas fa-trash-alt' /></button><button className='button icon' onClick=${() => { send({ type: 'skipto', index: i }) }}><i className='fas fa-forward' /></button></span></td>
       </tr>
     `)
   }
@@ -162,7 +162,7 @@ function Queue ({ tracks }) {
       <h1 className='queue-title'>Queue</h1>
       <${QueueButtons} />
       <div className='table-responsive'>
-        <table className='table table-dark table-striped'>
+        <table className='table table-dark'>
           <thead>
             <tr>
               <th>#</th>
@@ -204,7 +204,7 @@ function Toast (props) {
 
   if (!toast) { return null }
   return html`
-    <div className="alert alert-${toast.type}" style=${{ opacity: opacity }}>
+    <div className="alert alert-${toast.type}" style=${{ backgroundColor: toast.type === 'danger' ? '#ff0000' : toast.type === 'success' ? '#6cff57' : '#9afffd', opacity: opacity }}>
       <span><i className="fas fa-${toast.type === 'danger' ? 'exclamation' : toast.type === 'success' ? 'check' : 'info'}-circle fa-2x"></i></span><span style=${{ fontSize: '1.2em', marginLeft: '5px' }}>${toast.message}</span>
     </div>
   `

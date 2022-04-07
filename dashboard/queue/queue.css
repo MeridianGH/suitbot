@@ -55,7 +55,7 @@ ul.horizontal-list li {
 
 .progress-container {
     width: 356px;
-    background-color: #373b3e
+    background-color: var(--button-color)
 }
 .progress {
     width: 0;
@@ -71,7 +71,7 @@ ul.horizontal-list li {
     margin-right: 5px;
     padding-left: 5px;
     padding-right: 5px;
-    border: 2px solid var(--button-color);
+    border: none;
     border-radius: 5px;
     outline: none;
     vertical-align: bottom;
@@ -85,16 +85,20 @@ ul.horizontal-list li {
     width: 286px;
     border-radius: 5px;
     cursor: pointer;
-    background: var(--button-color);
+    background-color: var(--button-color);
 }
 .volume-slider::-webkit-slider-thumb, .volume-slider::-moz-range-thumb {
     -webkit-appearance: none;
-    height: 20px;
-    width: 20px;
+    height: 15px;
+    width: 15px;
     border-radius: 100%;
     border-width: 5px;
     border-color: var(--button-color);
-    background: var(--text-color);
+    background-color: var(--text-color);
+    transition: background-color 0.5s;
+}
+.volume-slider:hover::-webkit-slider-thumb, .volume-slider:hover::-moz-range-thumb {
+    background-color: var(--button-hover);
 }
 
 .queue-button-container {
@@ -110,16 +114,9 @@ ul.horizontal-list li {
     height: 30px;
     margin-right: 5px;
     padding: 0 5px;
-    border: 2px solid var(--button-color);
+    border: none;
     border-radius: 5px;
     outline: none;
-}
-
-.table > :not(caption) > * > * {
-    color: var(--text-color);
-    background-color: var(--background-light);
-}
-td {
     vertical-align: middle;
 }
 

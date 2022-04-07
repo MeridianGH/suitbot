@@ -55,7 +55,7 @@ module.exports = {
 
         if (guild.members.cache.get(user.id)?.voice.channel !== guild.me.voice.channel) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
 
-        const toast = { message: null, type: 'info' }
+        let toast = null
         switch (data.type) {
           case 'previous': {
             if (queue.currentTime > 5000) {
@@ -64,7 +64,7 @@ module.exports = {
             }
             try {
               await queue.previous()
-              toast.message = 'Skipped to previous song.'
+              toast = { message: 'Skipped to previous song.', type: 'info' }
             } catch (e) {
               await queue.seek(0)
             }
@@ -72,27 +72,26 @@ module.exports = {
           }
           case 'pause': {
             queue.setPaused(!queue.connection.paused)
-            toast.message = queue.connection.paused ? 'Paused.' : 'Resumed.'
+            toast = { message: queue.connection.paused ? 'Paused.' : 'Resumed.', type: 'info' }
             break
           }
           case 'skip': {
             queue.skip()
-            toast.message = 'Skipped.'
+            toast = { message: 'Skipped.', type: 'info' }
             break
           }
           case 'shuffle': {
             queue.shuffle()
-            toast.message = 'Shuffled the queue.'
+            toast = { message: 'Shuffled the queue.', type: 'info' }
             break
           }
           case 'repeat': {
             queue.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1)
-            toast.message = `Set repeat mode to "${{ 0: 'None', 1: 'Track', 2: 'Queue' }[queue.repeatMode]}"`
+            toast = { message: `Set repeat mode to "${{ 0: 'None', 1: 'Track', 2: 'Queue' }[queue.repeatMode]}"`, type: 'info' }
             break
           }
           case 'volume': {
             queue.setVolume(data.volume)
-            toast.message = `Set volume to ${data.volume}.`
             break
           }
           case 'play': {
@@ -108,39 +107,38 @@ module.exports = {
               .setFooter({ text: 'SuitBot Web Dashboard', iconURL: client.user.displayAvatarURL() })
 
             if (result.playlist) {
-              toast.message = `Added playlist "${result.title}" to the queue.`
+              toast = { message: `Added playlist "${result.title}" to the queue.`, type: 'success' }
               embed
                 .addField('Amount', `${result.tracks.length} songs`, true)
                 .addField('Author', result.author, true)
                 .addField('Position', `${queue.tracks.indexOf(result.tracks[0]).toString()}-${queue.tracks.indexOf(result.tracks[result.tracks.length - 1]).toString()}`, true)
             } else {
-              toast.message = `Added "${result.title}" to the queue.`
+              toast = { message: `Added "${result.title}" to the queue.`, type: 'success' }
               embed
                 .addField('Duration', result.live ? '🔴 Live' : result.duration, true)
                 .addField('Author', result.author, true)
                 .addField('Position', queue.tracks.indexOf(result).toString(), true)
             }
-            toast.type = 'success'
             queue.channel.send({ embeds: [embed] })
             break
           }
           case 'clear': {
             queue.clear()
-            toast.message = 'Cleared the queue.'
+            toast = { message: 'Cleared the queue.', type: 'info' }
             break
           }
           case 'remove': {
             const track = queue.remove(data.index)
-            toast.message = `Removed track #${data.index}: "${track.title}"`
+            toast = { message: `Removed track #${data.index}: "${track.title}"`, type: 'info' }
             break
           }
           case 'skipto': {
             queue.skip(data.index)
-            toast.message = `Skipped to #${data.index}: "${queue.tracks[1].title}"`
+            toast = { message: `Skipped to #${data.index}: "${queue.tracks[1].title}"`, type: 'info' }
             break
           }
         }
-        send(ws, { toast: toast })
+        if (toast) { send(ws, { toast: toast }) }
       })
 
       ws.on('close', () => {

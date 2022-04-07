@@ -1,18 +1,18 @@
 <%- include("partials/header", { djsClient, user, path, title: "Your Servers" }) %>
 
 <div class="card col-sm-10 offset-sm-1">
-  <header class="card-header">
+  <header class="card-header border-primary">
     <div><i class="fas fa-list"></i> Your Servers</div>
   </header>
   <div class="card-body">
     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
       <% user.guilds.forEach(guild => { if (!djsClient.guilds.cache.get(guild.id)) { return } %>
-      <div class="card <%= djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? 'border border-success border-4' : 'border-0' %>" style="width: 18rem; margin: 2rem; background-color: #ffffff; border-radius: 3px;">
+      <div class="card server-card" style="<%= djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? 'border: 4px solid #6cff57' : '' %>">
         <img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : '/assets/img/generic_server.png' %>" class="card-img-top" style="max-width: 18rem;">
         <div class="card-body">
           <%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `<a href="/dashboard/${guild.id}" class="stretched-link"></a>` : '' %>
-          <h5 class="card-title" style="color: #000000;"><%= guild.name %></h5>
-          <p class="card-text" style="color: #000000;"><%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `Now Playing:<br>${djsClient.player.getQueue(guild.id).nowPlaying.title}` : 'Nothing playing on this server.' %></p>
+          <h5 class="card-title"><%= guild.name %></h5>
+          <p class="card-text"><%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `Now Playing:<br>${djsClient.player.getQueue(guild.id).nowPlaying.title}` : 'Nothing playing on this server.' %></p>
         </div>
       </div>
       <% }) %>
