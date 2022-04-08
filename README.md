@@ -105,7 +105,7 @@ Rename `config_example.json` to `config.json` and replace the placeholders insid
 - Get your YouTube cookie like described in this **[Guide](https://github.com/play-dl/play-dl/blob/main/instructions/README.md)**, but don't create any file. Just paste it in here.
 - Get a Genius API application **[here](https://docs.genius.com/)**, generate an access token and paste it here. Can be an empty string.
 
-Use `node deploy-commands.js` to update and add commands in the guild you specified and `node deploy-commands-global.js` to update the commands in every guild the bot is in.\
+Use `node deploy-commands.js` to update and add commands in the guild you specified and `node deploy-commands.js global` to update the commands in every guild the bot is in.\
 Guild commands are refreshed instantly while global commands can take up to an hour.
 
 Start the bot with
