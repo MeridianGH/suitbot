@@ -16,11 +16,11 @@ export const { data, execute } = {
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
     await interaction.deferReply()
 
-    const musicInfo = (await playdl.video_basic_info(queue.nowPlaying.streamURL)).video_details.music
-    console.log(musicInfo)
+    const musicInfo = (await playdl.video_basic_info(queue.nowPlaying.streamURL, { language: 'en-US' })).video_details.music
+    const title = musicInfo ? musicInfo[0].artist + ' ' + musicInfo[0].song : queue.nowPlaying.title
 
     try {
-      const song = (await Genius.songs.search(queue.nowPlaying.title))[0]
+      const song = (await Genius.songs.search(title))[0]
       const lyrics = await song.lyrics()
 
       const lines = lyrics.split('\n')
