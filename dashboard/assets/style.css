@@ -36,7 +36,7 @@ a:hover {
 /* Navbar */
 .navbar-dark, .navbar-expand-lg .navbar-nav {
     border: 0;
-    background-color: var(--background-light);
+    background-color: var(--background);
     text-align: center;
 }
 .navbar-dark .navbar-nav .nav-link, .navbar-dark .navbar-brand {
