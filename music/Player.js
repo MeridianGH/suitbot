@@ -1,10 +1,11 @@
-const { Collection } = require('discord.js')
-const playdl = require('play-dl')
-const Queue = require('./Queue')
-const { simpleEmbed } = require('../utilities')
+import { Collection } from 'discord.js'
+import playdl from 'play-dl'
+import { Queue } from './Queue.js'
+import { simpleEmbed } from '../utilities.js'
+import { cookie } from '../config.js'
 
 // noinspection JSIgnoredPromiseFromCall
-module.exports = class Player {
+export class Player {
   constructor (client) {
     this.client = client
     this.queues = new Collection()
@@ -14,7 +15,7 @@ module.exports = class Player {
     })
 
     playdl.getFreeClientID().then(clientId => { playdl.setToken({ soundcloud: { client_id: clientId } }) })
-    playdl.setToken({ youtube: { cookie: process.env.cookie ?? require('../config.json').cookie } })
+    playdl.setToken({ youtube: { cookie: cookie } })
   }
 
   createQueue (guildId) {

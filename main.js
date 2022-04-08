@@ -1,8 +1,8 @@
-const { Client, Collection, Intents } = require('discord.js')
-const Player = require('./music/Player')
-const { getFilesRecursively, errorEmbed } = require('./utilities')
+import { Client, Collection, Intents } from 'discord.js'
+import { Player } from './music/Player.js'
+import { errorEmbed, getFilesRecursively } from './utilities.js'
 
-const token = process.env.token ?? require('./config.json').token
+import { token } from './config.js'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 client.player = new Player(client)
@@ -10,17 +10,17 @@ client.player = new Player(client)
 // Commands
 client.commands = new Collection()
 for (const file of getFilesRecursively('./commands')) {
-  const command = require(`./${file}`)
+  const command = (await import(`./${file}`))
   client.commands.set(command.data.name, command)
 }
 
 // Events
 for (const file of getFilesRecursively('./events')) {
-  const event = require(`./${file}`)
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args))
+  const event = (await import(`./${file}`))
+  if (event.data.once) {
+    client.once(event.data.name, (...args) => event.execute(...args))
   } else {
-    client.on(event.name, (...args) => event.execute(...args))
+    client.on(event.data.name, (...args) => event.execute(...args))
   }
 }
 process.on('SIGTERM', shutdown)
@@ -43,4 +43,4 @@ async function shutdown () {
 }
 
 // Login
-client.login(token)
+await client.login(token)

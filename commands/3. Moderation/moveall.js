@@ -1,9 +1,9 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed } = require('../../utilities')
-const { MessageEmbed, Permissions } = require('discord.js')
-const { ChannelType } = require('discord-api-types/v9')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { simpleEmbed } from '../../utilities.js'
+import { MessageEmbed, Permissions } from 'discord.js'
+import { ChannelType } from 'discord-api-types/v9'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('moveall')
     .setDescription('Moves all users from the first channel to the second channel.')

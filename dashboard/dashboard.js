@@ -1,24 +1,27 @@
 // noinspection JSCheckFunctionSignatures
 
-const express = require('express')
+import express from 'express'
 const app = express()
-const minify = require('express-minify')
-const ejs = require('ejs')
+import minify from 'express-minify'
+import ejs from 'ejs'
 
-const passport = require('passport')
-const { Strategy } = require('passport-discord')
-const session = require('express-session')
-const MemoryStore = require('memorystore')(session)
-const { randomBytes } = require('crypto')
+import passport from 'passport'
+import { Strategy } from 'passport-discord'
+import session from 'express-session'
+import memorystore from 'memorystore'
+const MemoryStore = memorystore(session)
+import { randomBytes } from 'crypto'
 
-const path = require('path')
-const fetch = require('node-fetch')
-const websocket = require('./websocket')
+import path from 'path'
+import fetch from 'node-fetch'
+import { setupWebsocket } from './websocket.js'
+import { appId, clientSecret, adminId } from '../config.js'
 
-const clientId = process.env.appId ?? require('../config.json').appId
-const clientSecret = process.env.clientSecret ?? require('../config.json').clientSecret
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-module.exports = function startDashboard (client) {
+export function startDashboard (client) {
   const port = process.env.PORT ?? 80
   const domain = process.env.PORT ? 'https://suitbotxyz.herokuapp.com' : 'http://localhost'
 
@@ -34,7 +37,7 @@ module.exports = function startDashboard (client) {
   // Passport Discord login
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((obj, done) => done(null, obj))
-  passport.use(new Strategy({ clientID: clientId, clientSecret: clientSecret, callbackURL: `${domain}/callback`, scope: ['identify', 'guilds'] }, (accessToken, refreshToken, profile, done) => { process.nextTick(() => done(null, profile)) }))
+  passport.use(new Strategy({ clientID: appId, clientSecret: clientSecret, callbackURL: `${domain}/callback`, scope: ['identify', 'guilds'] }, (accessToken, refreshToken, profile, done) => { process.nextTick(() => done(null, profile)) }))
 
   app.use(session({
     store: new MemoryStore({ checkPeriod: 86400000 }),
@@ -112,8 +115,7 @@ module.exports = function startDashboard (client) {
   })
 
   // Admin endpoint.
-  app.get('/admin', checkAuth, (req, res) => {
-    const adminId = process.env.adminId ? process.env.adminId : require('../config.json').adminId
+  app.get('/admin', checkAuth, async (req, res) => {
     if (req.user.id !== adminId) { return res.redirect('/') }
     render(req, res, 'admin.ejs')
   })
@@ -124,7 +126,7 @@ module.exports = function startDashboard (client) {
   })
 
   // WebSocket
-  websocket.setup(client, domain)
+  setupWebsocket(client, domain)
   client.dashboard.update = function (queue) {
     client.dashboard.emit('update', queue)
   }

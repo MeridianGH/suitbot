@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed, Permissions } = require('discord.js')
-const { simpleEmbed } = require('../../utilities')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageEmbed, Permissions } from 'discord.js'
+import { simpleEmbed } from '../../utilities.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('slowmode')
     .setDescription('Sets the rate limit of the current channel.')

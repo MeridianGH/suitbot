@@ -1,7 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed, msToHMS, timeToMs } = require('../../utilities')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { msToHMS, simpleEmbed, timeToMs } from '../../utilities.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('seek')
     .setDescription('Skips to the specified point in the current track.')

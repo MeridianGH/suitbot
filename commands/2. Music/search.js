@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js')
-const { simpleEmbed, errorEmbed } = require('../../utilities')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
+import { errorEmbed, simpleEmbed } from '../../utilities.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('search')
     .setDescription('Searches five songs from YouTube and lets you select one to play.')

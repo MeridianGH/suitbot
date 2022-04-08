@@ -1,7 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed } = require('../../utilities')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { simpleEmbed } from '../../utilities.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('volume')
     .setDescription('Sets the volume of the music player.')

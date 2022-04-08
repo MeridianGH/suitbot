@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const fs = require('fs')
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import fs from 'fs'
+import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('help')
     .setDescription('Replies with help on how to use this bot.')
@@ -42,7 +42,7 @@ module.exports = {
     for (const [category, commands] of Object.entries(categories)) {
       let description = ''
       for (const command of commands) {
-        const commandData = require(`../${category}/${command}`)
+        const commandData = (await import(`../${category}/${command}`))
         description = description + `\`${commands.indexOf(command) + 1}.\` **/${commandData.data.name}:** ${commandData.data.description}\n\n`
       }
       description = description + '\u2015'.repeat(34)

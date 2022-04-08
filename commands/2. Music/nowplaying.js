@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed } = require('discord.js')
-const { simpleEmbed } = require('../../utilities')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageEmbed } from 'discord.js'
+import { simpleEmbed } from '../../utilities.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('nowplaying')
     .setDescription('Shows the currently playing song.'),

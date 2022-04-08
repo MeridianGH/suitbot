@@ -1,7 +1,7 @@
-const { errorEmbed } = require('../utilities')
+import { errorEmbed } from '../utilities.js'
 
-module.exports = {
-  name: 'interactionCreate',
+export const { data, execute } = {
+  data: { name: 'interactionCreate' },
   async execute (interaction) {
     if (!interaction.isCommand()) { return }
     if (interaction.guild === null) { return await interaction.reply(errorEmbed('Error', 'Commands are not supported in DMs.\nPlease use the bot in a server.')) }

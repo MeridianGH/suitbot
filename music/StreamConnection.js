@@ -1,9 +1,8 @@
-const voice = require('@discordjs/voice')
-const { EventEmitter } = require('events')
-const { sleep } = require('../utilities')
-const { VoiceConnectionStatus } = require('@discordjs/voice')
+import * as voice from '@discordjs/voice'
+import { EventEmitter } from 'events'
+import { sleep } from '../utilities.js'
 
-module.exports = class StreamConnection extends EventEmitter {
+export class StreamConnection extends EventEmitter {
   constructor (connection, channel) {
     super()
     this.connection = connection
@@ -71,7 +70,7 @@ module.exports = class StreamConnection extends EventEmitter {
     if (!resource) { throw new Error('No resource available') }
     if (!this.resource) { this.resource = resource }
 
-    if (this.connection.state.status !== VoiceConnectionStatus.Ready) { await this._waitForReady() }
+    if (this.connection.state.status !== voice.VoiceConnectionStatus.Ready) { await this._waitForReady() }
 
     this.player.play(resource)
   }

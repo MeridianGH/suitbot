@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed } = require('../../utilities')
-const { Permissions } = require('discord.js')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { simpleEmbed } from '../../utilities.js'
+import { Permissions } from 'discord.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('purge')
     .setDescription('Clears a specified amount of messages.')

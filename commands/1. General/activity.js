@@ -1,10 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed, errorEmbed } = require('../../utilities')
-const discordRest = require('@discordjs/rest')
-const { Routes, ChannelType } = require('discord-api-types/v9')
-const { MessageEmbed } = require('discord.js')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { errorEmbed, simpleEmbed } from '../../utilities.js'
+import discordRest from '@discordjs/rest'
+import { ChannelType, Routes } from 'discord-api-types/v9'
+import { MessageEmbed } from 'discord.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('activity')
     .setDescription('Creates a Discord activity.')

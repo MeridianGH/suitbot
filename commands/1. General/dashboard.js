@@ -1,7 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed } = require('discord.js')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageEmbed } from 'discord.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('dashboard')
     .setDescription('Sends a link to the dashboard.'),

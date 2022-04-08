@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed } = require('discord.js')
-const { timeSince } = require('../../utilities')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageEmbed } from 'discord.js'
+import { timeSince } from '../../utilities.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('serverinfo')
     .setDescription('Shows info about the server.'),

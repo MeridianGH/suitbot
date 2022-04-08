@@ -1,11 +1,12 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
-const { simpleEmbed } = require('../../utilities')
-const playdl = require('play-dl')
-const genius = require('genius-lyrics')
-const Genius = new genius.Client(process.env.geniusAppId ?? require('../../config.json').geniusAppId)
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
+import { simpleEmbed } from '../../utilities.js'
+import playdl from 'play-dl'
+import { geniusAppId } from '../../config.js'
+import genius from 'genius-lyrics'
+const Genius = new genius.Client(geniusAppId)
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('lyrics')
     .setDescription('Shows the lyrics of the currently playing song.'),

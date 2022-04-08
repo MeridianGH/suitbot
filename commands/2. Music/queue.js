@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
-const { simpleEmbed, msToHMS } = require('../../utilities')
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
+import { msToHMS, simpleEmbed } from '../../utilities.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('queue')
     .setDescription('Displays the queue.'),

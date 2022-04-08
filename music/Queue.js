@@ -1,10 +1,10 @@
-const voice = require('@discordjs/voice')
-const playdl = require('play-dl')
-const StreamConnection = require('./StreamConnection')
-const { errorEmbed, msToHMS } = require('../utilities')
-const { getPreview, getData, getTracks } = require('spotify-url-info')
+import * as voice from '@discordjs/voice'
+import playdl from 'play-dl'
+import { StreamConnection } from './StreamConnection.js'
+import { errorEmbed, msToHMS } from '../utilities.js'
+import { getData, getPreview, getTracks } from 'spotify-url-info'
 
-module.exports = class Queue {
+export class Queue {
   constructor (player, guild) {
     this.player = player
     this.guild = guild

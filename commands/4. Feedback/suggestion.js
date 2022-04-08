@@ -1,9 +1,9 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { simpleEmbed } = require('../../utilities')
-const { MessageEmbed } = require('discord.js')
-const guildId = process.env.guildId ?? require('../../config.json').guildId
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { simpleEmbed } from '../../utilities.js'
+import { MessageEmbed } from 'discord.js'
+import { guildId } from '../../config.js'
 
-module.exports = {
+export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('suggestion')
     .setDescription('Sends a suggestion to the developer.')
