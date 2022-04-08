@@ -56,11 +56,11 @@ module.exports = {
     }
 
     const previous = new MessageButton()
-      .setCustomId('previousHelp')
+      .setCustomId('previous')
       .setLabel('Previous')
       .setStyle('PRIMARY')
     const next = new MessageButton()
-      .setCustomId('nextHelp')
+      .setCustomId('next')
       .setLabel('Next')
       .setStyle('PRIMARY')
 
@@ -70,7 +70,7 @@ module.exports = {
     // Collect button interactions (when a user clicks a button)
     const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
     collector.on('collect', async buttonInteraction => {
-      buttonInteraction.customId === 'previousHelp' ? (currentIndex -= 1) : (currentIndex += 1)
+      buttonInteraction.customId === 'previous' ? (currentIndex -= 1) : (currentIndex += 1)
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
     })
     collector.on('end', async (collected) => {
