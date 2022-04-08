@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import { errorEmbed, simpleEmbed } from '../../utilities.js'
+import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()

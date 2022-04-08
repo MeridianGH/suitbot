@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { msToHMS, simpleEmbed, timeToMs } from '../../utilities.js'
+import { msToHMS, simpleEmbed, timeToMs } from '../../utilities/utilities.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()

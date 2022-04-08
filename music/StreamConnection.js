@@ -1,6 +1,6 @@
 import * as voice from '@discordjs/voice'
 import { EventEmitter } from 'events'
-import { sleep } from '../utilities.js'
+import { sleep } from '../utilities/utilities.js'
 
 export class StreamConnection extends EventEmitter {
   constructor (connection, channel) {

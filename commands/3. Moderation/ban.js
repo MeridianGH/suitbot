@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { GuildMember, MessageEmbed, Permissions } from 'discord.js'
-import { simpleEmbed } from '../../utilities.js'
+import { simpleEmbed } from '../../utilities/utilities.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()

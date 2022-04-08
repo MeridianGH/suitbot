@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import { timeSince } from '../../utilities.js'
+import { timeSince } from '../../utilities/utilities.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()

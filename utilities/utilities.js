@@ -6,7 +6,7 @@ export async function simpleEmbed (content, ephemeral = false) {
   return {
     embeds: [new MessageEmbed()
       .setDescription(content)
-      .setFooter({ text: 'SuitBot', iconURL: (await import('./events/ready')).iconURL })
+      .setFooter({ text: 'SuitBot', iconURL: (await import('../events/ready.js')).iconURL })
     ],
     ephemeral: ephemeral
   }
@@ -17,7 +17,7 @@ export async function errorEmbed (title, content, ephemeral = false) {
     embeds: [new MessageEmbed()
       .setTitle(title)
       .setDescription(content)
-      .setFooter({ text: 'SuitBot', iconURL: (await import('./events/ready')).iconURL })
+      .setFooter({ text: 'SuitBot', iconURL: (await import('../events/ready.js')).iconURL })
       .setColor('#ff0000')],
     ephemeral: ephemeral
   }

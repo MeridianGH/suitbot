@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
-import { simpleEmbed } from '../../utilities.js'
+import { simpleEmbed } from '../../utilities/utilities.js'
 import playdl from 'play-dl'
-import { geniusAppId } from '../../config.js'
+import { geniusAppId } from '../../utilities/config.js'
 import genius from 'genius-lyrics'
 const Genius = new genius.Client(geniusAppId)
 

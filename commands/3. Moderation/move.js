@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { simpleEmbed } from '../../utilities.js'
+import { simpleEmbed } from '../../utilities/utilities.js'
 import { GuildMember, MessageEmbed, Permissions } from 'discord.js'
 import { ChannelType } from 'discord-api-types/v9'
 

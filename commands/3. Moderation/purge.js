@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { simpleEmbed } from '../../utilities.js'
+import { simpleEmbed } from '../../utilities/utilities.js'
 import { Permissions } from 'discord.js'
 
 export const { data, execute } = {

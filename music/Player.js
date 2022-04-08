@@ -1,8 +1,8 @@
 import { Collection } from 'discord.js'
 import playdl from 'play-dl'
 import { Queue } from './Queue.js'
-import { simpleEmbed } from '../utilities.js'
-import { cookie } from '../config.js'
+import { simpleEmbed } from '../utilities/utilities.js'
+import { cookie } from '../utilities/config.js'
 
 // noinspection JSIgnoredPromiseFromCall
 export class Player {

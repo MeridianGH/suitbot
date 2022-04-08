@@ -1,8 +1,8 @@
 import { Client, Collection, Intents } from 'discord.js'
 import { Player } from './music/Player.js'
-import { errorEmbed, getFilesRecursively } from './utilities.js'
+import { errorEmbed, getFilesRecursively } from './utilities/utilities.js'
 
-import { token } from './config.js'
+import { token } from './utilities/config.js'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 client.player = new Player(client)

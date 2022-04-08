@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
-import { msToHMS, simpleEmbed } from '../../utilities.js'
+import { msToHMS, simpleEmbed } from '../../utilities/utilities.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()

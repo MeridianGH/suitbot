@@ -1,7 +1,7 @@
 import * as voice from '@discordjs/voice'
 import playdl from 'play-dl'
 import { StreamConnection } from './StreamConnection.js'
-import { errorEmbed, msToHMS } from '../utilities.js'
+import { errorEmbed, msToHMS } from '../utilities/utilities.js'
 import { getData, getPreview, getTracks } from 'spotify-url-info'
 
 export class Queue {

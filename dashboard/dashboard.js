@@ -15,7 +15,7 @@ import { randomBytes } from 'crypto'
 import path from 'path'
 import fetch from 'node-fetch'
 import { setupWebsocket } from './websocket.js'
-import { appId, clientSecret, adminId } from '../config.js'
+import { appId, clientSecret, adminId } from '../utilities/config.js'
 
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
