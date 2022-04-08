@@ -1,15 +1,8 @@
 import { existsSync } from 'fs'
 import { readFile } from 'fs/promises'
 
-const config = existsSync('../config.json') ? JSON.parse(await readFile(new URL('../config.json', import.meta.url))) : {
-  token: null,
-  appId: null,
-  clientSecret: null,
-  guildId: null,
-  adminId: null,
-  cookie: null,
-  geniusAppId: null
-}
+const file = new URL('../config.json', import.meta.url)
+const config = existsSync(file) ? JSON.parse(await readFile(file)) : {}
 
 if (process.env.token) {
   Object.keys(config).map(key => {
