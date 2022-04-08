@@ -53,6 +53,7 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 | Command     | Description                                                       |
 |-------------|-------------------------------------------------------------------|
 | /clear      | Clears the queue.                                                 |
+| /lyrics     | Shows the lyrics of the currently playing song.                   |
 | /nowplaying | Shows the currently playing song.                                 |
 | /pause      | Pauses playback.                                                  |
 | /play       | Searches and plays a song or playlist from YouTube or Spotify.    |
@@ -102,6 +103,7 @@ Rename `config_example.json` to `config.json` and replace the placeholders insid
 - The Guild ID of the server in which you want to test the bot. To get this ID, activate `Developer Mode` in Discord's options and right-click your server.
 - Your User ID of your Discord account which will be your Admin-Account for the bot. Right-click yourself with `Developer Mode` activated.
 - Get your YouTube cookie like described in this **[Guide](https://github.com/play-dl/play-dl/blob/main/instructions/README.md)**, but don't create any file. Just paste it in here.
+- Get a Genius API application **[here](https://docs.genius.com/)**, generate an access token and paste it here. Can be an empty string.
 
 Use `node deploy-commands.js` to update and add commands in the guild you specified and `node deploy-commands-global.js` to update the commands in every guild the bot is in.\
 Guild commands are refreshed instantly while global commands can take up to an hour.

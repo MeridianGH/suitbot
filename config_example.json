@@ -4,5 +4,6 @@
 	"clientSecret": "yourClientSecret",
 	"guildId": "yourGuildID",
 	"adminId": "yourUserID",
-	"cookie": "yourYTCookie"
+	"cookie": "yourYTCookie",
+	"geniusAppId": "yourGeniusAppId"
 }
