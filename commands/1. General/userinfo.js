@@ -12,7 +12,8 @@ export const { data, execute } = {
     if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
 
     let userStatus
-    switch (member.presence.status) {
+    const status = member.presence?.status ?? 'offline'
+    switch (status) {
       case 'online':
         userStatus = '🟢 Online'
         break
@@ -23,7 +24,6 @@ export const { data, execute } = {
         userStatus = '🔴 Do not Disturb'
         break
       case 'offline':
-      case 'invisible': // I have no idea if I really need this, but it's error proof.
         userStatus = '⚫ Offline'
         break
     }
