@@ -180,7 +180,7 @@ export class Queue {
         const info = await getPreview(query)
         if (!info) { return null }
 
-        const tracks = (await getTracks(query)).map(async track => {
+        const tracks = await Promise.all((await getTracks(query)).map(async track => {
           // noinspection JSUnresolvedVariable
           return {
             title: track.artists[0].name + ' - ' + track.name,
@@ -195,7 +195,7 @@ export class Queue {
             live: false,
             track: true
           }
-        })
+        }))
 
         added = {
           title: info.title,
