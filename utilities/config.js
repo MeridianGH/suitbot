@@ -9,5 +9,6 @@ if (process.env.token) {
     config[key] = process.env[key]
   })
 }
+console.log(config)
 
 export const { token, appId, clientSecret, guildId, adminId, cookie, geniusAppId } = config
