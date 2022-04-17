@@ -7,10 +7,6 @@ function send (data) {
   websocket.send(JSON.stringify(data))
 }
 
-const loader = document.getElementById('loader')
-
-'use strict'
-
 function App () {
   const [queue, setQueue] = React.useState(null)
   const [toast, setToast] = React.useState(null)
@@ -20,7 +16,7 @@ function App () {
       send({ type: 'request' })
     })
     websocket.addEventListener('message', message => {
-      loader.remove()
+      document.getElementById('loader')?.remove()
       const data = JSON.parse(message.data)
       if (data.toast) {
         setToast(data.toast)
