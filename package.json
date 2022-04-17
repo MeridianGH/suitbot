@@ -1,17 +1,14 @@
 {
   "name": "suitbot",
-  "version": "1.0.0",
   "description": "A lightweight music and general purpose bot, that uses slash commands and buttons to be as user-friendly as possible!",
+  "homepage": "https://suitbot.xyz",
+  "author": "Meridian",
+  "license": "Apache-2.0",
   "main": "main.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "engines": {
     "node": "16.x"
   },
-  "author": "Meridian",
-  "license": "Apache-2.0",
   "dependencies": {
     "@discordjs/builders": "^0.7.0",
     "@discordjs/opus": "*",
@@ -20,7 +17,7 @@
     "body-parser": "^1.19.0",
     "discord-api-types": "^0.23.1",
     "discord.js": "13.6.0",
-    "ejs": "^3.1.6",
+    "ejs": "^3.0.2",
     "express": "^4.17.1",
     "express-minify": "^1.0.0",
     "express-session": "^1.17.2",
@@ -35,7 +32,7 @@
     "websocket": "^1.0.34"
   },
   "devDependencies": {
-    "ejs-lint": "^1.2.1",
+    "ejs-lint": "^1.1.0",
     "standard": "^16.0.4"
   },
   "standard": {
