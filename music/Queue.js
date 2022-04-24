@@ -49,6 +49,10 @@ export class Queue {
       })
     }
 
+    setTimeout(() => {
+      if (!this.playing) { this.stop() }
+    }, 30000)
+
     this.connection.on('start', () => {
       this.playing = true
       this.player.client.dashboard.update(this)
