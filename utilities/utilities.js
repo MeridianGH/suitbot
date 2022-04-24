@@ -1,23 +1,24 @@
 import { MessageEmbed } from 'discord.js'
 import fs from 'fs'
 import path from 'path'
+import { iconURL } from '../events/ready.js'
 
-export async function simpleEmbed (content, ephemeral = false) {
+export function simpleEmbed (content, ephemeral = false) {
   return {
     embeds: [new MessageEmbed()
       .setDescription(content)
-      .setFooter({ text: 'SuitBot', iconURL: (await import('../events/ready.js')).iconURL })
+      .setFooter({ text: 'SuitBot', iconURL: iconURL })
     ],
     ephemeral: ephemeral
   }
 }
 
-export async function errorEmbed (title, content, ephemeral = false) {
+export function errorEmbed (title, content, ephemeral = false) {
   return {
     embeds: [new MessageEmbed()
       .setTitle(title)
       .setDescription(content)
-      .setFooter({ text: 'SuitBot', iconURL: (await import('../events/ready.js')).iconURL })
+      .setFooter({ text: 'SuitBot', iconURL: iconURL })
       .setColor('#ff0000')],
     ephemeral: ephemeral
   }
