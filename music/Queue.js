@@ -64,6 +64,7 @@ export class Queue {
 
       if (this.tracks.length === 0 && this.repeatMode === 0) {
         // Queue empty
+        this.player.client.dashboard.update(this)
         setTimeout(() => { if (!this.playing) { this.stop() } }, 30000)
         return
       } else if (this.repeatMode === 1) {
