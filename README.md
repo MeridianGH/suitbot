@@ -1,40 +1,28 @@
 ![logo](https://repository-images.githubusercontent.com/406747355/0c0fcbbd-8dab-4259-a5d6-d8cc5069ef37)
 
+[![Invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=Invite&message=SuitBot&color=000000)](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)
 [![Heroku](https://img.shields.io/static/v1?label=Hosted%20with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku)](https://www.heroku.com)
 [![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
 [![Discord](https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord)](https://discord.gg/qX2CBrrUpf)
-\
-[![CodeFactor](https://www.codefactor.io/repository/github/meridiangh/suitbot/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/meridiangh/suitbot)
-![Lines of code](https://img.shields.io/tokei/lines/github/MeridianGH/suitbot?style=for-the-badge)
-![GitHub repo size](https://img.shields.io/github/repo-size/MeridianGH/suitbot?style=for-the-badge)
-\
-[![discord.js](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/discord.js)
-[![play-dl](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/play-dl?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/play-dl)
 
 # SuitBot
 
 > A lightweight music and general purpose bot with dashboard, that uses slash commands and buttons to be as user-friendly as possible!
 
-It uses [discord.js](https://discord.js.org/) and [play-dl](https://github.com/play-dl/play-dl) for its main features.
+[Invite](#Invite) • [Commands & Features](#Commands--Features) • [Installation](#Installation) • [Heroku](#Heroku) • [Stats](#Stats) • [License](#License)
 
 Head on over to the [dashboard](https://suitbot.xyz) for more information!
-
-&nbsp;
 
 Check out the [Progress Board](https://github.com/MeridianGH/suitbot/projects/1) if you're interested in the current progress in development!
 
 Join the [Discord server](https://discord.gg/qX2CBrrUpf) for information about updates and support or if you'd like to report a bug or leave a suggestion.
 
-## Availability
+## Invite
 > Disclaimer: The bot is still in development, so expect some bugs or features that might not work 100% yet. Please report any bugs or suggestions via the respective commands.
 
-I'm currently hosting the bot myself, and it is publicly available with this invite link:
+It's not recommended to try and run the bot yourself. I am hosting a public instance which is available with this invite link:
 
-[![invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=&labelColor=212121&message=Invite&color=212121)](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)
-
-The dashboard is available here: [Dashboard](https://suitbot.xyz)\
-You can check the current status to the right under `Environments`.
-
+[![Invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=&labelColor=212121&message=Invite&color=212121)](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)
 
 ## Commands & Features
 SuitBot uses slash commands to integrate itself into the server. You can easily access its commands directly by typing `/` in your chat window.
@@ -88,7 +76,7 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 | /github     | Sends a link to the repo of this bot. |
 | /suggestion | Sends a suggestion to the developer.  |
 
-## Running the Bot
+## Installation
 You'll need Node.js v16.x and FFmpeg v4.4.\
 Installing SuitBot:
 
@@ -127,5 +115,34 @@ https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
 
 Deploying on Heroku automatically deploys all commands globally, so make sure to test your commands locally beforehand.
 
+## Stats
+
+### Size
+![Lines of code](https://img.shields.io/tokei/lines/github/MeridianGH/suitbot?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/MeridianGH/suitbot?style=for-the-badge)
+
+### Code
+![GitHub top language](https://img.shields.io/github/languages/top/MeridianGH/suitbot?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/MeridianGH/suitbot?style=for-the-badge)
+[![CodeFactor](https://www.codefactor.io/repository/github/meridiangh/suitbot/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/meridiangh/suitbot)
+\
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/MeridianGH/suitbot?style=for-the-badge)
+[![discord.js](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/discord.js)
+[![play-dl](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/play-dl?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/play-dl)
+
+### GitHub
+![GitHub issues](https://img.shields.io/github/issues/MeridianGH/suitbot?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/MeridianGH/suitbot?style=for-the-badge)
+\
+![GitHub last commit](https://img.shields.io/github/last-commit/MeridianGH/suitbot?style=for-the-badge)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MeridianGH/suitbot?style=for-the-badge)
+\
+![GitHub Repo stars](https://img.shields.io/github/stars/MeridianGH/suitbot?style=for-the-badge)
+![GitHub watchers](https://img.shields.io/github/watchers/MeridianGH/suitbot?style=for-the-badge)
+
+### Dashboard
+![GitHub deployments](https://img.shields.io/github/deployments/MeridianGH/suitbot/suitbotxyz?label=Deployment&style=for-the-badge)
+![Website](https://img.shields.io/website?down_message=offline&label=dashboard&style=for-the-badge&up_message=online&url=https%3A%2F%2Fsuitbot.xyz)
+
 ## License
-<a href="https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge" height=30></a>
+[![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
