@@ -5,8 +5,8 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('skip')
     .setDescription('Skips the current track or to a specified point in the queue.')
-    .addIntegerOption(option => option.setName('track').setDescription('The track to skip to.')),
-  async execute (interaction) {
+    .addIntegerOption((option) => option.setName('track').setDescription('The track to skip to.')),
+  async execute(interaction) {
     const index = interaction.options.getInteger('track')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }

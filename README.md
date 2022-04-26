@@ -1,13 +1,15 @@
 ![logo](https://repository-images.githubusercontent.com/406747355/0c0fcbbd-8dab-4259-a5d6-d8cc5069ef37)
-<p>
-<a href="https://github.com/standard/standard"><img alt="JS Standard" src="https://cdn.rawgit.com/standard/standard/master/badge.svg" height=30></a>
-<a href="https://www.heroku.com"><img alt="Heroku" src="https://img.shields.io/static/v1?label=Hosted with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku" height=30></a>
-<a href="https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge" height=30></a>
-<a href="https://discord.gg/qX2CBrrUpf"><img alt="Discord" src="https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord" height=30></a>
-<br>
-<a href="https://www.npmjs.com/package/discord.js"><img alt="discord.js" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge"></a>
-<a href="https://www.npmjs.com/package/play-dl"><img alt="play-dl" src="https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/play-dl?color=44b868&logo=npm&style=for-the-badge"></a>
-</p>
+
+[![Heroku](https://img.shields.io/static/v1?label=Hosted%20with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku)](https://www.heroku.com)
+[![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
+[![Discord](https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord)](https://discord.gg/qX2CBrrUpf)
+\
+[![CodeFactor](https://www.codefactor.io/repository/github/meridiangh/suitbot/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/meridiangh/suitbot)
+![Lines of code](https://img.shields.io/tokei/lines/github/MeridianGH/suitbot?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/MeridianGH/suitbot?style=for-the-badge)
+\
+[![discord.js](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/discord.js)
+[![play-dl](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/play-dl?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/play-dl)
 
 # SuitBot
 

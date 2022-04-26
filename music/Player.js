@@ -6,7 +6,7 @@ import { cookie } from '../utilities/config.js'
 
 // noinspection JSIgnoredPromiseFromCall
 export class Player {
-  constructor (client) {
+  constructor(client) {
     this.client = client
     this.queues = new Collection()
 
@@ -14,11 +14,11 @@ export class Player {
       this._voiceUpdate(oldState, newState)
     })
 
-    playdl.getFreeClientID().then(clientId => { playdl.setToken({ soundcloud: { client_id: clientId } }) })
+    playdl.getFreeClientID().then((clientId) => { playdl.setToken({ soundcloud: { client_id: clientId } }) })
     playdl.setToken({ youtube: { cookie: cookie } })
   }
 
-  createQueue (guildId) {
+  createQueue(guildId) {
     const guild = this.client.guilds.resolve(guildId)
     if (!guild) { return null }
     if (this.queues.has(guildId) && !this.queues.get(guildId).destroyed) { return this.queues.get(guildId) }
@@ -28,15 +28,15 @@ export class Player {
     return queue
   }
 
-  getQueue (guildId) {
+  getQueue(guildId) {
     return this.queues.get(guildId)
   }
 
-  deleteQueue (guildId) {
+  deleteQueue(guildId) {
     this.queues.delete(guildId)
   }
 
-  _voiceUpdate (oldState, newState) {
+  _voiceUpdate(oldState, newState) {
     const queue = this.queues.get(oldState.guild.id)
     if (!queue) { return }
 

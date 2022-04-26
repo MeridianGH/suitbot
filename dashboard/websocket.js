@@ -3,7 +3,7 @@ import { server as WebsocketServer } from 'websocket'
 
 const clients = {}
 
-function simplifyQueue (queue) {
+function simplifyQueue(queue) {
   if (!queue || !queue.playing) { return {} }
   return {
     guild: queue.guild.id,
@@ -16,20 +16,20 @@ function simplifyQueue (queue) {
   }
 }
 
-function send (ws, data) {
+function send(ws, data) {
   ws.sendUTF(JSON.stringify(Object.assign({}, data)))
 }
 
-export function setupWebsocket (client, domain) {
+export function setupWebsocket(client, domain) {
   const wss = new WebsocketServer({ httpServer: client.dashboard })
 
   // noinspection JSUnresolvedFunction
-  wss.on('request', request => {
+  wss.on('request', (request) => {
     if (request.origin !== domain && request.origin !== 'https://suitbot.xyz') { return request.reject() }
     const ws = request.accept(null, request.origin)
     let guildId, userId
 
-    ws.on('message', async message => {
+    ws.on('message', async (message) => {
       if (message.type !== 'utf8') { return }
       const data = JSON.parse(message.utf8Data)
 
@@ -148,7 +148,7 @@ export function setupWebsocket (client, domain) {
     })
   })
 
-  client.dashboard.on('update', queue => {
+  client.dashboard.on('update', (queue) => {
     if (clients[queue.guild.id]) {
       for (const user in clients[queue.guild.id]) {
         const ws = clients[queue.guild.id][user]

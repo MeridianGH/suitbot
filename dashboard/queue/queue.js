@@ -1,13 +1,16 @@
+/* global htm, React, ReactDOM, guildId, userId */
+// noinspection JSUnresolvedFunction,JSUnresolvedVariable
+
 const html = htm.bind(React.createElement)
 
 const websocket = new WebSocket(location.hostname === 'localhost' ? 'ws://localhost' : `wss://${location.hostname}`)
-function send (data) {
+function send(data) {
   data.guildId = guildId
   data.userId = userId
   websocket.send(JSON.stringify(data))
 }
 
-function App () {
+function App() {
   const [queue, setQueue] = React.useState(null)
   const [toast, setToast] = React.useState(null)
 
@@ -15,7 +18,7 @@ function App () {
     websocket.addEventListener('open', () => {
       send({ type: 'request' })
     })
-    websocket.addEventListener('message', message => {
+    websocket.addEventListener('message', (message) => {
       document.getElementById('loader')?.remove()
       const data = JSON.parse(message.data)
       if (data.toast) {
@@ -32,7 +35,7 @@ function App () {
           clearInterval(interval)
           setQueue({ ...queue, currentTime: queue.nowPlaying.milliseconds })
         } else {
-          setQueue({ ...queue, currentTime: (queue.currentTime += 1000) })
+          setQueue({ ...queue, currentTime: queue.currentTime += 1000 })
         }
       }
     }, 1000)
@@ -55,14 +58,14 @@ function App () {
   `
 }
 
-function NowPlaying ({ track, currentTime, paused, repeatMode, volume }) {
+function NowPlaying({ track, currentTime, paused, repeatMode, volume }) {
   const msToHMS = (ms) => {
-    let totalSeconds = (ms / 1000)
+    let totalSeconds = ms / 1000
     const hours = Math.floor(totalSeconds / 3600).toString()
     totalSeconds %= 3600
     const minutes = Math.floor(totalSeconds / 60).toString()
     const seconds = Math.floor(totalSeconds % 60).toString()
-    return (hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`)
+    return hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
   }
   return html`
     <h1 className='queue-title'>Now Playing</h1>
@@ -86,16 +89,16 @@ function NowPlaying ({ track, currentTime, paused, repeatMode, volume }) {
   `
 }
 
-function Thumbnail ({ image }) {
+function Thumbnail({ image }) {
   return html`
     <div className='thumbnail-container'>
-      <img className='thumbnail-backdrop' src=${image} />
-      <img className='thumbnail' src=${image} />
+      <img className='thumbnail-backdrop' src=${image}  alt='Thumbnail Background'/>
+      <img className='thumbnail' src=${image}  alt='Video Thumbnail'/>
     </div>
   `
 }
 
-function MusicControls ({ paused, repeatMode }) {
+function MusicControls({ paused, repeatMode }) {
   return html`
     <div>
       <button className='button icon' onClick=${() => { send({ type: 'previous' }) }}><i className='fas fa-backward' /></button>
@@ -108,7 +111,7 @@ function MusicControls ({ paused, repeatMode }) {
   `
 }
 
-function VolumeControl (props) {
+function VolumeControl(props) {
   const [volume, setVolume] = React.useState(props.volume)
   React.useEffect(() => {
     setVolume(props.volume)
@@ -117,12 +120,12 @@ function VolumeControl (props) {
   return html`
     <div>
       <button className='volume-display' disabled><i className=${volume === 0 ? 'fas fa-volume-off' : volume <= 33 ? 'fas fa-volume-down' : volume <= 66 ? 'fas fa-volume' : 'fas fa-volume-up'} /> ${volume}</button>
-      <input className='volume-slider' type='range' defaultValue=${volume} step='1' min='0' max='100' onInput=${event => { setVolume(event.target.value) }} onMouseUp=${(event => { send({ type: 'volume', volume: event.target.value }) })} />
+      <input className='volume-slider' type='range' defaultValue=${volume} step='1' min='0' max='100' onInput=${(event) => { setVolume(event.target.value) }} onMouseUp=${(event) => { send({ type: 'volume', volume: event.target.value }) }} />
     </div>
   `
 }
 
-function QueueButtons () {
+function QueueButtons() {
   const input = React.createRef()
   const handlePlay = (event) => {
     event.preventDefault()
@@ -140,7 +143,8 @@ function QueueButtons () {
   `
 }
 
-function Queue ({ tracks }) {
+function Queue({ tracks }) {
+  // noinspection JSMismatchedCollectionQueryUpdate
   const rows = []
   for (let i = 1; i < tracks.length; i++) {
     rows.push(html`
@@ -177,7 +181,7 @@ function Queue ({ tracks }) {
   `
 }
 
-function Toast (props) {
+function Toast(props) {
   const [toast, setToast] = React.useState(props.toast)
   const [opacity, setOpacity] = React.useState(1)
   React.useEffect(() => {
@@ -194,7 +198,7 @@ function Toast (props) {
     }, 5000))
 
     return () => {
-      timeouts.forEach(timeout => { clearTimeout(timeout) })
+      timeouts.forEach((timeout) => { clearTimeout(timeout) })
     }
   }, [props.toast])
 
@@ -206,7 +210,7 @@ function Toast (props) {
   `
 }
 
-function MediaSession ({ track, paused }) {
+function MediaSession({ track, paused }) {
   React.useEffect(async () => {
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
       const audio = document.createElement('audio')
@@ -216,7 +220,7 @@ function MediaSession ({ track, paused }) {
       await audio.play().catch(() => {
         const div = document.getElementById('autoplay-alert')
         div.classList.add('alert', 'alert-danger', 'alert-dismissible', 'fade', 'show')
-        div.setAttribute('role',  'alert')
+        div.setAttribute('role', 'alert')
         div.style.cssText = 'position: fixed; right: 1em; bottom: 0;'
         div.innerHTML = '<i class="far fa-exclamation-triangle fa-1.5x"></i><span style="font-size: 1em; margin-left: 5px">Autoplay seems to be disabled. Enable Media Autoplay to use media buttons to control the music bot!<button type="button" class="btn-close" data-bs-dismiss="alert"></button>'
       })
@@ -224,7 +228,7 @@ function MediaSession ({ track, paused }) {
     }
   }, [])
   React.useEffect(() => {
-    function htmlDecode (input) { return (new DOMParser().parseFromString(input, 'text/html')).documentElement.textContent }
+    function htmlDecode(input) { return new DOMParser().parseFromString(input, 'text/html').documentElement.textContent }
 
     navigator.mediaSession.metadata = new MediaMetadata({
       title: htmlDecode(track.title),

@@ -5,7 +5,7 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('invite')
     .setDescription('Sends an invite link for the bot.'),
-  async execute (interaction) {
+  async execute(interaction) {
     const embed = new MessageEmbed()
       .setAuthor({ name: 'Invite', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('Invite SuitBot')

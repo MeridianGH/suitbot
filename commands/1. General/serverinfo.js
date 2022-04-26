@@ -6,7 +6,7 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('serverinfo')
     .setDescription('Shows info about the server.'),
-  async execute (interaction) {
+  async execute(interaction) {
     const guild = interaction.guild
 
     const embed = new MessageEmbed()

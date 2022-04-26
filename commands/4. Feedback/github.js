@@ -5,7 +5,7 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('github')
     .setDescription('Sends a link to the source code of this bot.'),
-  async execute (interaction) {
+  async execute(interaction) {
     const embed = new MessageEmbed()
       .setAuthor({ name: 'GitHub', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('GitHub Repository')

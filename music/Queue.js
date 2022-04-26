@@ -5,7 +5,7 @@ import { errorEmbed, msToHMS } from '../utilities/utilities.js'
 import { getData, getPreview, getTracks } from 'spotify-url-info'
 
 export class Queue {
-  constructor (player, guild) {
+  constructor(player, guild) {
     this.player = player
     this.guild = guild
     this.connection = undefined
@@ -18,7 +18,7 @@ export class Queue {
     this.destroyed = false
   }
 
-  async join (channelId) {
+  async join(channelId) {
     if (this.destroyed) { return }
     if (this.connection) { return }
 
@@ -85,7 +85,7 @@ export class Queue {
     this.connection.on('error', (error) => { this.channel?.send(errorEmbed('Error', error)) })
   }
 
-  async play (query, options) {
+  async play(query, options) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!query) { return null }
@@ -133,21 +133,19 @@ export class Queue {
         const info = await playdl.playlist_info(query, { incomplete: true })
         if (!info) { return null }
 
-        const tracks = (await info.all_videos()).map(track => {
-          return {
-            title: track.title,
-            author: track.channel.name,
-            url: track.url,
-            streamURL: track.url,
-            thumbnail: track.thumbnails.at(-1).url,
-            requestedBy: options?.requestedBy ?? 'null',
-            duration: msToHMS(track.durationInSec * 1000),
-            milliseconds: track.durationInSec * 1000,
-            seekTime: 0,
-            live: track.live,
-            track: true
-          }
-        })
+        const tracks = (await info.all_videos()).map((track) => ({
+          title: track.title,
+          author: track.channel.name,
+          url: track.url,
+          streamURL: track.url,
+          thumbnail: track.thumbnails.at(-1).url,
+          requestedBy: options?.requestedBy ?? 'null',
+          duration: msToHMS(track.durationInSec * 1000),
+          milliseconds: track.durationInSec * 1000,
+          seekTime: 0,
+          live: track.live,
+          track: true
+        }))
 
         added = {
           title: info.title,
@@ -170,7 +168,7 @@ export class Queue {
           title: info.artist + ' - ' + info.title,
           author: info.artist,
           url: info.link,
-          streamURL: await playdl.search(`${info.artist} ${info.title} lyrics`, { limit: 1 }).then(result => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
+          streamURL: await playdl.search(`${info.artist} ${info.title} lyrics`, { limit: 1 }).then((result) => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
           thumbnail: info.image,
           requestedBy: options?.requestedBy ?? 'null',
           duration: msToHMS(data.duration_ms),
@@ -185,13 +183,13 @@ export class Queue {
         const info = await getPreview(query)
         if (!info) { return null }
 
-        const tracks = await Promise.all((await getTracks(query)).map(async track => {
-          // noinspection JSUnresolvedVariable
-          return {
+        // noinspection JSUnresolvedVariable
+        const tracks = await Promise.all((await getTracks(query)).map(
+          async (track) => ({
             title: track.artists[0].name + ' - ' + track.name,
             author: track.artists[0].name,
             url: track.external_urls.spotify,
-            streamURL: await playdl.search(`${track.artists[0].name} ${track.name} lyrics`, { limit: 1 }).then(result => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
+            streamURL: await playdl.search(`${track.artists[0].name} ${track.name} lyrics`, { limit: 1 }).then((result) => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
             thumbnail: track.album?.images[0]?.url,
             requestedBy: options?.requestedBy ?? 'null',
             duration: msToHMS(track.duration_ms),
@@ -199,8 +197,8 @@ export class Queue {
             seekTime: 0,
             live: false,
             track: true
-          }
-        }))
+          })
+        ))
 
         added = {
           title: info.title,
@@ -237,21 +235,19 @@ export class Queue {
         const info = await playdl.soundcloud(query)
         if (!info) { return null }
 
-        const tracks = (await info.all_tracks()).map(track => {
-          return {
-            title: track.name,
-            author: track.publisher?.name ?? track.publisher?.artist ?? track.publisher?.writer_composer ?? 'Soundcloud',
-            url: info.permalink,
-            streamURL: info.url,
-            thumbnail: info.thumbnail,
-            requestedBy: options?.requestedBy ?? 'null',
-            duration: msToHMS(info.durationInMs),
-            milliseconds: info.durationInMs,
-            seekTime: 0,
-            live: false,
-            track: true
-          }
-        })
+        const tracks = (await info.all_tracks()).map((track) => ({
+          title: track.name,
+          author: track.publisher?.name ?? track.publisher?.artist ?? track.publisher?.writer_composer ?? 'Soundcloud',
+          url: info.permalink,
+          streamURL: info.url,
+          thumbnail: info.thumbnail,
+          requestedBy: options?.requestedBy ?? 'null',
+          duration: msToHMS(info.durationInMs),
+          milliseconds: info.durationInMs,
+          seekTime: 0,
+          live: false,
+          track: true
+        }))
 
         added = {
           title: info.name,
@@ -295,31 +291,29 @@ export class Queue {
     return added
   }
 
-  async search (query, options) {
+  async search(query, options) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!query) { return null }
 
     const info = await playdl.search(query, { source: { youtube: 'video' }, limit: 5 })
     if (!info) { return null }
 
-    return info.map(track => {
-      return {
-        title: track.title,
-        author: track.channel.name,
-        url: track.url,
-        streamURL: track.url,
-        thumbnail: track.thumbnails.at(-1).url,
-        requestedBy: options?.requestedBy ?? 'null',
-        duration: msToHMS(track.durationInSec * 1000),
-        milliseconds: track.durationInSec * 1000,
-        seekTime: 0,
-        live: track.live,
-        track: true
-      }
-    })
+    return info.map((track) => ({
+      title: track.title,
+      author: track.channel.name,
+      url: track.url,
+      streamURL: track.url,
+      thumbnail: track.thumbnails.at(-1).url,
+      requestedBy: options?.requestedBy ?? 'null',
+      duration: msToHMS(track.durationInSec * 1000),
+      milliseconds: track.durationInSec * 1000,
+      seekTime: 0,
+      live: track.live,
+      track: true
+    }))
   }
 
-  async seek (time) {
+  async seek(time) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.playing) { throw new Error('Nothing playing') }
 
@@ -330,7 +324,7 @@ export class Queue {
     this.player.client.dashboard.update(this)
   }
 
-  skip (index = 0) {
+  skip(index = 0) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
 
@@ -338,7 +332,7 @@ export class Queue {
     this.connection.stop()
   }
 
-  previous () {
+  previous() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
 
@@ -348,7 +342,7 @@ export class Queue {
     return this.nowPlaying
   }
 
-  stop () {
+  stop() {
     if (this.destroyed) { return }
     this.player.client.dashboard.update({ guild: this.guild })
     this.destroyed = true
@@ -356,7 +350,7 @@ export class Queue {
     this.player.deleteQueue(this.guild.id)
   }
 
-  shuffle () {
+  shuffle() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (this.tracks.length <= 2) { return }
     for (let i = this.tracks.length - 1; i > 1; --i) {
@@ -366,20 +360,20 @@ export class Queue {
     this.player.client.dashboard.update(this)
   }
 
-  remove (index) {
+  remove(index) {
     const removed = this.tracks.splice(index, 1)[0]
     this.player.client.dashboard.update(this)
     return removed
   }
 
-  clear () {
+  clear() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     const nowPlaying = this.tracks.shift()
     this.tracks = [nowPlaying]
     this.player.client.dashboard.update(this)
   }
 
-  createProgressBar (body, head) {
+  createProgressBar(body, head) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.playing) { throw new Error('Nothing playing') }
     const currentTime = this.currentTime
@@ -388,39 +382,39 @@ export class Queue {
     return body.repeat(progress) + head + ' '.repeat(emptyProgress) + msToHMS(currentTime) + '/' + this.nowPlaying.duration
   }
 
-  setRepeatMode (mode) {
+  setRepeatMode(mode) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     this.repeatMode = mode
     this.player.client.dashboard.update(this)
   }
 
-  setChannel (channel) {
+  setChannel(channel) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!channel.isText()) { return }
     this.channel = channel
   }
 
-  get nowPlaying () {
+  get nowPlaying() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     return this.tracks[0]
   }
 
-  get currentTime () {
+  get currentTime() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!this.playing) { throw new Error('Nothing playing') }
     return this.nowPlaying.seekTime + this.connection.time
   }
 
-  get totalTime () {
+  get totalTime() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!this.playing) { throw new Error('Nothing playing') }
-    return this.tracks.length > 1 ? this.tracks.slice(1).map(track => track.milliseconds).reduce((p, c) => p + c) : 0
+    return this.tracks.length > 1 ? this.tracks.slice(1).map((track) => track.milliseconds).reduce((p, c) => p + c) : 0
   }
 
-  setPaused (state) {
+  setPaused(state) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!this.playing) { throw new Error('Nothing playing') }
@@ -428,14 +422,14 @@ export class Queue {
     this.player.client.dashboard.update(this)
   }
 
-  get paused () {
+  get paused() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!this.playing) { throw new Error('Nothing playing') }
     return this.connection.paused
   }
 
-  setVolume (volume) {
+  setVolume(volume) {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     this.queueVolume = volume
@@ -443,7 +437,7 @@ export class Queue {
     this.player.client.dashboard.update(this)
   }
 
-  get volume () {
+  get volume() {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     return this.connection.volume

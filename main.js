@@ -10,13 +10,13 @@ client.player = new Player(client)
 // Commands
 client.commands = new Collection()
 for (const file of getFilesRecursively('./commands')) {
-  const command = (await import(`./${file}`))
+  const command = await import(`./${file}`)
   client.commands.set(command.data.name, command)
 }
 
 // Events
 for (const file of getFilesRecursively('./events')) {
-  const event = (await import(`./${file}`))
+  const event = await import(`./${file}`)
   if (event.data.once) {
     client.once(event.data.name, (...args) => event.execute(...args))
   } else {
@@ -28,7 +28,7 @@ process.on('SIGINT', shutdown)
 process.on('uncaughtException', (error) => { console.log(`Ignoring uncaught exception: ${error} | ${error.stack.split(/\r?\n/)[1].split('\\').pop().slice(0, -1)}`) })
 
 // Shutdown Handling
-async function shutdown () {
+async function shutdown() {
   console.log(`Closing ${client.player.queues.size} queues.`)
   for (const entry of client.player.queues) {
     const queue = entry[1]

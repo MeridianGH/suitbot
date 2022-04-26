@@ -10,7 +10,7 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('lyrics')
     .setDescription('Shows the lyrics of the currently playing song.'),
-  async execute (interaction) {
+  async execute(interaction) {
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
@@ -64,8 +64,8 @@ export const { data, execute } = {
         // Collect button interactions (when a user clicks a button),
         const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
         let currentIndex = 0
-        collector.on('collect', async buttonInteraction => {
-          buttonInteraction.customId === 'previous' ? (currentIndex -= 1) : (currentIndex += 1)
+        collector.on('collect', async (buttonInteraction) => {
+          buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
           await buttonInteraction.update({
             embeds: [new MessageEmbed()
               .setAuthor({ name: 'Lyrics', iconURL: interaction.member.user.displayAvatarURL() })

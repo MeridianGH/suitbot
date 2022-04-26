@@ -6,13 +6,13 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('help')
     .setDescription('Replies with help on how to use this bot.')
-    .addStringOption(option => option.setName('category').setDescription('The category to display first.')
+    .addStringOption((option) => option.setName('category').setDescription('The category to display first.')
       .addChoice('General', '2')
       .addChoice('Music', '3')
       .addChoice('Moderation', '4')
       .addChoice('Feedback', '5')),
-  async execute (interaction) {
-    const folders = fs.readdirSync('./commands/', { withFileTypes: true }).filter(entry => entry.isDirectory()).map(entry => entry.name)
+  async execute(interaction) {
+    const folders = fs.readdirSync('./commands/', { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name)
     const categories = {}
     for (const folder of folders) {
       const commands = []
@@ -42,7 +42,7 @@ export const { data, execute } = {
     for (const [category, commands] of Object.entries(categories)) {
       let description = ''
       for (const command of commands) {
-        const commandData = (await import(`../${category}/${command}`))
+        const commandData = await import(`../${category}/${command}`)
         description = description + `\`${commands.indexOf(command) + 1}.\` **/${commandData.data.name}:** ${commandData.data.description}\n\n`
       }
       description = description + '\u2015'.repeat(34)
@@ -69,8 +69,8 @@ export const { data, execute } = {
 
     // Collect button interactions (when a user clicks a button)
     const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
-    collector.on('collect', async buttonInteraction => {
-      buttonInteraction.customId === 'previous' ? (currentIndex -= 1) : (currentIndex += 1)
+    collector.on('collect', async (buttonInteraction) => {
+      buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
     })
     collector.on('end', async (collected) => {

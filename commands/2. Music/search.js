@@ -6,11 +6,11 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('search')
     .setDescription('Searches five songs from YouTube and lets you select one to play.')
-    .addStringOption(option => option.setName('query').setDescription('The query to search for.').setRequired(true)),
-  async execute (interaction) {
+    .addStringOption((option) => option.setName('query').setDescription('The query to search for.').setRequired(true)),
+  async execute(interaction) {
     const channel = interaction.member.voice.channel
     if (!channel) { return await interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }
-    if (interaction.guild.me.voice.channel && (channel !== interaction.guild.me.voice.channel)) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
+    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
     if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true)) }
     await interaction.deferReply()
 
@@ -44,8 +44,8 @@ export const { data, execute } = {
     })
 
     // noinspection JSCheckFunctionSignatures
-    const collector = embedMessage.createMessageComponentCollector({ time: 60000, filter: async c => { await c.deferUpdate(); return c.user.id === interaction.user.id } })
-    collector.on('collect', async menuInteraction => {
+    const collector = embedMessage.createMessageComponentCollector({ time: 60000, filter: async (c) => { await c.deferUpdate(); return c.user.id === interaction.user.id } })
+    collector.on('collect', async (menuInteraction) => {
       const track = result[Number(menuInteraction.values[0])]
       await queue.join(channel)
       await queue.play(track)

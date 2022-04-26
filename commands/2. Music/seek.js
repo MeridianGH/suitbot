@@ -5,8 +5,8 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('seek')
     .setDescription('Skips to the specified point in the current track.')
-    .addStringOption(option => option.setName('time').setDescription('The time to skip to. Can be seconds or HH:MM:SS.').setRequired(true)),
-  async execute (interaction) {
+    .addStringOption((option) => option.setName('time').setDescription('The time to skip to. Can be seconds or HH:MM:SS.').setRequired(true)),
+  async execute(interaction) {
     const time = timeToMs(interaction.options.getString('time'))
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }

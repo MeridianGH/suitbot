@@ -7,11 +7,11 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('suggestion')
     .setDescription('Sends a suggestion to the developer.')
-    .addStringOption(option => option.setName('suggestion').setDescription('The suggestion to send.').setRequired(true)),
-  async execute (interaction) {
+    .addStringOption((option) => option.setName('suggestion').setDescription('The suggestion to send.').setRequired(true)),
+  async execute(interaction) {
     const suggestion = interaction.options.getString('suggestion')
     const developerGuild = interaction.client.guilds.cache.get(guildId)
-    const suggestionChannel = developerGuild.channels.cache.find(channel => (channel.name === 'suggestions') && channel.isText())
+    const suggestionChannel = developerGuild.channels.cache.find((channel) => channel.name === 'suggestions' && channel.isText())
 
     const embed = new MessageEmbed()
       .setAuthor({ name: 'Suggestion received', iconURL: interaction.member.user.displayAvatarURL() })
@@ -19,7 +19,7 @@ export const { data, execute } = {
       .setDescription(suggestion)
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
-    suggestionChannel?.send({ embeds: [embed], fetchReply: true }).then(async message => { await message.react('✅'); await message.react('❌') })
+    suggestionChannel?.send({ embeds: [embed], fetchReply: true }).then(async (message) => { await message.react('✅'); await message.react('❌') })
 
     await interaction.reply(simpleEmbed('Your suggestion was sent successfully!'))
   }

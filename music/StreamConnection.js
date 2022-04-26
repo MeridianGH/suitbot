@@ -3,7 +3,7 @@ import { EventEmitter } from 'events'
 import { sleep } from '../utilities/utilities.js'
 
 export class StreamConnection extends EventEmitter {
-  constructor (connection, channel) {
+  constructor(connection, channel) {
     super()
     this.connection = connection
     this.player = voice.createAudioPlayer()
@@ -53,20 +53,20 @@ export class StreamConnection extends EventEmitter {
         }
       }
     })
-    this.player.on('error', data => {
+    this.player.on('error', (data) => {
       this.emit('error', data)
     })
 
     this.connection.subscribe(this.player)
   }
 
-  createAudioStream (stream) {
+  createAudioStream(stream) {
     // noinspection JSCheckFunctionSignatures
     this.resource = voice.createAudioResource(stream.stream, { inputType: stream.type, inlineVolume: true })
     return this.resource
   }
 
-  async playAudioStream (resource) {
+  async playAudioStream(resource) {
     if (!resource) { throw new Error('No resource available') }
     if (!this.resource) { this.resource = resource }
 
@@ -75,7 +75,7 @@ export class StreamConnection extends EventEmitter {
     this.player.play(resource)
   }
 
-  setPaused (state) {
+  setPaused(state) {
     if (state) {
       this.player.pause()
       this.paused = true
@@ -87,11 +87,11 @@ export class StreamConnection extends EventEmitter {
     }
   }
 
-  stop () {
+  stop() {
     this.player.stop()
   }
 
-  leave () {
+  leave() {
     this.player.stop()
     try {
       this.connection.destroy()
@@ -100,22 +100,22 @@ export class StreamConnection extends EventEmitter {
     }
   }
 
-  setVolume (volume) {
+  setVolume(volume) {
     if (!this.resource) { throw new Error('No resource available') }
     this.resource.volume.setVolumeLogarithmic(volume / 100)
   }
 
-  get volume () {
+  get volume() {
     if (!this.resource?.volume) { return 50 }
     return Math.round(Math.pow(this.resource.volume.volume, 1 / 1.661) * 100)
   }
 
-  get time () {
+  get time() {
     if (!this.resource) { return 0 }
     return this.resource.playbackDuration
   }
 
-  async _waitForReady () {
+  async _waitForReady() {
     await voice.entersState(this.connection, voice.VoiceConnectionStatus.Ready, 20000)
   }
 }

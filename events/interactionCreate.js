@@ -2,7 +2,7 @@ import { errorEmbed } from '../utilities/utilities.js'
 
 export const { data, execute } = {
   data: { name: 'interactionCreate' },
-  async execute (interaction) {
+  async execute(interaction) {
     if (!interaction.isCommand()) { return }
     if (interaction.guild === null) { return await interaction.reply(errorEmbed('Error', 'Commands are not supported in DMs.\nPlease use the bot in a server.')) }
 

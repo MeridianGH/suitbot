@@ -6,8 +6,8 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('userinfo')
     .setDescription('Shows info about a user.')
-    .addMentionableOption(option => option.setName('user').setDescription('The user to get info from.').setRequired(true)),
-  async execute (interaction) {
+    .addMentionableOption((option) => option.setName('user').setDescription('The user to get info from.').setRequired(true)),
+  async execute(interaction) {
     const member = interaction.options.getMentionable('user')
     if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed('You can only specify a valid user!', true)) }
 

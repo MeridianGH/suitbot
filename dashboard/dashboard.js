@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-export function startDashboard (client) {
+export function startDashboard(client) {
   const port = process.env.PORT ?? 80
   const domain = process.env.PORT ? 'https://suitbotxyz.herokuapp.com' : 'http://localhost'
 
@@ -66,7 +66,7 @@ export function startDashboard (client) {
     }, 1500000)
   }
 
-  app.use(function forceDomain (req, res, next) {
+  app.use(function forceDomain(req, res, next) {
     // Redirect from Heroku app to domain
     if (req.get('Host') === 'suitbotxyz.herokuapp.com') {
       return res.redirect(301, 'https://suitbot.xyz' + req.originalUrl)
@@ -127,7 +127,7 @@ export function startDashboard (client) {
 
   // WebSocket
   setupWebsocket(client, domain)
-  client.dashboard.update = function (queue) {
+  client.dashboard.update = function(queue) {
     client.dashboard.emit('update', queue)
   }
 }

@@ -5,8 +5,8 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('volume')
     .setDescription('Sets the volume of the music player.')
-    .addIntegerOption(option => option.setName('volume').setDescription('The volume to set the player to.').setRequired(true)),
-  async execute (interaction) {
+    .addIntegerOption((option) => option.setName('volume').setDescription('The volume to set the player to.').setRequired(true)),
+  async execute(interaction) {
     const volume = Math.min(Math.max(interaction.options.getInteger('volume'), 0), 100)
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }

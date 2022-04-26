@@ -5,7 +5,7 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('dashboard')
     .setDescription('Sends a link to the dashboard.'),
-  async execute (interaction) {
+  async execute(interaction) {
     const embed = new MessageEmbed()
       .setAuthor({ name: 'Dashboard', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('SuitBot Dashboard')

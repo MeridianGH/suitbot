@@ -5,8 +5,8 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('info')
     .setDescription('Shows info about the bot.'),
-  async execute (interaction) {
-    let totalSeconds = (interaction.client.uptime / 1000)
+  async execute(interaction) {
+    let totalSeconds = interaction.client.uptime / 1000
     const days = Math.floor(totalSeconds / 86400)
     totalSeconds %= 86400
     const hours = Math.floor(totalSeconds / 3600)

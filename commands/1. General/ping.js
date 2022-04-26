@@ -5,7 +5,7 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Replies with the current latency.'),
-  async execute (interaction) {
+  async execute(interaction) {
     const embed = new MessageEmbed()
       .setAuthor({ name: 'Ping', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle('Bot & API Latency')

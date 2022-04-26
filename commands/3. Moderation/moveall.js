@@ -7,9 +7,9 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('moveall')
     .setDescription('Moves all users from the first channel to the second channel.')
-    .addChannelOption(option => option.setName('channel1').setDescription('The channel to move from.').addChannelType(ChannelType.GuildVoice).setRequired(true))
-    .addChannelOption(option => option.setName('channel2').setDescription('The channel to move to.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
-  async execute (interaction) {
+    .addChannelOption((option) => option.setName('channel1').setDescription('The channel to move from.').addChannelType(ChannelType.GuildVoice).setRequired(true))
+    .addChannelOption((option) => option.setName('channel2').setDescription('The channel to move to.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
+  async execute(interaction) {
     const channel1 = interaction.options.getChannel('channel1')
     const channel2 = interaction.options.getChannel('channel2')
 
