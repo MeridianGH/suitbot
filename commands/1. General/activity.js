@@ -26,7 +26,7 @@ export const { data, execute } = {
     if (!channel.isVoice()) { return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true)) }
 
     const rest = new discordRest.REST({ version: '9' }).setToken(interaction.client.token)
-    await rest.post(Routes.channelInvites(channel.id), { body: { target_application_id: interaction.options.getString('activity'), target_type: 2 } })
+    await rest.post(Routes.channelInvites(channel.id), { body: { 'target_application_id': interaction.options.getString('activity'), 'target_type': 2 } })
       .then(async (response) => {
         if (response.error || !response.code) { return interaction.reply(errorEmbed('Error', 'An error occurred while creating your activity!', true)) }
         if (response.code === '50013') { return interaction.reply(simpleEmbed('The bot is missing permissions to perform that action.', true)) }

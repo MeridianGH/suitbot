@@ -14,7 +14,7 @@ export class Player {
       this._voiceUpdate(oldState, newState)
     })
 
-    playdl.getFreeClientID().then((clientId) => { playdl.setToken({ soundcloud: { client_id: clientId } }) })
+    playdl.getFreeClientID().then((clientId) => { playdl.setToken({ soundcloud: { 'client_id': clientId } }) })
     playdl.setToken({ youtube: { cookie: cookie } })
   }
 
