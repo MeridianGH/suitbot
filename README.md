@@ -1,9 +1,9 @@
 ![logo](https://repository-images.githubusercontent.com/406747355/0c0fcbbd-8dab-4259-a5d6-d8cc5069ef37)
 
 [![Invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=Invite&message=SuitBot&color=000000)](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)
+[![Discord](https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord)](https://discord.gg/qX2CBrrUpf)
 [![Heroku](https://img.shields.io/static/v1?label=Hosted%20with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku)](https://www.heroku.com)
 [![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
-[![Discord](https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord)](https://discord.gg/qX2CBrrUpf)
 
 # SuitBot
 
@@ -124,7 +124,7 @@ Deploying on Heroku automatically deploys all commands globally, so make sure to
 ### Code
 ![GitHub top language](https://img.shields.io/github/languages/top/MeridianGH/suitbot?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/MeridianGH/suitbot?style=for-the-badge)
-[![CodeFactor](https://www.codefactor.io/repository/github/meridiangh/suitbot/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/meridiangh/suitbot)
+[![CodeFactor](https://img.shields.io/codefactor/grade/github/MeridianGH/suitbot?style=for-the-badge)](https://www.codefactor.io/repository/github/meridiangh/suitbot)
 \
 ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/MeridianGH/suitbot?style=for-the-badge)
 [![discord.js](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/discord.js)
