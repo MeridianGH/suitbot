@@ -214,7 +214,7 @@ function MediaSession({ track, paused }) {
   React.useEffect(async () => {
     if (navigator.userAgent.indexOf('Firefox') !== -1) {
       const audio = document.createElement('audio')
-      audio.src = '/assets/near-silence.mp3'
+      audio.src = '/queue/near-silence.mp3'
       audio.volume = 0.00001
       audio.load()
       await audio.play().catch(() => {
