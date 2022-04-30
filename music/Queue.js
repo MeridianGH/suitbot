@@ -168,7 +168,7 @@ export class Queue {
           title: info.artist + ' - ' + info.title,
           author: info.artist,
           url: info.link,
-          streamURL: await playdl.search(`${info.artist} ${info.title} lyrics`, { limit: 1 }).then((result) => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
+          streamURL: await getStreamURL(`${info.artist} ${info.title}`),
           thumbnail: info.image,
           requestedBy: options?.requestedBy ?? 'null',
           duration: msToHMS(data.duration_ms),
@@ -189,7 +189,7 @@ export class Queue {
             title: track.artists[0].name + ' - ' + track.name,
             author: track.artists[0].name,
             url: track.external_urls.spotify,
-            streamURL: await playdl.search(`${track.artists[0].name} ${track.name} lyrics`, { limit: 1 }).then((result) => result[0] ? `https://youtu.be/${result[0].id}` : 'https://youtu.be/Wch3gJG2GJ4'),
+            streamURL: await getStreamURL(`${track.artists[0].name} ${track.name}`),
             thumbnail: track.album?.images[0]?.url,
             requestedBy: options?.requestedBy ?? 'null',
             duration: msToHMS(track.duration_ms),
@@ -442,4 +442,15 @@ export class Queue {
     if (!this.connection) { throw new Error('Connection unavailable') }
     return this.connection.volume
   }
+}
+
+async function getStreamURL(query) {
+  const videos = await playdl.search(query, { limit: 5 })
+  return (
+    videos.find((video) => video.channel.name.endsWith('- Topic'))?.url ??
+    videos.find((video) => video.title.toLowerCase().includes('lyrics') || video.title.toLowerCase().includes('audio'))?.url ??
+    videos.find((video) => video.channel.artist)?.url ??
+    videos[0]?.url ??
+    'https://youtu.be/Wch3gJG2GJ4'
+  )
 }
