@@ -260,24 +260,23 @@ export class Queue {
         this.tracks.push(...tracks)
       }
 
-      if (youtubeType === 'search') {
-        const info = (await playdl.search(query, { source: { youtube: 'video' }, limit: 1 }))[0]
-        if (!info) { return null }
-        added = {
-          title: info.title,
-          author: info.channel.name,
-          url: info.url,
-          streamURL: info.url,
-          thumbnail: info.thumbnails.at(-1).url,
-          requestedBy: options?.requestedBy ?? 'null',
-          duration: msToHMS(info.durationInSec * 1000),
-          milliseconds: info.durationInSec * 1000,
-          seekTime: 0,
-          live: info.live,
-          track: true
-        }
-        this.tracks.push(added)
+      // YouTube Search
+      const info = (await playdl.search(query, { source: { youtube: 'video' }, limit: 1 }))[0]
+      if (!info) { return null }
+      added = {
+        title: info.title,
+        author: info.channel.name,
+        url: info.url,
+        streamURL: info.url,
+        thumbnail: info.thumbnails.at(-1).url,
+        requestedBy: options?.requestedBy ?? 'null',
+        duration: msToHMS(info.durationInSec * 1000),
+        milliseconds: info.durationInSec * 1000,
+        seekTime: 0,
+        live: info.live,
+        track: true
       }
+      this.tracks.push(added)
     }
 
     if (isFirst) {
