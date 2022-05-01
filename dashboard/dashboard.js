@@ -120,6 +120,10 @@ export function startDashboard(client) {
     render(req, res, 'admin.ejs')
   })
 
+  app.get('*', (req, res) => {
+    render(req, res, '404.ejs')
+  })
+
   client.dashboard = app.listen(port, null, null, () => {
     console.log(`Dashboard is up and running on port ${port}.`)
     heartbeat()
