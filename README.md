@@ -3,13 +3,13 @@
 [![Invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=Invite&message=SuitBot&color=000000)](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)
 [![Discord](https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord)](https://discord.gg/qX2CBrrUpf)
 [![Heroku](https://img.shields.io/static/v1?label=Hosted%20with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku)](https://www.heroku.com)
-[![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
+[![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=gnu&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
 
 # SuitBot
 
 > A lightweight music and general purpose bot with dashboard, that uses slash commands and buttons to be as user-friendly as possible!
 
-[Invite](#Invite) • [Commands & Features](#Commands--Features) • [Installation](#Installation) • [Heroku](#Heroku) • [Stats](#Stats) • [License](#License)
+[Invite](#Invite) • [Commands & Features](#Commands--Features) • [Installation](#Installation) • [Heroku](#Heroku) • [Stats](#Stats) • [Licensing](#Licensing)
 
 Head on over to the [dashboard](https://suitbot.xyz) for more information!
 
@@ -144,5 +144,7 @@ Deploying on Heroku automatically deploys all commands globally, so make sure to
 ![GitHub deployments](https://img.shields.io/github/deployments/MeridianGH/suitbot/suitbotxyz?label=Deployment&style=for-the-badge)
 ![Website](https://img.shields.io/website?down_message=offline&label=dashboard&style=for-the-badge&up_message=online&url=https%3A%2F%2Fsuitbot.xyz)
 
-## License
-[![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=apache&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
+## Licensing
+If you want to host your own version of SuitBot, with or without modifications to the source code or plan to use any part of this source code, you must disclose the source and reference this repository/license.
+
+[![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=gnu&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
