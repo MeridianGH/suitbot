@@ -150,7 +150,7 @@ export function setupWebsocket(client, domain) {
 
   client.dashboard.on('update', (queue) => {
     if (clients[queue.guild.id]) {
-      for (const user in clients[queue.guild.id]) {
+      for (const user of clients[queue.guild.id]) {
         const ws = clients[queue.guild.id][user]
         send(ws, simplifyQueue(queue))
       }
