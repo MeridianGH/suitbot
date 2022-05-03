@@ -31,6 +31,7 @@
     "no-extra-parens": "warn",
     "no-multi-spaces": "warn",
     "no-trailing-spaces": "warn",
+    "no-unused-vars": ["warn", { "ignoreRestSiblings":  true }],
     "no-whitespace-before-property": "warn",
     "object-curly-newline": ["warn", { "multiline": true }],
     "object-curly-spacing": ["warn", "always"],
