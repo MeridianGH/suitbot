@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import discordRest from '@discordjs/rest'
 import { ChannelType, Routes } from 'discord-api-types/v9'
 import { MessageEmbed } from 'discord.js'

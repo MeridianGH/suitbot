@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { GuildMember, MessageEmbed, Permissions } from 'discord.js'
-import { simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -14,11 +14,11 @@ export const { data, execute } = {
     const member = interaction.options.getMentionable('user')
     const reason = interaction.options.getString('reason')
 
-    if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) { return await interaction.reply(simpleEmbed(lang.errors.userMissingPerms, true)) }
-    if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed(lang.errors.invalidUser, true)) }
-    if (!member.bannable) { return await interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
+    if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
+    if (!(member instanceof GuildMember)) { return await interaction.reply(errorEmbed(lang.errors.invalidUser, true)) }
+    if (!member.bannable) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
 
-    await member.ban({ reason: reason }).catch(async () => await interaction.reply(simpleEmbed(lang.errors.generic, true)))
+    await member.ban({ reason: reason }).catch(async () => await interaction.reply(errorEmbed(lang.errors.generic, true)))
 
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })

@@ -13,7 +13,7 @@ export const { data, execute } = {
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
     const track = queue.previous()
-    if (!track) { return await interaction.reply(simpleEmbed(lang.errors.generic, true)) }
+    if (!track) { return await interaction.reply(errorEmbed(lang.errors.generic, true)) }
 
     await interaction.reply(simpleEmbed('⏮ ' + lang.other.response(`\`#0\`: **${queue.nowPlaying.title}**`)))
   }

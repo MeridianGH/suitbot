@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed, Permissions } from 'discord.js'
-import { simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -12,8 +12,8 @@ export const { data, execute } = {
     const { slowmode: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const seconds = interaction.options.getInteger('seconds')
 
-    if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(simpleEmbed(lang.errors.userMissingPerms, true)) }
-    if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
+    if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
+    if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
 
     await interaction.channel.setRateLimitPerUser(seconds)
 

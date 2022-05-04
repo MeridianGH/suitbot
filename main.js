@@ -1,7 +1,7 @@
 import { Client, Collection, Intents, MessageEmbed } from 'discord.js'
 import database from './utilities/database.js'
 import { Player } from './music/Player.js'
-import { errorEmbed, getFilesRecursively } from './utilities/utilities.js'
+import { getFilesRecursively } from './utilities/utilities.js'
 
 import { token } from './utilities/config.js'
 import locale from './language/locale.js'

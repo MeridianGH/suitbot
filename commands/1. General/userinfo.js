@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { GuildMember, MessageEmbed } from 'discord.js'
-import { simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -11,7 +11,7 @@ export const { data, execute } = {
   async execute(interaction) {
     const { userinfo: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const member = interaction.options.getMentionable('user')
-    if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed(lang.errors.invalidUser, true)) }
+    if (!(member instanceof GuildMember)) { return await interaction.reply(errorEmbed(lang.errors.invalidUser, true)) }
 
     let userStatus
     const status = member.presence?.status ?? 'offline'

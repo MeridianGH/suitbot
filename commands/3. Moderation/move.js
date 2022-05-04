@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import { GuildMember, MessageEmbed, Permissions } from 'discord.js'
 import { ChannelType } from 'discord-api-types/v9'
 import locale from '../../language/locale.js'
@@ -15,9 +15,9 @@ export const { data, execute } = {
     const member = interaction.options.getMentionable('user')
     const channel = interaction.options.getChannel('channel')
 
-    if (!interaction.member.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed(lang.errors.userMissingPerms, true)) }
-    if (!(member instanceof GuildMember)) { return await interaction.reply(simpleEmbed(lang.errors.invalidUser, true)) }
-    if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
+    if (!interaction.member.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
+    if (!(member instanceof GuildMember)) { return await interaction.reply(errorEmbed(lang.errors.invalidUser, true)) }
+    if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MOVE_MEMBERS)) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
 
     await member.voice.setChannel(channel)
 

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
-import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -11,7 +11,7 @@ export const { data, execute } = {
   async execute(interaction) {
     const { search: lang, play } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const channel = interaction.member.voice.channel
-    if (!channel) { return await interaction.reply(simpleEmbed(lang.errors.noVoiceChannel, true)) }
+    if (!channel) { return await interaction.reply(errorEmbed(lang.errors.noVoiceChannel, true)) }
     if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
     if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
