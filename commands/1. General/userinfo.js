@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { GuildMember, MessageEmbed } from 'discord.js'
-import { simpleEmbed, timeSince } from '../../utilities/utilities.js'
+import { simpleEmbed } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -30,6 +30,8 @@ export const { data, execute } = {
         break
     }
 
+    const created = Math.floor(member.user.createdAt.getTime() / 1000)
+    const joined = Math.floor(member.joinedAt.getTime() / 1000)
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(member.displayName)
@@ -41,8 +43,8 @@ export const { data, execute } = {
       .addField(lang.fields.profile.name, `<@${member.id}>`, true)
       .addField(lang.fields.avatarURL.name, `[${lang.fields.avatarURL.value}](${member.user.displayAvatarURL({ dynamic: true, size: 1024 })})`, true)
       .addField(lang.fields.status.name, userStatus)
-      .addField(lang.fields.created.name, `${member.user.createdAt.toUTCString()} (${timeSince(member.user.createdAt)})`)
-      .addField(lang.fields.joined.name, `${member.joinedAt.toUTCString()} (${timeSince(member.joinedAt)})`)
+      .addField(lang.fields.created.name, `<t:${created}> (<t:${created}:R>)`)
+      .addField(lang.fields.joined.name, `<t:${joined}> (<t:${joined}:R>)`)
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })
