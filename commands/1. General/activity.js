@@ -3,6 +3,7 @@ import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
 import discordRest from '@discordjs/rest'
 import { ChannelType, Routes } from 'discord-api-types/v9'
 import { MessageEmbed } from 'discord.js'
+import locale from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -22,18 +23,19 @@ export const { data, execute } = {
     ]))
     .addChannelOption((option) => option.setName('channel').setDescription('The voice channel to create the activity in.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
   async execute(interaction) {
+    const { activity: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const channel = interaction.options.getChannel('channel')
-    if (!channel.isVoice()) { return await interaction.reply(simpleEmbed('You can only specify a voice channel!', true)) }
+    if (!channel.isVoice()) { return await interaction.reply(simpleEmbed(lang.errors.voiceChannel, true)) }
 
     const rest = new discordRest.REST({ version: '9' }).setToken(interaction.client.token)
     await rest.post(Routes.channelInvites(channel.id), { body: { 'target_application_id': interaction.options.getString('activity'), 'target_type': 2 } })
       .then(async (response) => {
-        if (response.error || !response.code) { return interaction.reply(errorEmbed('Error', 'An error occurred while creating your activity!', true)) }
-        if (response.code === '50013') { return interaction.reply(simpleEmbed('The bot is missing permissions to perform that action.', true)) }
+        if (response.error || !response.code) { return interaction.reply(errorEmbed('Error', lang.errors.generic, true)) }
+        if (response.code === '50013') { return interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
 
         const embed = new MessageEmbed()
-          .setAuthor({ name: 'Activity', iconURL: interaction.member.user.displayAvatarURL() })
-          .setTitle('Click here to open Activity')
+          .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+          .setTitle(lang.title)
           .setURL(`https://discord.gg/${response.code}`)
           .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 

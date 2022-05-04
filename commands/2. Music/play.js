@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
 import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
+import locale from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -8,10 +9,11 @@ export const { data, execute } = {
     .setDescription('Plays a song or playlist from YouTube.')
     .addStringOption((option) => option.setName('query').setDescription('The query to search for.').setRequired(true)),
   async execute(interaction) {
+    const { play: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const channel = interaction.member.voice.channel
-    if (!channel) { return await interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }
-    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
-    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true)) }
+    if (!channel) { return await interaction.reply(simpleEmbed(lang.errors.noVoiceChannel, true)) }
+    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
+    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
     const queue = interaction.client.player.createQueue(interaction.guild.id)
@@ -20,10 +22,10 @@ export const { data, execute } = {
     await queue.join(channel)
 
     const result = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.user })
-    if (!result) { return await interaction.editReply(errorEmbed('Error', 'There was an error while adding your song to the queue.')) }
+    if (!result) { return await interaction.editReply(errorEmbed('Error', lang.errors.generic)) }
 
     const embed = new MessageEmbed()
-      .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
+      .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(result.title)
       .setURL(result.url)
       .setThumbnail(result.thumbnail)
@@ -31,14 +33,14 @@ export const { data, execute } = {
 
     if (result.playlist) {
       embed
-        .addField('Amount', `${result.tracks.length} songs`, true)
-        .addField('Author', result.author, true)
-        .addField('Position', `${queue.tracks.indexOf(result.tracks[0]).toString()}-${queue.tracks.indexOf(result.tracks[result.tracks.length - 1]).toString()}`, true)
+        .addField(lang.fields.amount.name, lang.fields.amount.value(result.tracks.length), true)
+        .addField(lang.fields.author.name, result.author, true)
+        .addField(lang.fields.position.name, `${queue.tracks.indexOf(result.tracks[0]).toString()}-${queue.tracks.indexOf(result.tracks[result.tracks.length - 1]).toString()}`, true)
     } else {
       embed
-        .addField('Duration', result.live ? '🔴 Live' : result.duration, true)
-        .addField('Author', result.author, true)
-        .addField('Position', queue.tracks.indexOf(result).toString(), true)
+        .addField(lang.fields.duration.name, result.live ? '🔴 Live' : result.duration, true)
+        .addField(lang.fields.author.name, result.author, true)
+        .addField(lang.fields.position.name, queue.tracks.indexOf(result).toString(), true)
     }
 
     await interaction.editReply({ embeds: [embed] })

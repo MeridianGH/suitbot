@@ -1,18 +1,20 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { simpleEmbed } from '../../utilities/utilities.js'
+import locale from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('previous')
     .setDescription('Plays the previous track.'),
   async execute(interaction) {
+    const { previous: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed('Nothing currently playing.\nStart playback with /play!', true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
 
     const track = queue.previous()
-    if (!track) { return await interaction.reply(simpleEmbed('You can\'t use the command  `previous` right now!', true)) }
+    if (!track) { return await interaction.reply(simpleEmbed(lang.errors.generic, true)) }
 
-    await interaction.reply(simpleEmbed(`⏮ Playing previous track \`#0\`: **${queue.nowPlaying.title}**.`))
+    await interaction.reply(simpleEmbed('⏮ ' + lang.other.response(`\`#0\`: **${queue.nowPlaying.title}**`)))
   }
 }

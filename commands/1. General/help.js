@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import fs from 'fs'
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
+import locale from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -12,6 +13,7 @@ export const { data, execute } = {
       .addChoice('Moderation', '4')
       .addChoice('Feedback', '5')),
   async execute(interaction) {
+    const { help: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const folders = fs.readdirSync('./commands/', { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name)
     const categories = {}
     for (const folder of folders) {
@@ -25,18 +27,18 @@ export const { data, execute } = {
     const pages = []
 
     const embed = new MessageEmbed()
-      .setAuthor({ name: 'Help', iconURL: interaction.member.user.displayAvatarURL() })
-      .setTitle('SuitBot Help Page')
+      .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+      .setTitle(lang.title)
       .setThumbnail(interaction.client.user.displayAvatarURL())
-      .setDescription('This module lists every command SuitBot currently supports.\n\nTo use a command start by typing `/` followed by the command you want to execute. You can also use Discord\'s integrated auto-completion for commands.\n\n')
-      .addField('➕  Invite', '[Click here to invite](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)', true)
-      .addField('🌐  Website', '[suitbot.xyz](https://suitbot.xyz)', true)
+      .setDescription(lang.description)
+      .addField('➕ ' + lang.fields.invite.name, `[${lang.fields.invite.value}](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)`, true)
+      .addField('🌐 ' + lang.fields.website.name, '[suitbot.xyz](https://suitbot.xyz)', true)
       .addField('\u200b', '\u200b', true)
-      .addField('<:github:923336812410306630>  Source code', '[GitHub](https://github.com/MeridianGH/suitbot)', true)
-      .addField('<:discord:934041553209548840> Discord Server', '[Invite](https://discord.gg/qX2CBrrUpf)', true)
+      .addField('<:github:923336812410306630> ' + lang.fields.github.name, `[${lang.fields.github.value}](https://github.com/MeridianGH/suitbot)`, true)
+      .addField('<:discord:934041553209548840> ' + lang.fields.discord.name, `[${lang.fields.discord.value}](https://discord.gg/qX2CBrrUpf)`, true)
       .addField('\u200b', '\u200b', true)
-      .addField('\u200b', 'Press the buttons below to switch pages and display more info.')
-      .setFooter({ text: `SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
+      .addField('\u200b', lang.fields.buttons.value)
+      .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
     pages.push(embed)
 
     for (const [category, commands] of Object.entries(categories)) {
@@ -48,20 +50,20 @@ export const { data, execute } = {
       description = description + '\u2015'.repeat(34)
 
       const embed = new MessageEmbed()
-        .setAuthor({ name: 'Help', iconURL: interaction.member.user.displayAvatarURL() })
+        .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
         .setTitle(category)
         .setDescription(description)
-        .setFooter({ text: `SuitBot | Page ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
       pages.push(embed)
     }
 
     const previous = new MessageButton()
       .setCustomId('previous')
-      .setLabel('Previous')
+      .setLabel(lang.other.previous)
       .setStyle('PRIMARY')
     const next = new MessageButton()
       .setCustomId('next')
-      .setLabel('Next')
+      .setLabel(lang.other.next)
       .setStyle('PRIMARY')
 
     let currentIndex = Math.max(Number(interaction.options.getString('category')) - 1, 0)

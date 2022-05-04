@@ -1,17 +1,19 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
+import locale from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('github')
     .setDescription('Sends a link to the source code of this bot.'),
   async execute(interaction) {
+    const { github: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const embed = new MessageEmbed()
-      .setAuthor({ name: 'GitHub', iconURL: interaction.member.user.displayAvatarURL() })
-      .setTitle('GitHub Repository')
+      .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+      .setTitle(lang.title)
       .setURL('https://github.com/MeridianGH/suitbot')
       .setThumbnail(interaction.client.user.displayAvatarURL())
-      .setDescription('The source code for this bot along with helpful information.')
+      .setDescription(lang.description)
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
     await interaction.reply({ embeds: [embed] })
   }

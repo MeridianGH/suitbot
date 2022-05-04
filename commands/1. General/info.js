@@ -1,11 +1,13 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
+import locale from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('info')
     .setDescription('Shows info about the bot.'),
   async execute(interaction) {
+    const { info: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     let totalSeconds = interaction.client.uptime / 1000
     const days = Math.floor(totalSeconds / 86400)
     totalSeconds %= 86400
@@ -16,12 +18,12 @@ export const { data, execute } = {
     const uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`
 
     const embed = new MessageEmbed()
-      .setAuthor({ name: 'Info', iconURL: interaction.member.user.displayAvatarURL() })
-      .setTitle('Bot Information')
+      .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+      .setTitle(lang.title)
       .setThumbnail(interaction.client.user.displayAvatarURL())
-      .addField('Servers', interaction.client.guilds.cache.size.toString(), true)
-      .addField('Uptime', uptime, true)
-      .addField('Memory Usage', `heapUsed: ${Math.floor(process.memoryUsage().heapUsed / 1024 / 1024 * 100)}MB | heapTotal: ${Math.floor(process.memoryUsage().heapTotal / 1024 / 1024 * 100)}MB`)
+      .addField(lang.fields.servers.name, interaction.client.guilds.cache.size.toString(), true)
+      .addField(lang.fields.uptime.name, uptime, true)
+      .addField(lang.fields.memoryUsage.name, `heapUsed: ${Math.floor(process.memoryUsage().heapUsed / 1024 / 1024 * 100)}MB | heapTotal: ${Math.floor(process.memoryUsage().heapTotal / 1024 / 1024 * 100)}MB`)
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })

@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
 import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
+import locale from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -8,22 +9,23 @@ export const { data, execute } = {
     .setDescription('Searches five songs from YouTube and lets you select one to play.')
     .addStringOption((option) => option.setName('query').setDescription('The query to search for.').setRequired(true)),
   async execute(interaction) {
+    const { search: lang, play } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const channel = interaction.member.voice.channel
-    if (!channel) { return await interaction.reply(simpleEmbed('You need to be in a voice channel to use this command.', true)) }
-    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(simpleEmbed('You need to be in the same voice channel as the bot to use this command!', true)) }
-    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(simpleEmbed('The bot does not have the correct permissions to play in your voice channel!', true)) }
+    if (!channel) { return await interaction.reply(simpleEmbed(lang.errors.noVoiceChannel, true)) }
+    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
+    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
     const queue = interaction.client.player.createQueue(interaction.guild.id)
     queue.setChannel(interaction.channel)
 
     const result = await queue.search(interaction.options.getString('query'), { requestedBy: interaction.user })
-    if (!result) { return await interaction.editReply(errorEmbed('Error', 'There was an error while searching for your query.')) }
+    if (!result) { return await interaction.editReply(errorEmbed('Error', lang.errors.generic)) }
 
     // noinspection JSCheckFunctionSignatures
     const selectMenu = new MessageSelectMenu()
       .setCustomId('search')
-      .setPlaceholder('Select a song...')
+      .setPlaceholder(lang.other.select)
       .addOptions([
         { label: result[0].title, description: result[0].author, value: '0' },
         { label: result[1].title, description: result[1].author, value: '1' },
@@ -34,10 +36,10 @@ export const { data, execute } = {
 
     const embedMessage = await interaction.editReply({
       embeds: [new MessageEmbed()
-        .setAuthor({ name: 'Search Results.', iconURL: interaction.member.user.displayAvatarURL() })
-        .setTitle(`Here are the search results for your search\n"\`${interaction.options.getString('query')}\`":`)
+        .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+        .setTitle(lang.title(interaction.options.getString('query')))
         .setThumbnail(result[0].thumbnail)
-        .setFooter({ text: 'SuitBot | This embed expires after one minute.', iconURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ text: `SuitBot | ${lang.other.expires}`, iconURL: interaction.client.user.displayAvatarURL() })
       ],
       components: [new MessageActionRow({ components: [selectMenu] })],
       fetchReply: true
@@ -53,13 +55,13 @@ export const { data, execute } = {
       // noinspection JSCheckFunctionSignatures
       await menuInteraction.editReply({
         embeds: [new MessageEmbed()
-          .setAuthor({ name: 'Added to queue.', iconURL: interaction.member.user.displayAvatarURL() })
+          .setAuthor({ name: play.author, iconURL: interaction.member.user.displayAvatarURL() })
           .setTitle(track.title)
           .setURL(track.url)
           .setThumbnail(track.thumbnail)
-          .addField('Duration', track.live ? '🔴 Live' : track.duration, true)
-          .addField('Author', track.author, true)
-          .addField('Position', queue.tracks.indexOf(track).toString(), true)
+          .addField(play.fields.duration.name, track.live ? '🔴 Live' : track.duration, true)
+          .addField(play.fields.author.name, track.author, true)
+          .addField(play.fields.position.name, queue.tracks.indexOf(track).toString(), true)
           .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
         ],
         components: []
