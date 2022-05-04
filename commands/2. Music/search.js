@@ -35,11 +35,12 @@ export const { data, execute } = {
       ])
 
     const embedMessage = await interaction.editReply({
-      embeds: [new MessageEmbed()
-        .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-        .setTitle(lang.title(interaction.options.getString('query')))
-        .setThumbnail(result[0].thumbnail)
-        .setFooter({ text: `SuitBot | ${lang.other.expires}`, iconURL: interaction.client.user.displayAvatarURL() })
+      embeds: [
+        new MessageEmbed()
+          .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+          .setTitle(lang.title(interaction.options.getString('query')))
+          .setThumbnail(result[0].thumbnail)
+          .setFooter({ text: `SuitBot | ${lang.other.expires}`, iconURL: interaction.client.user.displayAvatarURL() })
       ],
       components: [new MessageActionRow({ components: [selectMenu] })],
       fetchReply: true
@@ -54,15 +55,16 @@ export const { data, execute } = {
 
       // noinspection JSCheckFunctionSignatures
       await menuInteraction.editReply({
-        embeds: [new MessageEmbed()
-          .setAuthor({ name: play.author, iconURL: interaction.member.user.displayAvatarURL() })
-          .setTitle(track.title)
-          .setURL(track.url)
-          .setThumbnail(track.thumbnail)
-          .addField(play.fields.duration.name, track.live ? '🔴 Live' : track.duration, true)
-          .addField(play.fields.author.name, track.author, true)
-          .addField(play.fields.position.name, queue.tracks.indexOf(track).toString(), true)
-          .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
+        embeds: [
+          new MessageEmbed()
+            .setAuthor({ name: play.author, iconURL: interaction.member.user.displayAvatarURL() })
+            .setTitle(track.title)
+            .setURL(track.url)
+            .setThumbnail(track.thumbnail)
+            .addField(play.fields.duration.name, track.live ? '🔴 Live' : track.duration, true)
+            .addField(play.fields.author.name, track.author, true)
+            .addField(play.fields.position.name, queue.tracks.indexOf(track).toString(), true)
+            .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
         ],
         components: []
       })

@@ -39,11 +39,12 @@ async function shutdown() {
     if (queue.destroyed) { continue }
     const { serverShutdown: lang } = locale[await client.database.getLocale(queue.guild.id)]
     await queue.channel.send({
-      embeds: [new MessageEmbed()
-        .setTitle(lang.title)
-        .setDescription(lang.description)
-        .setFooter({ text: 'SuitBot', iconURL: iconURL })
-        .setColor('#ff0000')
+      embeds: [
+        new MessageEmbed()
+          .setTitle(lang.title)
+          .setDescription(lang.description)
+          .setFooter({ text: 'SuitBot', iconURL: iconURL })
+          .setColor('#ff0000')
       ]
     })
     queue.stop()

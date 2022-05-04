@@ -5,9 +5,10 @@ import { iconURL } from '../events/ready.js'
 
 export function simpleEmbed(content, ephemeral = false) {
   return {
-    embeds: [new MessageEmbed()
-      .setDescription(content)
-      .setFooter({ text: 'SuitBot', iconURL: iconURL })
+    embeds: [
+      new MessageEmbed()
+        .setDescription(content)
+        .setFooter({ text: 'SuitBot', iconURL: iconURL })
     ],
     ephemeral: ephemeral
   }
@@ -15,10 +16,12 @@ export function simpleEmbed(content, ephemeral = false) {
 
 export function errorEmbed(content, ephemeral = false) {
   return {
-    embeds: [new MessageEmbed()
-      .setDescription(content)
-      .setFooter({ text: 'SuitBot', iconURL: iconURL })
-      .setColor('#ff0000')],
+    embeds: [
+      new MessageEmbed()
+        .setDescription(content)
+        .setFooter({ text: 'SuitBot', iconURL: iconURL })
+        .setColor('#ff0000')
+    ],
     ephemeral: ephemeral
   }
 }

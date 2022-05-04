@@ -48,13 +48,14 @@ export const { data, execute } = {
         .setStyle('PRIMARY')
 
       const embedMessage = await interaction.editReply({
-        embeds: [new MessageEmbed()
-          .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-          .setTitle(queue.nowPlaying.title)
-          .setURL(song.url)
-          .setThumbnail(queue.nowPlaying.thumbnail)
-          .setDescription(pages[0])
-          .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${{ 0: '❌', 1: '🔂 ' + lang.other.repeatModes.track, 2: '🔁 ' + lang.other.repeatModes.queue }[queue.repeatMode]} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
+        embeds: [
+          new MessageEmbed()
+            .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+            .setTitle(queue.nowPlaying.title)
+            .setURL(song.url)
+            .setThumbnail(queue.nowPlaying.thumbnail)
+            .setDescription(pages[0])
+            .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${{ 0: '❌', 1: '🔂 ' + lang.other.repeatModes.track, 2: '🔁 ' + lang.other.repeatModes.queue }[queue.repeatMode]} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
         ],
         components: isOnePage ? [] : [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(false)] })],
         fetchReply: true
@@ -67,13 +68,14 @@ export const { data, execute } = {
         collector.on('collect', async (buttonInteraction) => {
           buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
           await buttonInteraction.update({
-            embeds: [new MessageEmbed()
-              .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-              .setTitle(queue.nowPlaying.title)
-              .setURL(song.url)
-              .setThumbnail(queue.nowPlaying.thumbnail)
-              .setDescription(pages[currentIndex])
-              .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${{ 0: '❌', 1: '🔂 ' + lang.other.repeatModes.track, 2: '🔁 ' + lang.other.repeatModes.queue }[queue.repeatMode]} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
+            embeds: [
+              new MessageEmbed()
+                .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+                .setTitle(queue.nowPlaying.title)
+                .setURL(song.url)
+                .setThumbnail(queue.nowPlaying.thumbnail)
+                .setDescription(pages[currentIndex])
+                .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${{ 0: '❌', 1: '🔂 ' + lang.other.repeatModes.track, 2: '🔁 ' + lang.other.repeatModes.queue }[queue.repeatMode]} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
             ],
             components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })]
           })
@@ -84,13 +86,14 @@ export const { data, execute } = {
       }
     } catch {
       await interaction.editReply({
-        embeds: [new MessageEmbed()
-          .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-          .setTitle(queue.nowPlaying.title)
-          .setURL(queue.nowPlaying.url)
-          .setThumbnail(queue.nowPlaying.thumbnail)
-          .setDescription(lang.other.noResults)
-          .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${{ 0: '❌', 1: '🔂 ' + lang.other.repeatModes.track, 2: '🔁 ' + lang.other.repeatModes.queue }[queue.repeatMode]} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
+        embeds: [
+          new MessageEmbed()
+            .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+            .setTitle(queue.nowPlaying.title)
+            .setURL(queue.nowPlaying.url)
+            .setThumbnail(queue.nowPlaying.thumbnail)
+            .setDescription(lang.other.noResults)
+            .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${{ 0: '❌', 1: '🔂 ' + lang.other.repeatModes.track, 2: '🔁 ' + lang.other.repeatModes.queue }[queue.repeatMode]} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
         ]
       })
     }
