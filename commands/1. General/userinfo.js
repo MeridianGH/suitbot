@@ -37,7 +37,7 @@ export const { data, execute } = {
       .setTitle(member.displayName)
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .addField(lang.fields.fullName.name, member.user.tag, true)
-      .addField(lang.fields.nickname.name, member.nickname ?? 'None', true)
+      .addField(lang.fields.nickname.name, member.nickname ?? '-', true)
       .addField(lang.fields.bot.name, member.user.bot ? '✅' : '❌', true)
       .addField(lang.fields.id.name, member.id, true)
       .addField(lang.fields.profile.name, `<@${member.id}>`, true)

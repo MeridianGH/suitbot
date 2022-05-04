@@ -80,7 +80,6 @@ export const userinfo = {
     joined: { name: 'Joined', value: null }
   },
   other: {
-    noNickname: 'No nickname',
     online: 'Online',
     idle: 'Idle',
     dnd: 'Do not disturb',
