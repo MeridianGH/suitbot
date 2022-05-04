@@ -1,9 +1,11 @@
-import { Client, Collection, Intents } from 'discord.js'
+import { Client, Collection, Intents, MessageEmbed } from 'discord.js'
 import database from './utilities/database.js'
 import { Player } from './music/Player.js'
 import { errorEmbed, getFilesRecursively } from './utilities/utilities.js'
 
 import { token } from './utilities/config.js'
+import locale from './language/locale.js'
+import { iconURL } from './events/ready.js'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 client.player = new Player(client)
@@ -35,7 +37,15 @@ async function shutdown() {
   for (const entry of client.player.queues) {
     const queue = entry[1]
     if (queue.destroyed) { continue }
-    await queue.channel.send(errorEmbed('Server shutdown', 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'))
+    const { serverShutdown: lang } = locale[await client.database.getLocale(queue.guild.id)]
+    await queue.channel.send({
+      embeds: [new MessageEmbed()
+        .setTitle(lang.title)
+        .setDescription(lang.description)
+        .setFooter({ text: 'SuitBot', iconURL: iconURL })
+        .setColor('#ff0000')
+      ]
+    })
     queue.stop()
   }
   client.destroy()

@@ -339,3 +339,9 @@ export const github = {
 export const suggestion = {
   other: { response: 'Your suggestion was sent successfully!' }
 }
+
+// Other
+export const serverShutdown = {
+  title: 'Server shutdown.',
+  description: 'The server the bot is hosted on has been forced to shut down.\nThe bot should be up and running again in a few minutes.'
+}

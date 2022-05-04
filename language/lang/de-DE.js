@@ -339,3 +339,9 @@ export const github = {
 export const suggestion = {
   other: { response: 'Deine Anregung wurde erfolgreich abgeschickt!' }
 }
+
+// Other
+export const serverShutdown = {
+  title: 'Server heruntergefahren.',
+  description: 'Der Server, auf dem der Bot läuft, musste heruntergefahren werden.\nDer Bot sollte innerhalb weniger Minuten wieder online sein.'
+}
