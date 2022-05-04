@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -15,8 +15,8 @@ export const { data, execute } = {
     const { repeat: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const mode = interaction.options.getInteger('mode')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
     queue.setRepeatMode(mode)
     await interaction.reply(simpleEmbed(lang.other.response({ 0: lang.other.repeatModes.none + ' ▶', 1: lang.other.repeatModes.track + ' 🔂', 2: lang.other.repeatModes.queue + ' 🔁' }[mode])))

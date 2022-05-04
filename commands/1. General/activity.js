@@ -25,13 +25,13 @@ export const { data, execute } = {
   async execute(interaction) {
     const { activity: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const channel = interaction.options.getChannel('channel')
-    if (!channel.isVoice()) { return await interaction.reply(simpleEmbed(lang.errors.voiceChannel, true)) }
+    if (!channel.isVoice()) { return await interaction.reply(errorEmbed(lang.errors.voiceChannel, true)) }
 
     const rest = new discordRest.REST({ version: '9' }).setToken(interaction.client.token)
     await rest.post(Routes.channelInvites(channel.id), { body: { 'target_application_id': interaction.options.getString('activity'), 'target_type': 2 } })
       .then(async (response) => {
-        if (response.error || !response.code) { return interaction.reply(errorEmbed('Error', lang.errors.generic, true)) }
-        if (response.code === '50013') { return interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
+        if (response.error || !response.code) { return interaction.reply(errorEmbed(lang.errors.generic, true)) }
+        if (response.code === '50013') { return interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
 
         const embed = new MessageEmbed()
           .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { msToHMS, simpleEmbed, timeToMs } from '../../utilities/utilities.js'
+import { errorEmbed, msToHMS, simpleEmbed, timeToMs } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -11,10 +11,10 @@ export const { data, execute } = {
     const { seek: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const time = timeToMs(interaction.options.getString('time'))
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
-    if (queue.nowPlaying.live) { return await interaction.reply(simpleEmbed(lang.errors.isLive, true)) }
-    if (time < 0 || time > queue.nowPlaying.milliseconds) { return await interaction.reply(simpleEmbed(lang.errors.index(queue.nowPlaying.duration), true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (queue.nowPlaying.live) { return await interaction.reply(errorEmbed(lang.errors.isLive, true)) }
+    if (time < 0 || time > queue.nowPlaying.milliseconds) { return await interaction.reply(errorEmbed(lang.errors.index(queue.nowPlaying.duration), true)) }
 
     await queue.seek(time)
     await interaction.reply(simpleEmbed('⏩ ' + lang.other.response(msToHMS(time))))

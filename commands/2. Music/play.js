@@ -12,8 +12,8 @@ export const { data, execute } = {
     const { play: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const channel = interaction.member.voice.channel
     if (!channel) { return await interaction.reply(simpleEmbed(lang.errors.noVoiceChannel, true)) }
-    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
-    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
+    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
     const queue = interaction.client.player.createQueue(interaction.guild.id)
@@ -22,7 +22,7 @@ export const { data, execute } = {
     await queue.join(channel)
 
     const result = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.user })
-    if (!result) { return await interaction.editReply(errorEmbed('Error', lang.errors.generic)) }
+    if (!result) { return await interaction.editReply(errorEmbed(lang.errors.generic)) }
 
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })

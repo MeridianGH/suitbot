@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import { simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import locale from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -10,8 +10,8 @@ export const { data, execute } = {
   async execute(interaction) {
     const { nowplaying: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
     const track = queue.nowPlaying
     const progressBar = queue.createProgressBar('▬', '🔘')

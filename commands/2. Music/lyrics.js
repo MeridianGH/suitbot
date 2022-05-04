@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
-import { simpleEmbed } from '../../utilities/utilities.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 import playdl from 'play-dl'
 import { geniusAppId } from '../../utilities/config.js'
 import genius from 'genius-lyrics'
@@ -14,8 +14,8 @@ export const { data, execute } = {
   async execute(interaction) {
     const { lyrics: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(simpleEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
+    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
     await interaction.deferReply()
 
     const musicInfo = (await playdl.video_basic_info(queue.nowPlaying.streamURL, { language: 'en-US' })).video_details.music

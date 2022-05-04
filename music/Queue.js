@@ -82,7 +82,7 @@ export class Queue {
       this.play(this.tracks[0], { immediate: true })
     })
 
-    this.connection.on('error', (error) => { this.channel?.send(errorEmbed('Error', error)) })
+    this.connection.on('error', (error) => { this.channel?.send(errorEmbed(error)) })
   }
 
   async play(query, options) {

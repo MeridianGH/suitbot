@@ -12,15 +12,15 @@ export const { data, execute } = {
     const { search: lang, play } = locale[await interaction.client.database.getLocale(interaction.guildId)]
     const channel = interaction.member.voice.channel
     if (!channel) { return await interaction.reply(simpleEmbed(lang.errors.noVoiceChannel, true)) }
-    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(simpleEmbed(lang.errors.sameChannel, true)) }
-    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(simpleEmbed(lang.errors.missingPerms, true)) }
+    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
     const queue = interaction.client.player.createQueue(interaction.guild.id)
     queue.setChannel(interaction.channel)
 
     const result = await queue.search(interaction.options.getString('query'), { requestedBy: interaction.user })
-    if (!result) { return await interaction.editReply(errorEmbed('Error', lang.errors.generic)) }
+    if (!result) { return await interaction.editReply(errorEmbed(lang.errors.generic)) }
 
     // noinspection JSCheckFunctionSignatures
     const selectMenu = new MessageSelectMenu()

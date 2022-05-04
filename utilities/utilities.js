@@ -13,10 +13,9 @@ export function simpleEmbed(content, ephemeral = false) {
   }
 }
 
-export function errorEmbed(title, content, ephemeral = false) {
+export function errorEmbed(content, ephemeral = false) {
   return {
     embeds: [new MessageEmbed()
-      .setTitle(title)
       .setDescription(content)
       .setFooter({ text: 'SuitBot', iconURL: iconURL })
       .setColor('#ff0000')],
