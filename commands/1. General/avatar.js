@@ -13,7 +13,7 @@ export const { data, execute } = {
     const embed = new MessageEmbed()
       .setAuthor({ name: 'avatar', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(`${user.user.username}'s avatar`)
-	  .setImage(user.user.displayAvatarURL())
+      .setImage(user.user.displayAvatarURL())
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
     await interaction.reply({ embeds: [embed] })
   }
