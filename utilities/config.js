@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 import { existsSync } from 'fs'
 import { readFile } from 'fs/promises'
 
