@@ -1,17 +1,16 @@
 {
-  "root": true,
-  "extends": [
-    "eslint:recommended"
-  ],
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
   "env": {
     "browser": true,
     "node": true,
     "es6": true
   },
+  "extends": ["eslint:recommended"],
+  "ignorePatterns": ["**/*.ejs"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "root": true,
   "rules": {
     "array-bracket-newline": ["warn", { "multiline": true }],
     "arrow-body-style": ["warn", "as-needed"],
@@ -34,7 +33,7 @@
     "no-multi-spaces": "warn",
     "no-multiple-empty-lines": ["warn", { "max": 2, "maxEOF": 0 }],
     "no-trailing-spaces": "warn",
-    "no-unused-vars": ["warn", { "ignoreRestSiblings":  true }],
+    "no-unused-vars": ["warn", { "ignoreRestSiblings": true }],
     "no-whitespace-before-property": "warn",
     "object-curly-newline": ["warn", { "multiline": true }],
     "object-curly-spacing": ["warn", "always"],
