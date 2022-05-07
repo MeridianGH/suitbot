@@ -52,7 +52,7 @@ export const language = {
   description: (langCode) => `Kieli asetettiin \`${langCode}\`.`
 }
 export const ping = {
-  author: 'Viive',
+  author: 'Viive.',
   title: 'Botin & APIn Viive'
 }
 export const serverinfo = {
@@ -112,7 +112,7 @@ export const lyrics = {
   author: 'Sanat.',
   other: {
     repeatModes,
-    genius: 'Provided by genius.com',
+    genius: 'Tarjoaa genius.com',
     noResults: 'Sanoja ei löytynyt!',
     previous: 'Edellinen',
     next: 'Seuraava'
@@ -148,7 +148,7 @@ export const pause = {
 export const play = {
   author: 'Lisätty jonoon.',
   fields: {
-    amount: { name: 'Määrä', value: (amount) => `${amount} songs` },
+    amount: { name: 'Määrä', value: (amount) => `${amount} musiikkia` },
     duration: { name: 'Kesto', value: null },
     author: { name: 'Tekijä', value: null },
     position: { name: 'Paikka', value: null }
