@@ -90,7 +90,7 @@ export const userinfo = {
 
 // Music
 const musicErrors = {
-  nothingPlaying: 'Mikään ei soi tällä hetkellä.\nKäynnistä musiikki komennolla \`/play\`!',
+  nothingPlaying: 'Mikään ei soi tällä hetkellä.\nKäynnistä musiikki komennolla `/play`!',
   sameChannel: 'Sinun pitää olla samassa ääni kanavassa kuin bottikin!',
   noVoiceChannel: 'Sinun pitää olla ääni kanavalla käyttääksesi komentoa.',
   missingPerms: 'Botilla ei ole tarpeeksi oikeuksia soittaakseen musiikkia kanavallasi!'
@@ -163,7 +163,7 @@ export const play = {
 export const previous = {
   other: { response: (track) => `Soitetaan edellinen musiikki ${track}.` },
   errors: {
-    generic: 'Et voi käyttää komentoa `previous` juuri nyt!',
+    generic: 'Et voi käyttää komentoa `/previous` juuri nyt!',
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
   }
@@ -173,7 +173,7 @@ export const queue = {
   other: {
     dashboard: 'Vielä käytät vabnhoja komentoja? Kokeile uutta [paneelia](https://suitbot.xyz) sen sijaan!',
     nowPlaying: 'Nyt Soitetaan:',
-    noUpcomingSongs: 'Ei uusia musiikkeja tulossa.\nLisää musiikkeja \`/play\` komennolla!\n',
+    noUpcomingSongs: 'Ei uusia musiikkeja tulossa.\nLisää musiikkeja `/play` komennolla!\n',
     songsInQueue: (amount) => `${amount} musiikkia jonossa`,
     totalDuration: (duration) => `${duration} jonon koko kesto`,
     page: 'Sivu',

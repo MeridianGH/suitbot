@@ -90,7 +90,7 @@ export const userinfo = {
 
 // Music
 const musicErrors = {
-  nothingPlaying: 'Nothing currently playing.\nStart playback with /play!',
+  nothingPlaying: 'Nothing currently playing.\nStart playback with `/play`!',
   sameChannel: 'You need to be in the same voice channel as the bot to use this command!',
   noVoiceChannel: 'You need to be in a voice channel to use this command.',
   missingPerms: 'The bot does not have the correct permissions to play in your voice channel!'
@@ -163,7 +163,7 @@ export const play = {
 export const previous = {
   other: { response: (track) => `Playing previous track ${track}.` },
   errors: {
-    generic: 'You can\'t use the command `previous` right now!',
+    generic: 'You can\'t use the command `/previous` right now!',
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
   }
@@ -173,7 +173,7 @@ export const queue = {
   other: {
     dashboard: 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!',
     nowPlaying: 'Now Playing:',
-    noUpcomingSongs: 'No upcoming songs.\nAdd songs with /play!\n',
+    noUpcomingSongs: 'No upcoming songs.\nAdd songs with `/play`!\n',
     songsInQueue: (amount) => `${amount} songs in queue`,
     totalDuration: (duration) => `${duration} total duration`,
     page: 'Page',

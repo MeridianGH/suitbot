@@ -90,7 +90,7 @@ export const userinfo = {
 
 // Music
 const musicErrors = {
-  nothingPlaying: 'Aktuell wird nichts gespielt.\nStarte die Wiedergabe mit /play!',
+  nothingPlaying: 'Aktuell wird nichts gespielt.\nStarte die Wiedergabe mit `/play`!',
   sameChannel: 'Du musst im gleichen Sprachkanal wie der Bot sein, um diesen Befehl benutzen zu können!',
   noVoiceChannel: 'Du musst in einem Sprachkanal sein, um diesen Befehl benutzen zu können.',
   missingPerms: 'Dem Bot fehlen Berechtigungen, um in deinem Sprachkanal zu spielen!'
@@ -163,7 +163,7 @@ export const play = {
 export const previous = {
   other: { response: (track) => `Spielt vorherigen Titel ${track}.` },
   errors: {
-    generic: 'Du kannst den Befehl `previous` gerade nicht benutzen!',
+    generic: 'Du kannst den Befehl `/previous` gerade nicht benutzen!',
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
   }
@@ -171,9 +171,9 @@ export const previous = {
 export const queue = {
   author: 'Wiedergabeliste.',
   other: {
-    dashboard: 'Benutzt du immer noch alte und langweilige Befehle? Schau dir das neue [Web Dashboard](https://suitbot.xyz) an!',
+    dashboard: 'Benutzt du immer noch alte und langweilige Befehle? Nutze stattdessen das neue [Web Dashboard](https://suitbot.xyz)!',
     nowPlaying: 'Spielt gerade:',
-    noUpcomingSongs: 'Keine kommenden Titel.\nFüge Lieder mit /play hinzu!\n',
+    noUpcomingSongs: 'Keine kommenden Titel.\nFüge Lieder mit `/play` hinzu!\n',
     songsInQueue: (amount) => `${amount} Lieder in der Wiedergabeliste`,
     totalDuration: (duration) => `${duration} Gesamtdauer`,
     page: 'Seite',
