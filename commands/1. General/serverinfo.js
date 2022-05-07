@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('serverinfo')
     .setDescription('Shows info about the server.'),
   async execute(interaction) {
-    const { serverinfo: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).serverinfo
     const guild = interaction.guild
     const created = Math.floor(guild.createdAt.getTime() / 1000)
     const embed = new MessageEmbed()

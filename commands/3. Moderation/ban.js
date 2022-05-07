@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { GuildMember, MessageEmbed, Permissions } from 'discord.js'
 import { errorEmbed } from '../../utilities/utilities.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ export const { data, execute } = {
     .addMentionableOption((option) => option.setName('user').setDescription('The user to ban.').setRequired(true))
     .addStringOption((option) => option.setName('reason').setDescription('The reason for the ban.')),
   async execute(interaction) {
-    const { ban: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).ban
     const member = interaction.options.getMentionable('user')
     const reason = interaction.options.getString('reason')
 

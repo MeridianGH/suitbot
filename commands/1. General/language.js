@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -13,8 +13,9 @@ export const { data, execute } = {
       ['Português do Brasil', 'pt-BR']
     ])),
   async execute(interaction) {
+    // TODO: Check for permissions
     const langCode = interaction.options.getString('language')
-    const { language: lang } = locale[langCode]
+    const lang = getLanguage(langCode).language
     await interaction.client.database.setLocale(interaction.guild.id, langCode)
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })

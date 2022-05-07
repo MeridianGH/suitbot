@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { simpleEmbed } from '../../utilities/utilities.js'
 import { MessageEmbed } from 'discord.js'
 import { guildId } from '../../utilities/config.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ export const { data, execute } = {
     .setDescription('Reports a bug to the developer.')
     .addStringOption((option) => option.setName('bug').setDescription('A description of the bug.').setRequired(true)),
   async execute(interaction) {
-    const { bugreport: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).bugreport
     const bug = interaction.options.getString('bug')
     const developerGuild = interaction.client.guilds.cache.get(guildId)
     const bugReportChannel = developerGuild.channels.cache.find((channel) => channel.name === 'bug-reports' && channel.isText())

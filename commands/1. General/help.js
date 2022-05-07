@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import fs from 'fs'
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -13,7 +13,7 @@ export const { data, execute } = {
       .addChoice('Moderation', '4')
       .addChoice('Feedback', '5')),
   async execute(interaction) {
-    const { help: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).help
     const folders = fs.readdirSync('./commands/', { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name)
     const categories = {}
     for (const folder of folders) {

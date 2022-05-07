@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('info')
     .setDescription('Shows info about the bot.'),
   async execute(interaction) {
-    const { info: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).info
     let totalSeconds = interaction.client.uptime / 1000
     const days = Math.floor(totalSeconds / 86400)
     totalSeconds %= 86400

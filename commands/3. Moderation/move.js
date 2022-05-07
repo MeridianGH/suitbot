@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { errorEmbed } from '../../utilities/utilities.js'
 import { GuildMember, MessageEmbed, Permissions } from 'discord.js'
 import { ChannelType } from 'discord-api-types/v9'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -11,7 +11,7 @@ export const { data, execute } = {
     .addMentionableOption((option) => option.setName('user').setDescription('The user to move.').setRequired(true))
     .addChannelOption((option) => option.setName('channel').setDescription('The channel to move to.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
   async execute(interaction) {
-    const { move: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).move
     const member = interaction.options.getMentionable('user')
     const channel = interaction.options.getChannel('channel')
 

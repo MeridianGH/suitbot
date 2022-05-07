@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { GuildMember, MessageEmbed } from 'discord.js'
 import { errorEmbed } from '../../utilities/utilities.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -9,7 +9,7 @@ export const { data, execute } = {
     .setDescription('Shows info about a user.')
     .addMentionableOption((option) => option.setName('user').setDescription('The user to get info from.').setRequired(true)),
   async execute(interaction) {
-    const { userinfo: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).userinfo
     const member = interaction.options.getMentionable('user')
     if (!(member instanceof GuildMember)) { return await interaction.reply(errorEmbed(lang.errors.invalidUser, true)) }
 

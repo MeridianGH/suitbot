@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('github')
     .setDescription('Sends a link to the source code of this bot.'),
   async execute(interaction) {
-    const { github: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).github
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(lang.title)

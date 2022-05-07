@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed, Permissions } from 'discord.js'
 import { errorEmbed } from '../../utilities/utilities.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -9,7 +9,7 @@ export const { data, execute } = {
     .setDescription('Sets the rate limit of the current channel.')
     .addIntegerOption((option) => option.setName('seconds').setDescription('The new rate limit in seconds.').setRequired(true)),
   async execute(interaction) {
-    const { slowmode: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).slowmode
     const seconds = interaction.options.getInteger('seconds')
 
     if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }

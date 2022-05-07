@@ -4,7 +4,7 @@ import { Player } from './music/Player.js'
 import { getFilesRecursively } from './utilities/utilities.js'
 
 import { token } from './utilities/config.js'
-import locale from './language/locale.js'
+import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
@@ -37,7 +37,7 @@ async function shutdown() {
   for (const entry of client.player.queues) {
     const queue = entry[1]
     if (queue.destroyed) { continue }
-    const { serverShutdown: lang } = locale[await client.database.getLocale(queue.guild.id)]
+    const lang = getLanguage(await client.database.getLocale(queue.guild.id)).serverShutdown
     await queue.channel.send({
       embeds: [
         new MessageEmbed()

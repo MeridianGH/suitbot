@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ export const { data, execute } = {
     .setDescription('Skips the current track or to a specified point in the queue.')
     .addIntegerOption((option) => option.setName('track').setDescription('The track to skip to.')),
   async execute(interaction) {
-    const { skip: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).skip
     const index = interaction.options.getInteger('track')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }

@@ -4,7 +4,7 @@ import { errorEmbed } from '../../utilities/utilities.js'
 import playdl from 'play-dl'
 import { geniusAppId } from '../../utilities/config.js'
 import genius from 'genius-lyrics'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 const Genius = new genius.Client(geniusAppId)
 
 export const { data, execute } = {
@@ -12,7 +12,7 @@ export const { data, execute } = {
     .setName('lyrics')
     .setDescription('Shows the lyrics of the currently playing song.'),
   async execute(interaction) {
-    const { lyrics: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).lyrics
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
     if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }

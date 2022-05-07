@@ -5,10 +5,14 @@ import * as ptBR from './lang/pt-BR.js'
 
 // https://discord.com/developers/docs/reference#locales
 
-export default {
+const locales = {
   'de': de,
   'en-US': enUS,
   'fi': fi,
-  'pt-BR': ptBR,
-  'undefined': enUS
+  'pt-BR': ptBR
+}
+
+export function getLanguage(locale) {
+  if (!(locale in locales)) { return locales['en-US'] }
+  return locales[locale]
 }

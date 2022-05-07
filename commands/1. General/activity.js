@@ -3,7 +3,7 @@ import { errorEmbed } from '../../utilities/utilities.js'
 import discordRest from '@discordjs/rest'
 import { ChannelType, Routes } from 'discord-api-types/v9'
 import { MessageEmbed } from 'discord.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ export const { data, execute } = {
     ]))
     .addChannelOption((option) => option.setName('channel').setDescription('The voice channel to create the activity in.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
   async execute(interaction) {
-    const { activity: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).activity
     const channel = interaction.options.getChannel('channel')
     if (!channel.isVoice()) { return await interaction.reply(errorEmbed(lang.errors.voiceChannel, true)) }
 

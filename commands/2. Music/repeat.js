@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -12,7 +12,7 @@ export const { data, execute } = {
       .addChoice('Queue', 2)
     ),
   async execute(interaction) {
-    const { repeat: lang } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).repeat
     const mode = interaction.options.getInteger('mode')
     const queue = interaction.client.player.getQueue(interaction.guild.id)
     if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }

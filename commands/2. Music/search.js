@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
 import { errorEmbed } from '../../utilities/utilities.js'
-import locale from '../../language/locale.js'
+import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -9,7 +9,7 @@ export const { data, execute } = {
     .setDescription('Searches five songs from YouTube and lets you select one to play.')
     .addStringOption((option) => option.setName('query').setDescription('The query to search for.').setRequired(true)),
   async execute(interaction) {
-    const { search: lang, play } = locale[await interaction.client.database.getLocale(interaction.guildId)]
+    const { search: lang, play } = getLanguage(await interaction.client.database.getLocale(interaction.guildId))
     const channel = interaction.member.voice.channel
     if (!channel) { return await interaction.reply(errorEmbed(lang.errors.noVoiceChannel, true)) }
     if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
