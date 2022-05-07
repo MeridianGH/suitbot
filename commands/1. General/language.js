@@ -2,8 +2,6 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
 import locale from '../../language/locale.js'
 
-// https://discord.com/developers/docs/reference#locales
-
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('language')
@@ -11,6 +9,7 @@ export const { data, execute } = {
     .addStringOption((option) => option.setName('language').setDescription('The language to select.').setRequired(true).addChoices([
       ['English', 'en-US'],
       ['Deutsch', 'de-DE'],
+      ['Suomi', 'fi-FI'],
       ['Português do Brasil', 'pt-BR']
     ])),
   async execute(interaction) {
