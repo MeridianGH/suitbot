@@ -378,7 +378,7 @@ export class Queue {
     const currentTime = this.currentTime
     const progress = Math.round(20 * currentTime / this.nowPlaying.milliseconds)
     const emptyProgress = 20 - progress
-    return body.repeat(progress) + head + ' '.repeat(emptyProgress) + msToHMS(currentTime) + '/' + this.nowPlaying.duration
+    return body.repeat(progress) + head + ' '.repeat(emptyProgress) + '\n' + msToHMS(currentTime) + '/' + this.nowPlaying.duration
   }
 
   setRepeatMode(mode) {
@@ -410,7 +410,7 @@ export class Queue {
     if (this.destroyed) { throw new Error('Queue destroyed') }
     if (!this.connection) { throw new Error('Connection unavailable') }
     if (!this.playing) { throw new Error('Nothing playing') }
-    return this.tracks.length > 1 ? this.tracks.slice(1).map((track) => track.milliseconds).reduce((p, c) => p + c) : 0
+    return this.tracks.length >= 1 ? this.tracks.slice(1).map((track) => track.milliseconds).reduce((p, c) => p + c) + this.currentTime : 0
   }
 
   setPaused(state) {
