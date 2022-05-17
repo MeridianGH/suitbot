@@ -107,11 +107,165 @@ export class Queue {
       this.tracks.push(...query.tracks)
     } else {
       added = null
-      if (query.startsWith('https')) { query = query.split('&')[0] }
+      if (query.startsWith('https://')) {
+        // Links
+        query = query.split('&')[0] // Split off query parameters
 
-      const youtubeType = playdl.yt_validate(query)
-      if (youtubeType === 'video' && query.startsWith('https')) {
-        const info = (await playdl.search(query, { limit: 1 }))[0]
+        const youtubeType = playdl.yt_validate(query)
+        if (youtubeType === 'video') {
+          const info = (await playdl.search(query, { limit: 1 }))[0]
+          if (!info) { return null }
+
+          added = {
+            title: info.title,
+            author: info.channel.name,
+            url: info.url,
+            streamURL: info.url,
+            thumbnail: info.thumbnails.at(-1).url,
+            requestedBy: options?.requestedBy ?? 'null',
+            duration: msToHMS(info.durationInSec * 1000),
+            milliseconds: info.durationInSec * 1000,
+            seekTime: 0,
+            live: info.live,
+            track: true
+          }
+          this.tracks.push(added)
+        }
+        if (youtubeType === 'playlist') {
+          const info = await playdl.playlist_info(query, { incomplete: true })
+          if (!info) { return null }
+
+          const tracks = (await info.all_videos()).map((track) => ({
+            title: track.title,
+            author: track.channel.name,
+            url: track.url,
+            streamURL: track.url,
+            thumbnail: track.thumbnails.at(-1).url,
+            requestedBy: options?.requestedBy ?? 'null',
+            duration: msToHMS(track.durationInSec * 1000),
+            milliseconds: track.durationInSec * 1000,
+            seekTime: 0,
+            live: track.live,
+            track: true
+          }))
+
+          added = {
+            title: info.title,
+            author: info.channel.name,
+            url: info.url,
+            thumbnail: tracks[0].thumbnail,
+            playlist: true,
+            tracks: tracks
+          }
+          this.tracks.push(...tracks)
+        }
+
+        const spotifyType = playdl.sp_validate(query)
+        if (spotifyType === 'track') {
+          const info = await getPreview(query)
+          if (!info) { return null }
+          const data = await getData(query)
+
+          added = {
+            title: info.artist + ' - ' + info.title,
+            author: info.artist,
+            url: info.link,
+            streamURL: await getStreamURL(`${info.artist} ${info.title}`),
+            thumbnail: info.image,
+            requestedBy: options?.requestedBy ?? 'null',
+            duration: msToHMS(data.duration_ms),
+            milliseconds: data.duration_ms,
+            seekTime: 0,
+            live: false,
+            track: true
+          }
+          this.tracks.push(added)
+        }
+        if (spotifyType === 'playlist' || spotifyType === 'album') {
+          const info = await getPreview(query)
+          if (!info) { return null }
+          const data = await getData(query)
+
+          // noinspection JSUnresolvedVariable
+          const tracks = await Promise.all((await getTracks(query)).map(
+            async (track) => ({
+              title: track.artists[0].name + ' - ' + track.name,
+              author: track.artists[0].name,
+              url: track.external_urls.spotify,
+              streamURL: await getStreamURL(`${track.artists[0].name} ${track.name}`),
+              thumbnail: track.album?.images[0]?.url,
+              requestedBy: options?.requestedBy ?? 'null',
+              duration: msToHMS(track.duration_ms),
+              milliseconds: track.duration_ms,
+              seekTime: 0,
+              live: false,
+              track: true
+            })
+          ))
+
+          // noinspection JSUnresolvedVariable
+          added = {
+            title: info.title,
+            author: data.owner?.display_name ?? info.artist,
+            url: info.link,
+            thumbnail: info.image,
+            playlist: true,
+            tracks: tracks
+          }
+          this.tracks.push(...tracks)
+        }
+
+        const soundcloudType = await playdl.so_validate(query)
+        if (soundcloudType === 'track') {
+          const info = await playdl.soundcloud(query)
+          if (!info) { return null }
+
+          added = {
+            title: info.name,
+            author: info.publisher?.name ?? info.publisher?.artist ?? info.publisher?.writer_composer ?? 'Soundcloud',
+            url: info.permalink,
+            streamURL: info.url,
+            thumbnail: info.thumbnail,
+            requestedBy: options?.requestedBy ?? 'null',
+            duration: msToHMS(info.durationInMs),
+            milliseconds: info.durationInMs,
+            seekTime: 0,
+            live: false,
+            track: true
+          }
+          this.tracks.push(added)
+        }
+        if (soundcloudType === 'playlist') {
+          const info = await playdl.soundcloud(query)
+          if (!info) { return null }
+
+          const tracks = (await info.all_tracks()).map((track) => ({
+            title: track.name,
+            author: track.publisher?.name ?? track.publisher?.artist ?? track.publisher?.writer_composer ?? 'Soundcloud',
+            url: info.permalink,
+            streamURL: info.url,
+            thumbnail: info.thumbnail,
+            requestedBy: options?.requestedBy ?? 'null',
+            duration: msToHMS(info.durationInMs),
+            milliseconds: info.durationInMs,
+            seekTime: 0,
+            live: false,
+            track: true
+          }))
+
+          added = {
+            title: info.name,
+            author: info.user,
+            url: info.permalink,
+            thumbnail: tracks[0].thumbnail,
+            playlist: true,
+            tracks: tracks
+          }
+          this.tracks.push(...tracks)
+        }
+      } else {
+        // YouTube Search
+        const info = (await playdl.search(query, { source: { youtube: 'video' }, limit: 1 }))[0]
         if (!info) { return null }
 
         added = {
@@ -129,154 +283,6 @@ export class Queue {
         }
         this.tracks.push(added)
       }
-      if (youtubeType === 'playlist') {
-        const info = await playdl.playlist_info(query, { incomplete: true })
-        if (!info) { return null }
-
-        const tracks = (await info.all_videos()).map((track) => ({
-          title: track.title,
-          author: track.channel.name,
-          url: track.url,
-          streamURL: track.url,
-          thumbnail: track.thumbnails.at(-1).url,
-          requestedBy: options?.requestedBy ?? 'null',
-          duration: msToHMS(track.durationInSec * 1000),
-          milliseconds: track.durationInSec * 1000,
-          seekTime: 0,
-          live: track.live,
-          track: true
-        }))
-
-        added = {
-          title: info.title,
-          author: info.channel.name,
-          url: info.url,
-          thumbnail: tracks[0].thumbnail,
-          playlist: true,
-          tracks: tracks
-        }
-        this.tracks.push(...tracks)
-      }
-
-      const spotifyType = playdl.sp_validate(query)
-      if (spotifyType === 'track') {
-        const info = await getPreview(query)
-        if (!info) { return null }
-        const data = await getData(query)
-
-        added = {
-          title: info.artist + ' - ' + info.title,
-          author: info.artist,
-          url: info.link,
-          streamURL: await getStreamURL(`${info.artist} ${info.title}`),
-          thumbnail: info.image,
-          requestedBy: options?.requestedBy ?? 'null',
-          duration: msToHMS(data.duration_ms),
-          milliseconds: data.duration_ms,
-          seekTime: 0,
-          live: false,
-          track: true
-        }
-        this.tracks.push(added)
-      }
-      if (spotifyType === 'playlist' || spotifyType === 'album') {
-        const info = await getPreview(query)
-        if (!info) { return null }
-
-        // noinspection JSUnresolvedVariable
-        const tracks = await Promise.all((await getTracks(query)).map(
-          async (track) => ({
-            title: track.artists[0].name + ' - ' + track.name,
-            author: track.artists[0].name,
-            url: track.external_urls.spotify,
-            streamURL: await getStreamURL(`${track.artists[0].name} ${track.name}`),
-            thumbnail: track.album?.images[0]?.url,
-            requestedBy: options?.requestedBy ?? 'null',
-            duration: msToHMS(track.duration_ms),
-            milliseconds: track.duration_ms,
-            seekTime: 0,
-            live: false,
-            track: true
-          })
-        ))
-
-        added = {
-          title: info.title,
-          author: info.artist,
-          url: info.link,
-          thumbnail: info.image,
-          playlist: true,
-          tracks: tracks
-        }
-        this.tracks.push(...tracks)
-      }
-
-      const soundcloudType = await playdl.so_validate(query)
-      if (soundcloudType === 'track') {
-        const info = await playdl.soundcloud(query)
-        if (!info) { return null }
-
-        added = {
-          title: info.name,
-          author: info.publisher?.name ?? info.publisher?.artist ?? info.publisher?.writer_composer ?? 'Soundcloud',
-          url: info.permalink,
-          streamURL: info.url,
-          thumbnail: info.thumbnail,
-          requestedBy: options?.requestedBy ?? 'null',
-          duration: msToHMS(info.durationInMs),
-          milliseconds: info.durationInMs,
-          seekTime: 0,
-          live: false,
-          track: true
-        }
-        this.tracks.push(added)
-      }
-      if (soundcloudType === 'playlist') {
-        const info = await playdl.soundcloud(query)
-        if (!info) { return null }
-
-        const tracks = (await info.all_tracks()).map((track) => ({
-          title: track.name,
-          author: track.publisher?.name ?? track.publisher?.artist ?? track.publisher?.writer_composer ?? 'Soundcloud',
-          url: info.permalink,
-          streamURL: info.url,
-          thumbnail: info.thumbnail,
-          requestedBy: options?.requestedBy ?? 'null',
-          duration: msToHMS(info.durationInMs),
-          milliseconds: info.durationInMs,
-          seekTime: 0,
-          live: false,
-          track: true
-        }))
-
-        added = {
-          title: info.name,
-          author: info.user,
-          url: info.permalink,
-          thumbnail: tracks[0].thumbnail,
-          playlist: true,
-          tracks: tracks
-        }
-        this.tracks.push(...tracks)
-      }
-
-      // YouTube Search
-      const info = (await playdl.search(query, { source: { youtube: 'video' }, limit: 1 }))[0]
-      if (!info) { return null }
-      added = {
-        title: info.title,
-        author: info.channel.name,
-        url: info.url,
-        streamURL: info.url,
-        thumbnail: info.thumbnails.at(-1).url,
-        requestedBy: options?.requestedBy ?? 'null',
-        duration: msToHMS(info.durationInSec * 1000),
-        milliseconds: info.durationInSec * 1000,
-        seekTime: 0,
-        live: info.live,
-        track: true
-      }
-      this.tracks.push(added)
     }
 
     if (isFirst) {
