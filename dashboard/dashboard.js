@@ -12,14 +12,15 @@ import memorystore from 'memorystore'
 const MemoryStore = memorystore(session)
 import { randomBytes } from 'crypto'
 
+import fs from 'fs'
 import path from 'path'
 import fetch from 'node-fetch'
+import { marked } from 'marked'
 import { setupWebsocket } from './websocket.js'
 import { appId, clientSecret, adminId } from '../utilities/config.js'
 
 import { fileURLToPath } from 'url'
-import { dirname } from 'path'
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export function startDashboard(client) {
   const port = process.env.PORT ?? 80
@@ -112,6 +113,13 @@ export function startDashboard(client) {
     const guild = client.guilds.cache.get(req.params.guildId)
     if (!guild) { return res.redirect('/dashboard') }
     render(req, res, 'queue.ejs', { guild: guild })
+  })
+
+  // Commands endpoint.
+  app.get('/commands', (req, res) => {
+    const readme = fs.readFileSync('./README.md').toString()
+    const markdown = marked.parse(readme.substring(readme.indexOf('## Commands & Features'), readme.indexOf('## Installation')))
+    render(req, res, 'commands.ejs', { markdown: markdown })
   })
 
   // Admin endpoint.

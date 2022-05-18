@@ -23,6 +23,7 @@
     "express-session": "^1.17.2",
     "genius-lyrics": "4.3.6",
     "libsodium-wrappers": "^0.7.9",
+    "marked": "^4.0.16",
     "memorystore": "^1.6.6",
     "node-fetch": "^2.6.7",
     "passport": "^0.4.1",

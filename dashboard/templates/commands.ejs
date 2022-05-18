@@ -1,0 +1,17 @@
+<%- include("partials/header", { djsClient, user, path, title: "SuitBot" }) %>
+
+<style>
+    h3 { margin-top: 20px; }
+    td { padding: 0 15px 0 0; }
+</style>
+
+<div class="card col-sm-10 offset-sm-1">
+    <header class="card-header border-primary">
+        <div><i class="fas fa-list"></i> Commands</div>
+    </header>
+    <div class="card-body">
+        <%- markdown %>
+    </div>
+</div>
+
+<%- include("partials/footer") %>
