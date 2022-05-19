@@ -1,6 +1,7 @@
 import postgres from 'postgres'
 
 const sql = postgres(process.env.DATABASE_URL ?? 'postgres://postgres:postgres@localhost:5432/suitbot')
+console.log(sql.options.host, sql.options.database)
 
 export default {
   sql: sql,

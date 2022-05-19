@@ -8,8 +8,8 @@ export const { data, execute } = {
     .setDescription('Changes the bots language.')
     .addStringOption((option) => option.setName('language').setDescription('The language to select.').setRequired(true).addChoices([
       ['English', 'en-US'],
-      ['Deutsch', 'de-DE'],
-      ['Suomi', 'fi-FI'],
+      ['Deutsch', 'de'],
+      ['Suomi', 'fi'],
       ['Português do Brasil', 'pt-BR']
     ])),
   async execute(interaction) {
@@ -17,6 +17,7 @@ export const { data, execute } = {
     const langCode = interaction.options.getString('language')
     const lang = getLanguage(langCode).language
     await interaction.client.database.setLocale(interaction.guild.id, langCode)
+    console.log('debug')
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(lang.title)
