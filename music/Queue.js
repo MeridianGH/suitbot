@@ -453,7 +453,7 @@ async function getStreamURL(query) {
   const videos = await playdl.search(query, { limit: 5 })
   return (
     videos.find((video) => video.channel.name.endsWith('- Topic'))?.url ??
-    videos.find((video) => video.title.toLowerCase().includes('lyrics') || video.title.toLowerCase().includes('audio'))?.url ??
+    videos.find((video) => video.title.toLowerCase().includes('lyrics') || video.title.toLowerCase().includes('official audio'))?.url ??
     videos.find((video) => video.channel.artist)?.url ??
     videos[0]?.url ??
     'https://youtu.be/Wch3gJG2GJ4'
