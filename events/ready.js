@@ -10,5 +10,6 @@ export const { data, execute } = {
     console.log(`${client.user.tag} connected to Discord at ${date}`)
     startDashboard(client)
     iconURL = client.user.displayAvatarURL()
+    client.database.addAllServers(client.guilds.cache)
   }
 }

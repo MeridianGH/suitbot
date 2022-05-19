@@ -17,7 +17,6 @@ export const { data, execute } = {
     const langCode = interaction.options.getString('language')
     const lang = getLanguage(langCode).language
     await interaction.client.database.setLocale(interaction.guild.id, langCode)
-    console.log('debug')
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(lang.title)
