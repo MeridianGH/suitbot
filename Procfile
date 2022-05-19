@@ -1,2 +1,2 @@
-release: node deploy-commands.js global
+release: node deploy-commands.js
 web: node main.js
