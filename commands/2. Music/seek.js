@@ -3,7 +3,7 @@ import {
   errorEmbed,
   msToHMS,
   simpleEmbed,
-  timeToMs,
+  timeToMs
 } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
