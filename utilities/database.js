@@ -15,7 +15,6 @@ export default {
   },
   addAllServers: function addAllServers(guilds) {
     guilds = guilds.map((guild) => ({ id: guild.id, locale: guild.preferredLocale }))
-    console.log(guilds)
-    sql`insert into servers ${sql(guilds)} on conflict (id) do nothing;`
+    sql`insert into servers ${sql(guilds)} on conflict (id) do nothing;`.then(console.log)
   },
 }
