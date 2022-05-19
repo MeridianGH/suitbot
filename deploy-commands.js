@@ -16,6 +16,10 @@ if (process.argv.includes('global')) {
   rest.put(Routes.applicationCommands(appId), { body: commands })
     .then(() => console.log('Successfully registered global application commands.'))
     .catch((error) => console.log(error))
+} else if (process.argv.includes('clear')) {
+  Promise.all([ rest.put(Routes.applicationCommands(appId), { body: [] }), rest.put(Routes.applicationGuildCommands(appId, guildId), { body: [] })])
+    .then(() => console.log('Successfully cleared application commands.'))
+    .catch((error) => console.log(error))
 } else {
   rest.put(Routes.applicationGuildCommands(appId, guildId), { body: commands })
     .then(() => console.log('Successfully registered guild application commands.'))
