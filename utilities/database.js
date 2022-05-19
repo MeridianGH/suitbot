@@ -10,11 +10,11 @@ export default {
   setLocale: async function setLocale(guildId, locale) {
     await sql`update servers set ${sql({ locale: locale })} where id = ${guildId};`
   },
-  addServer: function addServer(guild) {
-    sql`insert into servers (id, locale) values (${guild.id}, ${guild.preferredLocale});`
+  addServer: async function addServer(guild) {
+    await sql`insert into servers (id, locale) values (${guild.id}, ${guild.preferredLocale});`
   },
-  addAllServers: function addAllServers(guilds) {
+  addAllServers: async function addAllServers(guilds) {
     guilds = guilds.map((guild) => ({ id: guild.id, locale: guild.preferredLocale }))
-    sql`insert into servers ${sql(guilds)} on conflict (id) do nothing;`.then(console.log)
+    await sql`insert into servers ${sql(guilds)} on conflict (id) do nothing;`
   },
 }
