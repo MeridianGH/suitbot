@@ -113,6 +113,10 @@ a:hover {
 .button.icon:hover {
     color: var(--text-hover);
 }
+.button.select:hover {
+    background-color: var(--button-color);
+    cursor: pointer;
+}
 
 /* Table */
 .table > :not(caption) > * > * {

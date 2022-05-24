@@ -10,8 +10,17 @@ function send(data) {
   websocket.send(JSON.stringify(data))
 }
 
+const msToHMS = (ms) => {
+  let totalSeconds = ms / 1000
+  const hours = Math.floor(totalSeconds / 3600).toString()
+  totalSeconds %= 3600
+  const minutes = Math.floor(totalSeconds / 60).toString()
+  const seconds = Math.floor(totalSeconds % 60).toString()
+  return hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
+}
+
 function App() {
-  const [queue, setQueue] = React.useState(null)
+  const [player, setPlayer] = React.useState(null)
   const [toast, setToast] = React.useState(null)
 
   React.useEffect(() => {
@@ -24,49 +33,41 @@ function App() {
       if (data.toast) {
         setToast(data.toast)
       } else {
-        setQueue(data)
+        setPlayer(data)
       }
     })
   }, [])
   React.useEffect(() => {
     const interval = setInterval(() => {
-      if (queue && queue.nowPlaying && !queue.paused && !queue.nowPlaying.live) {
-        if (queue.currentTime >= queue.nowPlaying.milliseconds) {
+      if (player && !player.paused && player.current && !player.current.isStream) {
+        if (player.position >= player.current.duration) {
           clearInterval(interval)
-          setQueue({ ...queue, currentTime: queue.nowPlaying.milliseconds })
+          setPlayer({ ...player, position: player.current.duration })
         } else {
-          setQueue({ ...queue, currentTime: queue.currentTime += 1000 })
+          setPlayer({ ...player, position: player.position += 1000 })
         }
       }
-    }, 1000)
+    }, 1000 * (1 / player?.timescale ?? 1))
 
     return () => {
       clearInterval(interval)
     }
-  }, [queue])
+  }, [player])
 
-  if (!queue) { return null }
-  if (!queue.nowPlaying) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
+  if (!player) { return null }
+  if (!player.current) { return html`<div>Nothing currently playing!<br />Join a voice channel and type "/play" to get started!</div>` }
   return html`
     <div>
-      <${MediaSession} track=${queue.nowPlaying} paused=${queue.paused} />
+      <${MediaSession} track=${player.current} paused=${player.paused} />
       <${Toast} toast=${toast} />
-      <${NowPlaying} track=${queue.nowPlaying} paused=${queue.paused} currentTime=${queue.currentTime} repeatMode=${queue.repeatMode} volume=${queue.volume} />
+      <${NowPlaying} track=${player.current} paused=${player.paused} position=${player.position} repeatMode=${player.repeatMode} volume=${player.volume} />
       <div style=${{ marginBottom: '20px' }} />
-      <${Queue} tracks=${queue.tracks} />
+      <${Queue} tracks=${player.queue} />
     </div>
   `
 }
 
-function NowPlaying({ track, currentTime, paused, repeatMode, volume }) {
-  const msToHMS = (ms) => {
-    let totalSeconds = ms / 1000
-    const hours = Math.floor(totalSeconds / 3600).toString()
-    totalSeconds %= 3600
-    const minutes = Math.floor(totalSeconds / 60).toString()
-    const seconds = Math.floor(totalSeconds % 60).toString()
-    return hours === '0' ? `${minutes}:${seconds.padStart(2, '0')}` : `${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
-  }
+function NowPlaying({ track, position, paused, repeatMode, volume }) {
   return html`
     <h1 className='queue-title'>Now Playing</h1>
     <div className='nowplaying-container'>
@@ -74,13 +75,13 @@ function NowPlaying({ track, currentTime, paused, repeatMode, volume }) {
         <li>
           <${Thumbnail} image=${track.thumbnail} />
           <div className='progress-container'>
-            <div className='progress' style=${{ width: `${track.live ? '100%' : currentTime / track.milliseconds * 100 + '%'}` }} />
+            <div className='progress' style=${{ width: `${track.isStream ? '100%' : position / track.duration * 100 + '%'}` }} />
           </div>
         </li>
         <li>
-          <a href=${track.url} rel='noreferrer' target='_blank'><h4>${track.title}</h4></a>
+          <a href=${track.uri} rel='noreferrer' target='_blank'><h4>${track.title}</h4></a>
           <h6>${track.author}</h6>
-          <h5>${track.live ? '🔴 Live' : `${msToHMS(currentTime)} / ${track.duration}`}</h5>
+          <h5>${track.isStream ? '🔴 Live' : `${msToHMS(position)} / ${msToHMS(track.duration)}`}</h5>
           <${MusicControls} paused=${paused} repeatMode=${repeatMode} />
         </li>
       </ul>
@@ -92,8 +93,8 @@ function NowPlaying({ track, currentTime, paused, repeatMode, volume }) {
 function Thumbnail({ image }) {
   return html`
     <div className='thumbnail-container'>
-      <img className='thumbnail-backdrop' src=${image}  alt='Thumbnail Background'/>
-      <img className='thumbnail' src=${image}  alt='Video Thumbnail'/>
+      <img className='thumbnail-backdrop' src=${image ?? '/assets/img/image_placeholder.png'}  alt='Thumbnail Background'/>
+      <img className='thumbnail' src=${image ?? '/assets/img/image_placeholder.png'}  alt='Video Thumbnail'/>
     </div>
   `
 }
@@ -106,7 +107,7 @@ function MusicControls({ paused, repeatMode }) {
       <button className='button icon' onClick=${() => { send({ type: 'skip' }) }}><i className='fas fa-forward' /></button>
       <span style=${{ marginRight: '10px' }}></span>
       <button className='button icon' onClick=${() => { send({ type: 'shuffle' }) }}><i className='fas fa-random' /></button>
-      <button className='button icon' onClick=${() => { send({ type: 'repeat' }) }}><i className=${repeatMode === 0 ? 'fad fa-repeat-alt' : repeatMode === 1 ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
+      <button className='button icon' onClick=${() => { send({ type: 'repeat' }) }}><i className=${repeatMode === 'none' ? 'fad fa-repeat-alt' : repeatMode === 'track' ? 'fas fa-repeat-1-alt' : 'fas fa-repeat'} /></button>
     </div>
   `
 }
@@ -125,35 +126,17 @@ function VolumeControl(props) {
   `
 }
 
-function QueueButtons() {
-  const input = React.createRef()
-  const handlePlay = (event) => {
-    event.preventDefault()
-    send({ type: 'play', query: input.current.value })
-    input.current.value = ''
-  }
-  return html`
-    <div className='queue-button-container'>
-      <form onSubmit=${handlePlay}>
-        <input type='text' className='textfield' placeholder='Add to queue' ref=${input} />
-        <button className='button'><i className='fas fa-plus' /> Play</button>
-      </form>
-      <button className='button' style=${{ marginRight: 0 }} onClick=${() => { send({ type: 'clear' }) }}><i className='fas fa-trash-alt' /> Clear queue</button>
-    </div>
-  `
-}
-
 function Queue({ tracks }) {
   // noinspection JSMismatchedCollectionQueryUpdate
   const rows = []
-  for (let i = 1; i < tracks.length; i++) {
+  for (let i = 0; i < tracks.length; i++) {
     rows.push(html`
-      <tr key=${i}>
-        <td><span className='text-nowrap'>${i}</span></td>
+      <tr key=${i + 1}>
+        <td><span className='text-nowrap'>${i + 1}</span></td>
         <td><span className='text-nowrap'>${tracks[i].title}</span></td>
         <td><span className='text-nowrap'>${tracks[i].author}</span></td>
-        <td><span className='text-nowrap'>${tracks[i].live ? '🔴 Live' : tracks[i].duration}</span></td>
-        <td><span className='text-nowrap'><button className='button icon' onClick=${() => { send({ type: 'remove', index: i }) }}><i className='fas fa-trash-alt' /></button><button className='button icon' onClick=${() => { send({ type: 'skipto', index: i }) }}><i className='fas fa-forward' /></button></span></td>
+        <td><span className='text-nowrap'>${tracks[i].isStream ? '🔴 Live' : msToHMS(tracks[i].duration)}</span></td>
+        <td><span className='text-nowrap'><button className='button icon' onClick=${() => { send({ type: 'remove', index: i + 1 }) }}><i className='fas fa-trash-alt' /></button><button className='button icon' onClick=${() => { send({ type: 'skipto', index: i + 1 }) }}><i className='fas fa-forward' /></button></span></td>
       </tr>
     `)
   }
@@ -177,6 +160,38 @@ function Queue({ tracks }) {
           </tbody>
         </table>
       </div>
+    </div>
+  `
+}
+
+function QueueButtons() {
+  const input = React.createRef()
+  const handlePlay = (event) => {
+    event.preventDefault()
+    send({ type: 'play', query: input.current.value })
+    input.current.value = ''
+  }
+  return html`
+    <div className='queue-button-container'>
+      <div style="${{ display: 'flex' }}">
+        <form onSubmit=${handlePlay}>
+          <input type='text' className='textfield' placeholder='Add to queue' ref=${input} />
+          <button className='button'><i className='fas fa-plus' /> Play</button>
+        </form>
+        <select class="button select" style="${{ marginLeft: '20px' }}" name="filter" id="filter" onChange=${(event) => { send({ type: 'filter', filter: event.target.value }) }}>
+          <option selected disabled>Select a filter...</option>
+          <option value="none">None</option>
+          <option value="bassboost">Bass Boost</option>
+          <option value="classic">Classic</option>
+          <option value="eightd">8D</option>
+          <option value="earrape">Earrape</option>
+          <option value="karaoke">Karaoke</option>
+          <option value="nightcore">Nightcore</option>
+          <option value="superfast">Superfast</option>
+          <option value="vaporwave">Vaporwave</option>
+        </select>
+      </div>
+      <button className='button' style=${{ marginRight: 0 }} onClick=${() => { send({ type: 'clear' }) }}><i className='fas fa-trash-alt' /> Clear queue</button>
     </div>
   `
 }

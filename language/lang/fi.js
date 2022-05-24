@@ -50,7 +50,10 @@ export const invite = {
 export const language = {
   author: 'Kieli.',
   title: 'Vaihda kieltä',
-  description: (langCode) => `Kieli asetettiin \`${langCode}\`.`
+  description: (langCode) => `Kieli asetettiin \`${langCode}\`.`,
+  errors: {
+    userMissingPerms: 'Sinulla ei ole oikeutta suorittaa tätä komentoa!'
+  }
 }
 export const ping = {
   author: 'Viive.',
@@ -249,6 +252,7 @@ export const skip = {
     skippedTo: (track) => `Skipattiin ${track}.`
   },
   errors: {
+    index: (index) => `Voit valita musiikin 1-${index} väliltä.`,
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
   }

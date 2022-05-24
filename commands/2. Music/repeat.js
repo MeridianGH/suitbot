@@ -6,19 +6,20 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('repeat')
     .setDescription('Sets the current repeat mode.')
-    .addIntegerOption((option) => option.setName('mode').setDescription('The mode to set.').setRequired(true)
-      .addChoice('None', 0)
-      .addChoice('Track', 1)
-      .addChoice('Queue', 2)
+    .addStringOption((option) => option.setName('mode').setDescription('The mode to set.').setRequired(true)
+      .addChoice('None', 'none')
+      .addChoice('Track', 'track')
+      .addChoice('Queue', 'queue')
     ),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).repeat
-    const mode = interaction.options.getInteger('mode')
-    const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    const mode = interaction.options.getString('mode')
+    const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
+    if (!player) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
-    queue.setRepeatMode(mode)
-    await interaction.reply(simpleEmbed(lang.other.response({ 0: lang.other.repeatModes.none + ' ▶', 1: lang.other.repeatModes.track + ' 🔂', 2: lang.other.repeatModes.queue + ' 🔁' }[mode])))
+    mode === 'track' ? player.setTrackRepeat(true) : mode === 'queue' ? player.setQueueRepeat(true) : player.setTrackRepeat(false)
+    await interaction.reply(simpleEmbed(lang.other.response(player.queueRepeat ? lang.other.repeatModes.queue + ' 🔁' : player.trackRepeat ? lang.other.repeatModes.track + ' 🔂' : lang.other.repeatModes.none + ' ▶')))
+    interaction.client.dashboard.update(player)
   }
 }

@@ -15,13 +15,14 @@ export const { data, execute } = {
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).seek
     const time = timeToMs(interaction.options.getString('time'))
-    const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
-    if (queue.nowPlaying.live) { return await interaction.reply(errorEmbed(lang.errors.isLive, true)) }
-    if (time < 0 || time > queue.nowPlaying.milliseconds) { return await interaction.reply(errorEmbed(lang.errors.index(queue.nowPlaying.duration), true)) }
+    const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
+    if (!player) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (player.queue.current.isStream) { return await interaction.reply(errorEmbed(lang.errors.isLive, true)) }
+    if (time < 0 || time > player.queue.current.duration) { return await interaction.reply(errorEmbed(lang.errors.index(player.queue.nowPlaying.duration), true)) }
 
-    await queue.seek(time)
+    player.seek(time)
     await interaction.reply(simpleEmbed('⏩ ' + lang.other.response(msToHMS(time))))
+    interaction.client.dashboard.update(player)
   }
 }

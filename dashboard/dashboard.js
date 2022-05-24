@@ -138,8 +138,13 @@ export function startDashboard(client) {
   })
 
   // WebSocket
-  setupWebsocket(client, domain)
-  client.dashboard.update = function(queue) {
-    client.dashboard.emit('update', queue)
+  const wss = setupWebsocket(client, domain)
+  client.dashboard.update = function(player) {
+    client.dashboard.emit('update', player)
+  }
+
+  client.dashboard.shutdown = () => {
+    client.dashboard.close()
+    wss.closeAllConnections()
   }
 }

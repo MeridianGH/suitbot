@@ -7,12 +7,12 @@
   <div class="card-body">
     <div style="display: flex; flex-wrap: wrap; justify-content: center;">
       <% user.guilds.forEach(guild => { if (!djsClient.guilds.cache.get(guild.id)) { return } %>
-      <div class="card server-card" style="<%= djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? 'border: 4px solid #6cff57' : '' %>">
+      <div class="card server-card" style="<%= djsClient.lavalink.getPlayer(guild.id) ? 'border: 4px solid #6cff57' : '' %>">
         <img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}?size=1024` : '/assets/img/generic_server.png' %>" class="card-img-top" style="max-width: 18rem;">
         <div class="card-body">
-          <%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `<a href="/dashboard/${guild.id}" class="stretched-link"></a>` : '' %>
+          <%- djsClient.lavalink.getPlayer(guild.id) ? `<a href="/dashboard/${guild.id}" class="stretched-link"></a>` : '' %>
           <h5 class="card-title"><%= guild.name %></h5>
-          <p class="card-text"><%- djsClient.player.getQueue(guild.id) && djsClient.player.getQueue(guild.id).playing ? `Now Playing:<br>${djsClient.player.getQueue(guild.id).nowPlaying.title}` : 'Nothing playing on this server.' %></p>
+          <p class="card-text"><%- djsClient.lavalink.getPlayer(guild.id) ? `Now Playing:<br>${djsClient.lavalink.getPlayer(guild.id).queue.current.title}` : 'Nothing playing on this server.' %></p>
         </div>
       </div>
       <% }) %>

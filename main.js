@@ -1,6 +1,6 @@
 import { Client, Collection, Intents, MessageEmbed } from 'discord.js'
 import database from './utilities/database.js'
-import { Player } from './music/Player.js'
+import { Lavalink } from './music/lavalink.js'
 import { getFilesRecursively } from './utilities/utilities.js'
 
 import { token } from './utilities/config.js'
@@ -8,8 +8,9 @@ import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
-client.player = new Player(client)
 client.database = database
+client.lavalink = new Lavalink(client)
+const lavalink = await client.lavalink.initialize()
 
 // Commands
 client.commands = new Collection()
@@ -33,12 +34,12 @@ process.on('uncaughtException', (error) => { console.log(`Ignoring uncaught exce
 
 // Shutdown Handling
 async function shutdown() {
-  console.log(`Closing ${client.player.queues.size} queues.`)
-  for (const entry of client.player.queues) {
-    const queue = entry[1]
-    if (queue.destroyed) { continue }
-    const lang = getLanguage(await client.database.getLocale(queue.guild.id)).serverShutdown
-    await queue.channel.send({
+  console.log(`Closing ${client.lavalink.manager.players.size} queues.`)
+  for (const entry of client.lavalink.manager.players) {
+    const player = entry[1]
+    const lang = getLanguage(await client.database.getLocale(player.guild)).serverShutdown
+    // noinspection JSUnresolvedFunction
+    await client.channels.cache.get(player.textChannel).send({
       embeds: [
         new MessageEmbed()
           .setTitle(lang.title)
@@ -47,10 +48,11 @@ async function shutdown() {
           .setColor('#ff0000')
       ]
     })
-    queue.stop()
+    player.destroy()
   }
+  lavalink.kill()
   client.destroy()
-  client.dashboard.close()
+  client.dashboard.shutdown()
   console.log('Received SIGTERM, shutting down.')
   process.exit(0)
 }

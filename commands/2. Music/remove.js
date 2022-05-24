@@ -10,12 +10,13 @@ export const { data, execute } = {
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).remove
     const index = interaction.options.getInteger('track')
-    const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
+    if (!player) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
-    if (index < 1 || index > queue.tracks.length) { return await interaction.reply(errorEmbed(lang.errors.index(queue.tracks.length), true)) }
-    const track = queue.remove(index)
+    if (index < 1 || index > player.queue.length) { return await interaction.reply(errorEmbed(lang.errors.index(player.queue.length), true)) }
+    const track = player.queue.remove(index - 1)[0]
     await interaction.reply(simpleEmbed('🗑️ ' + lang.other.response(`\`#${index}\`: **${track.title}**`)))
+    interaction.client.dashboard.update(player)
   }
 }

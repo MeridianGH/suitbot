@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
-import { errorEmbed } from '../../utilities/utilities.js'
+import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -16,33 +16,46 @@ export const { data, execute } = {
     if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
-    const queue = interaction.client.player.createQueue(interaction.guild.id)
-    queue.setChannel(interaction.channel)
+    const player = interaction.client.lavalink.createPlayer(interaction)
 
-    await queue.join(channel)
+    const query = interaction.options.getString('query')
+    const result = await player.search(query, interaction.member)
+    if (result.loadType === 'LOAD_FAILED' || result.loadType === 'NO_MATCHES') { return await interaction.editReply(errorEmbed(lang.errors.generic)) }
 
-    const result = await queue.play(interaction.options.getString('query'), { requestedBy: interaction.user })
-    if (!result) { return await interaction.editReply(errorEmbed(lang.errors.generic)) }
+    if (result.loadType === 'PLAYLIST_LOADED') {
+      player.queue.add(result.tracks)
+      if (player.state !== 'CONNECTED') { await player.connect() }
+      if (!player.playing && !player.paused && player.queue.totalSize === result.tracks.length) { await player.play() }
+      interaction.client.dashboard.update(player)
 
-    const embed = new MessageEmbed()
-      .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-      .setTitle(result.title)
-      .setURL(result.url)
-      .setThumbnail(result.thumbnail)
-      .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-
-    if (result.playlist) {
-      embed
+      // noinspection JSUnresolvedVariable
+      const embed = new MessageEmbed()
+        .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+        .setTitle(result.playlist.name)
+        .setURL(result.playlist.uri)
+        .setThumbnail(result.playlist.thumbnail)
         .addField(lang.fields.amount.name, lang.fields.amount.value(result.tracks.length), true)
-        .addField(lang.fields.author.name, result.author, true)
-        .addField(lang.fields.position.name, `${queue.tracks.indexOf(result.tracks[0]).toString()}-${queue.tracks.indexOf(result.tracks[result.tracks.length - 1]).toString()}`, true)
+        .addField(lang.fields.author.name, result.playlist.author, true)
+        .addField(lang.fields.position.name, `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, true)
+        .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
+      await interaction.editReply({ embeds: [embed] })
     } else {
-      embed
-        .addField(lang.fields.duration.name, result.live ? '🔴 Live' : result.duration, true)
-        .addField(lang.fields.author.name, result.author, true)
-        .addField(lang.fields.position.name, queue.tracks.indexOf(result).toString(), true)
-    }
+      const track = result.tracks[0]
+      player.queue.add(track)
+      if (player.state !== 'CONNECTED') { await player.connect() }
+      if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
+      interaction.client.dashboard.update(player)
 
-    await interaction.editReply({ embeds: [embed] })
+      const embed = new MessageEmbed()
+        .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+        .setTitle(track.title)
+        .setURL(track.uri)
+        .setThumbnail(track.thumbnail)
+        .addField(lang.fields.duration.name, track.isStream ? '🔴 Live' : msToHMS(track.duration), true)
+        .addField(lang.fields.author.name, track.author, true)
+        .addField(lang.fields.position.name, (player.queue.indexOf(track) + 1).toString(), true)
+        .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
+      await interaction.editReply({ embeds: [embed] })
+    }
   }
 }

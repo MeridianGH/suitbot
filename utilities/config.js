@@ -12,4 +12,4 @@ if (process.env.token) {
   })
 }
 
-export const { token, appId, clientSecret, guildId, adminId, cookie, geniusAppId } = config
+export const { token, appId, clientSecret, guildId, adminId, papisid, psid, geniusAppId } = config

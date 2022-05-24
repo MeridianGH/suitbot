@@ -8,11 +8,12 @@ export const { data, execute } = {
     .setDescription('Clears the queue.'),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).clear
-    const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
+    if (!player) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
-    queue.clear()
+    player.queue.clear()
     await interaction.reply(simpleEmbed('🗑️ ' + lang.other.response))
+    interaction.client.dashboard.update(player)
   }
 }

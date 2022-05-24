@@ -1,18 +1,22 @@
 import { MessageEmbed } from 'discord.js'
 import { server as WebsocketServer } from 'websocket'
+import { msToHMS } from '../utilities/utilities.js'
+import { getLanguage } from '../language/locale.js'
 
 const clients = {}
 
-function simplifyQueue(queue) {
-  if (!queue || !queue.playing) { return {} }
+function simplifyPlayer(player) {
+  if (!player) { return {} }
   return {
-    guild: queue.guild.id,
-    nowPlaying: queue.nowPlaying,
-    tracks: queue.tracks,
-    paused: queue.paused,
-    volume: queue.volume,
-    repeatMode: queue.repeatMode,
-    currentTime: queue.currentTime
+    guild: player.guild,
+    queue: player.queue,
+    current: player.queue.current,
+    paused: player.paused,
+    volume: player.volume,
+    filter: player.filter,
+    position: player.position,
+    timescale: player.timescale,
+    repeatMode: player.queueRepeat ? 'queue' : player.trackRepeat ? 'track' : 'none'
   }
 }
 
@@ -32,112 +36,132 @@ export function setupWebsocket(client, domain) {
     ws.on('message', async (message) => {
       if (message.type !== 'utf8') { return }
       const data = JSON.parse(message.utf8Data)
+      console.log(data)
 
       // Add to client manager
       guildId = data.guildId
       userId = data.userId
-      if (clients[data.guildId]) {
-        clients[data.guildId][data.userId] = ws
-      } else {
-        clients[data.guildId] = { [data.userId]: ws }
-      }
+      clients[data.guildId] = { ...clients[data.guildId], [data.userId]: ws }
 
       // Fetch guild, user and queue
       const guild = client.guilds.cache.get(data.guildId)
       if (!guild) { return ws.close() }
       const user = await client.users.cache.get(data.userId)
       if (!user) { return ws.close() }
-      const queue = client.player.getQueue(guild.id)
-      if (!queue || !queue.playing) { return send(ws, {}) }
+      const player = client.lavalink.getPlayer(guild.id)
+      if (!player) { return send(ws, {}) }
 
-      if (data.type === 'request') { return send(ws, simplifyQueue(queue)) }
+      if (data.type === 'request') { return send(ws, simplifyPlayer(player)) }
 
       if (guild.members.cache.get(user.id)?.voice.channel !== guild.me.voice.channel) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
 
       let toast = null
       switch (data.type) {
         case 'previous': {
-          if (queue.currentTime > 5000) {
-            await queue.seek(0)
+          if (player.position > 5000) {
+            await player.seek(0)
             break
           }
           try {
-            await queue.previous()
+            if (player.previousTracks.length === 0) { return send(ws, { toast: { message: 'You can\'t skip to a previous song!' } }) }
+            const track = player.previousTracks.pop()
+            player.queue.add(track, 0)
+            player.manager.once('trackEnd', (player) => { player.queue.add(player.previousTracks.pop(), 0) })
+            player.stop()
             toast = { message: 'Skipped to previous song.', type: 'info' }
           } catch (e) {
-            await queue.seek(0)
+            await player.seek(0)
           }
           break
         }
         case 'pause': {
-          queue.setPaused(!queue.connection.paused)
-          toast = { message: queue.connection.paused ? 'Paused.' : 'Resumed.', type: 'info' }
+          player.pause(!player.paused)
+          toast = { message: player.paused ? 'Paused.' : 'Resumed.', type: 'info' }
           break
         }
         case 'skip': {
-          queue.skip()
+          player.stop()
           toast = { message: 'Skipped.', type: 'info' }
           break
         }
         case 'shuffle': {
-          queue.shuffle()
+          player.queue.shuffle()
           toast = { message: 'Shuffled the queue.', type: 'info' }
           break
         }
         case 'repeat': {
-          queue.setRepeatMode(queue.repeatMode === 2 ? 0 : queue.repeatMode + 1)
-          toast = { message: `Set repeat mode to "${{ 0: 'None', 1: 'Track', 2: 'Queue' }[queue.repeatMode]}"`, type: 'info' }
+          player.trackRepeat ? player.setQueueRepeat(true) : player.queueRepeat ? player.setTrackRepeat(false) : player.setTrackRepeat(true)
+          toast = { message: `Set repeat mode to "${player.queueRepeat ? 'Queue' : player.trackRepeat ? 'Track' : 'None'}"`, type: 'info' }
           break
         }
         case 'volume': {
-          queue.setVolume(data.volume)
+          player.setVolume(data.volume)
+          break
+        }
+        case 'filter': {
+          // noinspection JSUnresolvedFunction
+          player.setFilter(data.filter)
+          toast = { message: `Set filter to "${data.filter}"`, type: 'info' }
           break
         }
         case 'play': {
           if (!data.query) { return }
-          const result = await queue.play(data.query, { requestedBy: user })
-          if (!result) { return send(ws, { toast: { message: 'There was an error while adding your song/playlist to the queue.', type: 'danger' } }) }
+          const result = await player.search(data.query, user)
+          if (result.loadType === 'LOAD_FAILED' || result.loadType === 'NO_MATCHES') { return send(ws, { toast: { message: 'There was an error while adding your song/playlist to the queue.', type: 'danger' } }) }
+          const lang = getLanguage(await client.database.getLocale(guild.id)).play
 
           const embed = new MessageEmbed()
-            .setAuthor({ name: 'Added to queue.', iconURL: user.displayAvatarURL() })
-            .setTitle(result.title)
-            .setURL(result.url)
-            .setThumbnail(result.thumbnail)
+            .setAuthor({ name: lang.author, iconURL: user.displayAvatarURL() })
             .setFooter({ text: 'SuitBot Web Dashboard', iconURL: client.user.displayAvatarURL() })
 
-          if (result.playlist) {
-            toast = { message: `Added playlist "${result.title}" to the queue.`, type: 'success' }
+          if (result.loadType === 'PLAYLIST_LOADED') {
+            player.queue.add(result.tracks)
+            if (player.state !== 'CONNECTED') { await player.connect() }
+            if (!player.playing && !player.paused && player.queue.totalSize === result.tracks.length) { await player.play() }
+            // noinspection JSUnresolvedVariable
             embed
-              .addField('Amount', `${result.tracks.length} songs`, true)
-              .addField('Author', result.author, true)
-              .addField('Position', `${queue.tracks.indexOf(result.tracks[0]).toString()}-${queue.tracks.indexOf(result.tracks[result.tracks.length - 1]).toString()}`, true)
+              .setTitle(result.playlist.name)
+              .setURL(result.playlist.uri)
+              .setThumbnail(result.playlist.thumbnail)
+              .addField(lang.fields.amount.name, lang.fields.amount.value(result.tracks.length), true)
+              .addField(lang.fields.author.name, result.playlist.author, true)
+              .addField(lang.fields.position.name, `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, true)
           } else {
-            toast = { message: `Added "${result.title}" to the queue.`, type: 'success' }
+            const track = result.tracks[0]
+            player.queue.add(track)
+            if (player.state !== 'CONNECTED') { await player.connect() }
+            if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
+
             embed
-              .addField('Duration', result.live ? '🔴 Live' : result.duration, true)
-              .addField('Author', result.author, true)
-              .addField('Position', queue.tracks.indexOf(result).toString(), true)
+              .setTitle(track.title)
+              .setURL(track.uri)
+              .setThumbnail(track.thumbnail)
+              .addField(lang.fields.duration.name, track.isStream ? '🔴 Live' : msToHMS(track.duration), true)
+              .addField(lang.fields.author.name, track.author, true)
+              .addField(lang.fields.position.name, (player.queue.indexOf(track) + 1).toString(), true)
           }
-          queue.channel.send({ embeds: [embed] })
+          await client.channels.cache.get(player.textChannel).send({ embeds: [embed] })
           break
         }
         case 'clear': {
-          queue.clear()
+          player.queue.clear()
           toast = { message: 'Cleared the queue.', type: 'info' }
           break
         }
         case 'remove': {
-          const track = queue.remove(data.index)
+          const track = player.queue.remove(data.index - 1)[0]
           toast = { message: `Removed track #${data.index}: "${track.title}"`, type: 'info' }
           break
         }
         case 'skipto': {
-          queue.skip(data.index)
-          toast = { message: `Skipped to #${data.index}: "${queue.tracks[1].title}"`, type: 'info' }
+          const track = player.queue[data.index - 1]
+          player.stop(data.index)
+          toast = { message: `Skipped to #${data.index}: "${track.title}"`, type: 'info' }
           break
         }
       }
       if (toast) { send(ws, { toast: toast }) }
+      client.dashboard.update(player)
     })
 
     ws.on('close', () => {
@@ -148,12 +172,14 @@ export function setupWebsocket(client, domain) {
     })
   })
 
-  client.dashboard.on('update', (queue) => {
-    if (clients[queue.guild.id]) {
-      for (const user of clients[queue.guild.id]) {
-        const ws = clients[queue.guild.id][user]
-        send(ws, simplifyQueue(queue))
+  client.dashboard.on('update', (player) => {
+    if (clients[player.guild]) {
+      for (const user of Object.keys(clients[player.guild])) {
+        const ws = clients[player.guild][user]
+        send(ws, simplifyPlayer(player))
       }
     }
   })
+
+  return wss
 }

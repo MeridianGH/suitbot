@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed, Permissions } from 'discord.js'
 import { getLanguage } from '../../language/locale.js'
+import { errorEmbed } from '../../utilities/utilities.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -13,9 +14,10 @@ export const { data, execute } = {
       ['Português do Brasil', 'pt-BR']
     ])),
   async execute(interaction) {
-    // TODO: Check for permissions
     const langCode = interaction.options.getString('language')
     const lang = getLanguage(langCode).language
+    if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
+
     await interaction.client.database.setLocale(interaction.guild.id, langCode)
     const embed = new MessageEmbed()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })

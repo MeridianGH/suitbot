@@ -50,7 +50,10 @@ export const invite = {
 export const language = {
   author: 'Idioma.',
   title: 'Mudar idioma',
-  description: (langCode) => `Definir idioma para \`${langCode}\`.`
+  description: (langCode) => `Definir idioma para \`${langCode}\`.`,
+  errors: {
+    userMissingPerms: 'Você não tem permissão para executar este comando!'
+  }
 }
 export const ping = {
   author: 'Ping',
@@ -249,6 +252,7 @@ export const skip = {
     skippedTo: (track) => `Pulada para ${track}.`
   },
   errors: {
+    index: (index) => `Você só pode especificar um número de música entre 1-${index}.`,
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
   }

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
-import { errorEmbed } from '../../utilities/utilities.js'
+import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -16,30 +16,25 @@ export const { data, execute } = {
     if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
-    const queue = interaction.client.player.createQueue(interaction.guild.id)
-    queue.setChannel(interaction.channel)
+    const player = interaction.client.lavalink.createPlayer(interaction)
 
-    const result = await queue.search(interaction.options.getString('query'), { requestedBy: interaction.user })
-    if (!result) { return await interaction.editReply(errorEmbed(lang.errors.generic)) }
+    const query = interaction.options.getString('query')
+    const result = await player.search(query, interaction.member)
+    if (result.loadType !== 'SEARCH_RESULT') { return await interaction.editReply(errorEmbed(lang.errors.generic)) }
+    const tracks = result.tracks.slice(0, 5).map((track, index) => ({ label: track.title, description: track.author, value: index.toString() }))
 
     // noinspection JSCheckFunctionSignatures
     const selectMenu = new MessageSelectMenu()
       .setCustomId('search')
       .setPlaceholder(lang.other.select)
-      .addOptions([
-        { label: result[0].title, description: result[0].author, value: '0' },
-        { label: result[1].title, description: result[1].author, value: '1' },
-        { label: result[2].title, description: result[2].author, value: '2' },
-        { label: result[3].title, description: result[3].author, value: '3' },
-        { label: result[4].title, description: result[4].author, value: '4' }
-      ])
+      .addOptions(...tracks)
 
     const embedMessage = await interaction.editReply({
       embeds: [
         new MessageEmbed()
           .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
           .setTitle(lang.title(interaction.options.getString('query')))
-          .setThumbnail(result[0].thumbnail)
+          .setThumbnail(result.tracks[0].thumbnail)
           .setFooter({ text: `SuitBot | ${lang.other.expires}`, iconURL: interaction.client.user.displayAvatarURL() })
       ],
       components: [new MessageActionRow({ components: [selectMenu] })],
@@ -49,9 +44,11 @@ export const { data, execute } = {
     // noinspection JSCheckFunctionSignatures
     const collector = embedMessage.createMessageComponentCollector({ time: 60000, filter: async (c) => { await c.deferUpdate(); return c.user.id === interaction.user.id } })
     collector.on('collect', async (menuInteraction) => {
-      const track = result[Number(menuInteraction.values[0])]
-      await queue.join(channel)
-      await queue.play(track)
+      const track = result.tracks[Number(menuInteraction.values[0])]
+      player.queue.add(track)
+      if (player.state !== 'CONNECTED') { await player.connect() }
+      if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
+      interaction.client.dashboard.update(player)
 
       // noinspection JSCheckFunctionSignatures
       await menuInteraction.editReply({
@@ -59,11 +56,11 @@ export const { data, execute } = {
           new MessageEmbed()
             .setAuthor({ name: play.author, iconURL: interaction.member.user.displayAvatarURL() })
             .setTitle(track.title)
-            .setURL(track.url)
+            .setURL(track.uri)
             .setThumbnail(track.thumbnail)
-            .addField(play.fields.duration.name, track.live ? '🔴 Live' : track.duration, true)
+            .addField(play.fields.duration.name, track.isStream ? '🔴 Live' : msToHMS(track.duration), true)
             .addField(play.fields.author.name, track.author, true)
-            .addField(play.fields.position.name, queue.tracks.indexOf(track).toString(), true)
+            .addField(play.fields.position.name, (player.queue.indexOf(track) + 1).toString(), true)
             .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
         ],
         components: []

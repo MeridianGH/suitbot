@@ -50,7 +50,10 @@ export const invite = {
 export const language = {
   author: 'Language.',
   title: 'Change language',
-  description: (langCode) => `Set language to \`${langCode}\`.`
+  description: (langCode) => `Set language to \`${langCode}\`.`,
+  errors: {
+    userMissingPerms: 'You do not have permission to execute this command!'
+  }
 }
 export const ping = {
   author: 'Ping',
@@ -104,6 +107,13 @@ const repeatModes = {
 }
 export const clear = {
   other: { response: 'Cleared the queue.' },
+  errors: {
+    nothingPlaying: musicErrors.nothingPlaying,
+    sameChannel: musicErrors.sameChannel
+  }
+}
+export const filter = {
+  other: { response: (filter) => `Set filter to ${filter}` },
   errors: {
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
@@ -249,6 +259,7 @@ export const skip = {
     skippedTo: (track) => `Skipped to ${track}.`
   },
   errors: {
+    index: (index) => `You can only specify a song number between 1-${index}.`,
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
   }

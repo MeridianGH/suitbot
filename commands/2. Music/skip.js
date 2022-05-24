@@ -8,19 +8,28 @@ export const { data, execute } = {
     .setDescription('Skips the current track or to a specified point in the queue.')
     .addIntegerOption((option) => option.setName('track').setDescription('The track to skip to.')),
   async execute(interaction) {
-    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).skip
+    const { skip: lang, stop } = getLanguage(await interaction.client.database.getLocale(interaction.guildId))
     const index = interaction.options.getInteger('track')
-    const queue = interaction.client.player.getQueue(interaction.guild.id)
-    if (!queue || !queue.playing) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel !== queue.connection.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
+    if (!player) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
+    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (index > player.queue.length && player.queue.length > 0) { return await interaction.reply(errorEmbed(lang.errors.index(player.queue.length))) }
+
+    if (player.queue.length === 0) {
+      player.destroy()
+      await interaction.reply(simpleEmbed('⏹ ' + stop.other.response))
+      interaction.client.dashboard.update(player)
+      return
+    }
 
     if (index) {
-      const track = queue.tracks[queue.tracks.indexOf(index)]
-      queue.skip(index)
+      const track = player.queue[index - 1]
+      player.stop(index)
       await interaction.reply(simpleEmbed('⏭ ' + lang.other.skippedTo(`\`#${index}\`: **${track.title}**`)))
     } else {
-      queue.skip()
+      player.stop()
       await interaction.reply(simpleEmbed('⏭ ' + lang.other.skipped))
     }
+    interaction.client.dashboard.update(player)
   }
 }
