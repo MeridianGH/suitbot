@@ -19,7 +19,7 @@ export const { data, execute } = {
     if (!player) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
     if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
     if (player.queue.current.isStream) { return await interaction.reply(errorEmbed(lang.errors.isLive, true)) }
-    if (time < 0 || time > player.queue.current.duration) { return await interaction.reply(errorEmbed(lang.errors.index(player.queue.nowPlaying.duration), true)) }
+    if (time < 0 || time > player.queue.current.duration) { return await interaction.reply(errorEmbed(lang.errors.index(player.queue.current.duration), true)) }
 
     player.seek(time)
     await interaction.reply(simpleEmbed('⏩ ' + lang.other.response(msToHMS(time))))
