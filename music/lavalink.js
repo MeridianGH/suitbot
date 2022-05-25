@@ -18,9 +18,17 @@ export class Lavalink {
           host: 'localhost',
           port: 2333,
           password: 'youshallnotpass'
+        },
+        {
+          host: 'lava.link',
+          port: 80,
+          password: 'lavalink'
         }
       ],
-      plugins: [new ExtendedSearch(), new FilterManager()],
+      plugins: [
+        new ExtendedSearch(),
+        new FilterManager()
+      ],
       send(id, payload) {
         // noinspection JSIgnoredPromiseFromCall
         client.guilds.cache.get(id)?.shard.send(payload)
