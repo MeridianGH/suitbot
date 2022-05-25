@@ -18,11 +18,6 @@ export class Lavalink {
           host: 'localhost',
           port: 2333,
           password: 'youshallnotpass'
-        },
-        {
-          host: 'lava.link',
-          port: 80,
-          password: 'lavalink'
         }
       ],
       plugins: [
