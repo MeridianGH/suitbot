@@ -113,7 +113,7 @@ export const clear = {
   }
 }
 export const filter = {
-  other: { response: (filter) => `Set filter to ${filter}.` },
+  other: { response: (filter) => `Definir filtro para ${filter}.` },
   errors: {
     nothingPlaying: musicErrors.nothingPlaying,
     sameChannel: musicErrors.sameChannel
