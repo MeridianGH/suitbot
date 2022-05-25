@@ -112,6 +112,13 @@ export const clear = {
     sameChannel: musicErrors.sameChannel
   }
 }
+export const filter = {
+  other: { response: (filter) => `Asetettiin filtteri ${filter}.` },
+  errors: {
+    nothingPlaying: musicErrors.nothingPlaying,
+    sameChannel: musicErrors.sameChannel
+  }
+}
 export const lyrics = {
   author: 'Sanat.',
   other: {

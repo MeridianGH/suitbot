@@ -18,7 +18,7 @@ export const { data, execute } = {
       [ 'Vaporwave', 'vaporwave' ]
     ])),
   async execute(interaction) {
-    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).skip
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).filter
     const filter = interaction.options.getString('filter')
     const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
     if (!player) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
@@ -26,7 +26,7 @@ export const { data, execute } = {
 
     // noinspection JSUnresolvedFunction
     player.setFilter(filter)
-    await interaction.reply(simpleEmbed(`Set filter to \`${filter}\``))
+    await interaction.reply(simpleEmbed(lang.other.response(filter)))
     interaction.client.dashboard.update(player)
   }
 }
