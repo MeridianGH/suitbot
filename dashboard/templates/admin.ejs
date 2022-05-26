@@ -16,7 +16,7 @@
   </header>
   <div class="card-body">
     <h5><%= uptime(djsClient.uptime) %></h5>
-    <h5>Playing in <%= djsClient.player.queues.size %> server(s).</h5>
+    <h5>Playing in <%= djsClient.lavalink.manager.players.size %> server(s).</h5>
     <div class="table-responsive">
       <table class="table table-dark">
         <thead>
