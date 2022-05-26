@@ -68,6 +68,7 @@ export class ExtendedSearch extends Plugin {
     // Use maxresdefault thumbnails
     const search = await this._search(query, requestedBy)
     search.tracks.forEach((track) => { track.thumbnail = track.displayThumbnail('maxresdefault') })
+    console.log(search)
 
     return search
   }
