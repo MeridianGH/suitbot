@@ -35,6 +35,7 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 | /help       | Replies with help on how to use this bot. |
 | /info       | Shows info about the bot.                 |
 | /invite     | Sends an invite link for the bot.         |
+| /language   | Changes the bots language.                |
 | /ping       | Replies with the current latency.         |
 | /serverinfo | Shows info about the server.              |
 | /userinfo   | Shows info about a user.                  |
@@ -43,6 +44,7 @@ SuitBot uses slash commands to integrate itself into the server. You can easily 
 | Command     | Description                                                       |
 |-------------|-------------------------------------------------------------------|
 | /clear      | Clears the queue.                                                 |
+| /filter     | Sets filter modes for the player.                                 |
 | /lyrics     | Shows the lyrics of the currently playing song.                   |
 | /nowplaying | Shows the currently playing song.                                 |
 | /pause      | Pauses playback.                                                  |
