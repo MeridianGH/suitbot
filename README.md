@@ -19,6 +19,7 @@
 <summary style="cursor: pointer"><b>Table of Contents</b></summary>
 
 - [Invite](#invite)
+- [Features](#features)
 - [Commands](#commands)
 - [Installation](#installation)
 - [Stats](#stats)
