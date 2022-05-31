@@ -4,6 +4,7 @@
 	"clientSecret": "yourClientSecret",
 	"guildId": "yourGuildID",
 	"adminId": "yourUserID",
-	"cookie": "yourYTCookie",
+	"papisid": "yourPAPISID",
+	"psid": "yourPSID",
 	"geniusAppId": "yourGeniusAppId"
 }
