@@ -37,7 +37,7 @@ export const { data, execute } = {
       .addField('<:github:923336812410306630> ' + lang.fields.github.name, `[${lang.fields.github.value}](https://github.com/MeridianGH/suitbot)`, true)
       .addField('<:discord:934041553209548840> ' + lang.fields.discord.name, `[${lang.fields.discord.value}](https://discord.gg/qX2CBrrUpf)`, true)
       .addField('\u200b', '\u200b', true)
-      .addField('\u200b', lang.fields.buttons.value)
+      .addField('\u200b', lang.fields.buttons.value + '\nChange language with `/language`.')
       .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
     pages.push(embed)
 
