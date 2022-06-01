@@ -1,5 +1,4 @@
 // noinspection JSUnusedGlobalSymbols
-/* eslint-disable object-curly-newline */
 
 // General
 export const activity = {
@@ -51,9 +50,7 @@ export const language = {
   author: 'Idioma.',
   title: 'Mudar idioma',
   description: (langCode) => `Definir idioma para \`${langCode}\`.`,
-  errors: {
-    userMissingPerms: 'Você não tem permissão para executar este comando!'
-  }
+  errors: { userMissingPerms: 'Você não tem permissão para executar este comando!' }
 }
 export const ping = {
   author: 'Ping',
@@ -339,17 +336,13 @@ export const slowmode = {
 }
 
 // Feedback
-export const bugreport = {
-  other: { response: 'Seu relatório de bug foi enviado com sucesso!' }
-}
+export const bugreport = { other: { response: 'Seu relatório de bug foi enviado com sucesso!' } }
 export const github = {
   author: 'GitHub.',
   title: 'GitHub Repositório',
   description: 'A source desse bot juntamente com informações úteis.'
 }
-export const suggestion = {
-  other: { response: 'Sua sugestão foi enviada com sucesso!' }
-}
+export const suggestion = { other: { response: 'Sua sugestão foi enviada com sucesso!' } }
 
 // Other
 export const serverShutdown = {

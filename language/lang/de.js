@@ -1,5 +1,4 @@
 // noinspection JSUnusedGlobalSymbols
-/* eslint-disable object-curly-newline */
 
 // General
 export const activity = {
@@ -51,9 +50,7 @@ export const language = {
   author: 'Sprache.',
   title: 'Sprache ändern',
   description: (langCode) => `Sprache zu \`${langCode}\` geändert.`,
-  errors: {
-    userMissingPerms: 'Du hast nicht die Berechtigung, diesen Befehl auszuführen!'
-  }
+  errors: { userMissingPerms: 'Du hast nicht die Berechtigung, diesen Befehl auszuführen!' }
 }
 export const ping = {
   author: 'Ping',
@@ -339,17 +336,13 @@ export const slowmode = {
 }
 
 // Feedback
-export const bugreport = {
-  other: { response: 'Deine Fehlermeldung wurde erfolgreich abgeschickt!' }
-}
+export const bugreport = { other: { response: 'Deine Fehlermeldung wurde erfolgreich abgeschickt!' } }
 export const github = {
   author: 'GitHub.',
   title: 'GitHub Projektarchiv',
   description: 'Der Quellcode dieses Bots und weitere nützliche Informationen.'
 }
-export const suggestion = {
-  other: { response: 'Deine Anregung wurde erfolgreich abgeschickt!' }
-}
+export const suggestion = { other: { response: 'Deine Anregung wurde erfolgreich abgeschickt!' } }
 
 // Other
 export const serverShutdown = {

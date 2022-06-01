@@ -1,5 +1,4 @@
 // noinspection JSUnusedGlobalSymbols
-/* eslint-disable object-curly-newline */
 
 // General
 export const activity = {
@@ -51,9 +50,7 @@ export const language = {
   author: 'Kieli.',
   title: 'Vaihda kieltä',
   description: (langCode) => `Kieli asetettiin \`${langCode}\`.`,
-  errors: {
-    userMissingPerms: 'Sinulla ei ole oikeutta suorittaa tätä komentoa!'
-  }
+  errors: { userMissingPerms: 'Sinulla ei ole oikeutta suorittaa tätä komentoa!' }
 }
 export const ping = {
   author: 'Viive.',
@@ -339,17 +336,13 @@ export const slowmode = {
 }
 
 // Feedback
-export const bugreport = {
-  other: { response: 'Bug-reporttisi on lähetetty!' }
-}
+export const bugreport = { other: { response: 'Bug-reporttisi on lähetetty!' } }
 export const github = {
   author: 'GitHub.',
   title: 'GitHub Repositorio',
   description: 'Botin lähde koodi tiedon kanssa.'
 }
-export const suggestion = {
-  other: { response: 'Sinun ehdotuksesi on lähetetty!' }
-}
+export const suggestion = { other: { response: 'Sinun ehdotuksesi on lähetetty!' } }
 
 // Other
 export const serverShutdown = {
