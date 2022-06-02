@@ -53,7 +53,7 @@ export class Lavalink {
     const doc = yaml.load(fs.readFileSync('./music/lavalink/template.yml'), {})
     doc.lavalink.server.youtubeConfig.PAPISID = papisid
     doc.lavalink.server.youtubeConfig.PSID = psid
-    fs.writeFileSync('./music/lavalink/application.yml', yaml.dump(doc))
+    fs.writeFileSync('./music/lavalink/application.yml', yaml.dump(doc, {}))
 
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
