@@ -7,11 +7,12 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('help')
     .setDescription('Replies with help on how to use this bot.')
-    .addStringOption((option) => option.setName('category').setDescription('The category to display first.')
-      .addChoice('General', '2')
-      .addChoice('Music', '3')
-      .addChoice('Moderation', '4')
-      .addChoice('Feedback', '5')),
+    .addStringOption((option) => option.setName('category').setDescription('The category to display first.').addChoices(
+      { name: 'General', value: '2' },
+      { name: 'Music', value: '3' },
+      { name: 'Moderation', value: '4' },
+      { name: 'Feedback', value: '5' }
+    )),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).help
     const folders = fs.readdirSync('./commands/', { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name)

@@ -1,15 +1,15 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { errorEmbed } from '../../utilities/utilities.js'
 import { MessageEmbed, Permissions } from 'discord.js'
-import { ChannelType } from 'discord-api-types/v9'
+import { ChannelType } from 'discord-api-types/v10'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('moveall')
     .setDescription('Moves all users from the first channel to the second channel.')
-    .addChannelOption((option) => option.setName('channel1').setDescription('The channel to move from.').addChannelType(ChannelType.GuildVoice).setRequired(true))
-    .addChannelOption((option) => option.setName('channel2').setDescription('The channel to move to.').addChannelType(ChannelType.GuildVoice).setRequired(true)),
+    .addChannelOption((option) => option.setName('channel1').setDescription('The channel to move from.').addChannelTypes(ChannelType.GuildVoice).setRequired(true))
+    .addChannelOption((option) => option.setName('channel2').setDescription('The channel to move to.').addChannelTypes(ChannelType.GuildVoice).setRequired(true)),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).moveall
     const channel1 = interaction.options.getChannel('channel1')

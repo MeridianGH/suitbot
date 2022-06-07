@@ -1,5 +1,5 @@
-import discordRest from '@discordjs/rest'
-import { Routes } from 'discord-api-types/v9'
+import { REST } from '@discordjs/rest'
+import { Routes } from 'discord-api-types/v10'
 import { getFilesRecursively } from './utilities/utilities.js'
 import { token, appId, guildId } from './utilities/config.js'
 
@@ -10,7 +10,7 @@ for (const file of getFilesRecursively('./commands')) {
   commands.push(command.data.toJSON())
 }
 
-const rest = new discordRest.REST({ version: '9' }).setToken(token)
+const rest = new REST({ version: '9' }).setToken(token)
 
 if (process.argv.includes('global')) {
   rest.put(Routes.applicationCommands(appId), { body: commands })

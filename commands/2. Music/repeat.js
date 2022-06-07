@@ -6,11 +6,11 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('repeat')
     .setDescription('Sets the current repeat mode.')
-    .addStringOption((option) => option.setName('mode').setDescription('The mode to set.').setRequired(true)
-      .addChoice('None', 'none')
-      .addChoice('Track', 'track')
-      .addChoice('Queue', 'queue')
-    ),
+    .addStringOption((option) => option.setName('mode').setDescription('The mode to set.').setRequired(true).addChoices(
+      { name: 'None', value: 'none' },
+      { name: 'Track', value: 'track' },
+      { name: 'Queue', value: 'queue' }
+    )),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).repeat
     const mode = interaction.options.getString('mode')

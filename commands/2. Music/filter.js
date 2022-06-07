@@ -6,17 +6,17 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('filter')
     .setDescription('Sets filter modes for the player.')
-    .addStringOption((option) => option.setName('filter').setDescription('The filter to select.').setRequired(true).addChoices([
-      [ 'None', 'none' ],
-      [ 'Bass Boost', 'bassboost' ],
-      [ 'Classic', 'classic' ],
-      [ '8D', 'eightd' ],
-      [ 'Earrape', 'earrape' ],
-      [ 'Karaoke', 'karaoke' ],
-      [ 'Nightcore', 'nightcore' ],
-      [ 'Superfast', 'superfast' ],
-      [ 'Vaporwave', 'vaporwave' ]
-    ])),
+    .addStringOption((option) => option.setName('filter').setDescription('The filter to select.').setRequired(true).addChoices(
+      { name: 'None', value: 'none' },
+      { name: 'Bass Boost', value: 'bassboost' },
+      { name: 'Classic', value: 'classic' },
+      { name: '8D', value: 'eightd' },
+      { name: 'Earrape', value: 'earrape' },
+      { name: 'Karaoke', value: 'karaoke' },
+      { name: 'Nightcore', value: 'nightcore' },
+      { name: 'Superfast', value: 'superfast' },
+      { name: 'Vaporwave', value: 'vaporwave' }
+    )),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).filter
     const filter = interaction.options.getString('filter')

@@ -7,12 +7,12 @@ export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('language')
     .setDescription('Changes the bots language.')
-    .addStringOption((option) => option.setName('language').setDescription('The language to select.').setRequired(true).addChoices([
-      ['English', 'en-US'],
-      ['Deutsch', 'de'],
-      ['Suomi', 'fi'],
-      ['Português do Brasil', 'pt-BR']
-    ])),
+    .addStringOption((option) => option.setName('language').setDescription('The language to select.').setRequired(true).addChoices(
+      { name: 'English', value: 'en-US' },
+      { name: 'Deutsch', value: 'de' },
+      { name: 'Suomi', value: 'fi' },
+      { name: 'Português do Brasil', value: 'pt-BR' }
+    )),
   async execute(interaction) {
     const langCode = interaction.options.getString('language')
     const lang = getLanguage(langCode).language
