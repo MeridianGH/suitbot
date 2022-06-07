@@ -234,25 +234,26 @@ Deploying on Heroku automatically deploys all commands globally. Make sure to te
 ### Code
 ![GitHub top language](https://img.shields.io/github/languages/top/MeridianGH/suitbot?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/MeridianGH/suitbot?style=for-the-badge)
-[![CodeFactor](https://img.shields.io/codefactor/grade/github/MeridianGH/suitbot?style=for-the-badge)](https://www.codefactor.io/repository/github/meridiangh/suitbot)
 \
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/MeridianGH/suitbot?style=for-the-badge)
+[![CodeFactor](https://img.shields.io/codefactor/grade/github/MeridianGH/suitbot?style=for-the-badge)](https://www.codefactor.io/repository/github/meridiangh/suitbot)
+[![Libraries.io](https://img.shields.io/librariesio/github/MeridianGH/suitbot?style=for-the-badge)](https://libraries.io/github/MeridianGH/suitbot)
+\
 [![discord.js](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/discord.js?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/discord.js)
 [![erelajs](https://img.shields.io/github/package-json/dependency-version/MeridianGH/suitbot/erela.js?color=44b868&logo=npm&style=for-the-badge)](https://www.npmjs.com/package/play-dl)
 
 ### GitHub
-![GitHub issues](https://img.shields.io/github/issues/MeridianGH/suitbot?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/MeridianGH/suitbot?style=for-the-badge)
+[![GitHub issues](https://img.shields.io/github/issues/MeridianGH/suitbot?style=for-the-badge)](https://github.com/MeridianGH/suitbot/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/MeridianGH/suitbot?style=for-the-badge)](https://github.com/MeridianGH/suitbot/pulls)
 \
-![GitHub last commit](https://img.shields.io/github/last-commit/MeridianGH/suitbot?style=for-the-badge)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MeridianGH/suitbot?style=for-the-badge)
+[![GitHub last commit](https://img.shields.io/github/last-commit/MeridianGH/suitbot?style=for-the-badge)](https://github.com/MeridianGH/suitbot/commits)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MeridianGH/suitbot?style=for-the-badge)](https://github.com/MeridianGH/suitbot/graphs/commit-activity)
 \
-![GitHub Repo stars](https://img.shields.io/github/stars/MeridianGH/suitbot?style=for-the-badge)
-![GitHub watchers](https://img.shields.io/github/watchers/MeridianGH/suitbot?style=for-the-badge)
+[![GitHub Repo stars](https://img.shields.io/github/stars/MeridianGH/suitbot?style=for-the-badge)](https://github.com/MeridianGH/suitbot/stargazers)
+[![GitHub watchers](https://img.shields.io/github/watchers/MeridianGH/suitbot?style=for-the-badge)](https://github.com/MeridianGH/suitbot/watchers)
 
 ### Dashboard
-![GitHub deployments](https://img.shields.io/github/deployments/MeridianGH/suitbot/suitbotxyz?label=Deployment&style=for-the-badge)
-![Website](https://img.shields.io/website?down_message=offline&label=dashboard&style=for-the-badge&up_message=online&url=https%3A%2F%2Fsuitbot.xyz)
+[![GitHub deployments](https://img.shields.io/github/deployments/MeridianGH/suitbot/suitbotxyz?label=Deployment&style=for-the-badge)](https://github.com/MeridianGH/suitbot/deployments)
+[![Website](https://img.shields.io/website?down_message=offline&label=dashboard&style=for-the-badge&up_message=online&url=https%3A%2F%2Fsuitbot.xyz)](https://suitbot.xyz)
 
 ## Licensing
 If you want to host your own version of SuitBot, with or without modifications to the source code or plan to use any part of this source code, you must disclose the source and reference this repository/license.
