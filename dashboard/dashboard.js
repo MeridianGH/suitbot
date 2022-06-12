@@ -128,6 +128,17 @@ export function startDashboard(client) {
     render(req, res, 'admin.ejs')
   })
 
+  // Terms of Service endpoint.
+  app.get('/terms', (req, res) => {
+    render(req, res, 'legal/terms.ejs')
+  })
+
+  // Privacy Policy endpoint.
+  app.get('/privacy', (req, res) => {
+    render(req, res, 'legal/privacy.ejs')
+  })
+
+  // 404
   app.get('*', (req, res) => {
     render(req, res, '404.ejs')
   })
