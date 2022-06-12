@@ -16,5 +16,8 @@ export default {
   addAllServers: async function addAllServers(guilds) {
     guilds = guilds.map((guild) => ({ id: guild.id, locale: guild.preferredLocale }))
     await sql`insert into servers ${sql(guilds)} on conflict (id) do nothing;`
+  },
+  removeServer: async function removeServer(guild) {
+    await sql`delete from servers where id = ${guild.id};`
   }
 }
