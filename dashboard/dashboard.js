@@ -118,7 +118,7 @@ export function startDashboard(client) {
   // Commands endpoint.
   app.get('/commands', (req, res) => {
     const readme = fs.readFileSync('./README.md').toString()
-    const markdown = marked.parse(readme.substring(readme.indexOf('## Commands & Features'), readme.indexOf('## Installation')))
+    const markdown = marked.parse(readme.substring(readme.indexOf('### General'), readme.indexOf('## Installation')))
     render(req, res, 'commands.ejs', { markdown: markdown })
   })
 
