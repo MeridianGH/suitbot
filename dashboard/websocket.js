@@ -36,7 +36,6 @@ export function setupWebsocket(client, domain) {
     ws.on('message', async (message) => {
       if (message.type !== 'utf8') { return }
       const data = JSON.parse(message.utf8Data)
-      console.log(data)
 
       // Add to client manager
       guildId = data.guildId
