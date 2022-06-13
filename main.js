@@ -7,7 +7,7 @@ import { token } from './utilities/config.js'
 import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 client.database = database
 client.lavalink = new Lavalink(client)
 const lavalink = await client.lavalink.initialize()

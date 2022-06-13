@@ -159,9 +159,7 @@ Rename `config_example.json` to `config.json` and replace the placeholders insid
   
 ### Setting up
 #### Discord
-Go to your Discord Application and do the following:
-- Go to `OAuth2` and add `http://localhost/callback` to `Redirects`.
-- Go to `Bot` and enable the `Presence Intent`
+Go to your Discord Application, go to `OAuth2` and add `http://localhost/callback` to `Redirects`.
   
 #### Domain
 Replace the domain in `dashboard.js` with your domain. \
@@ -202,9 +200,7 @@ Set the variables in config vars under `Settings`.
 
 ### Setting up
 #### Discord
-Go to your Discord Application and do the following:
-- Go to `OAuth2` and add `http://yourHerokuDomain/callback` to `Redirects`.
-- Go to `Bot` and enable the `Presence Intent`
+Go to your Discord Application, go to `OAuth2` and add `http://yourHerokuDomain/callback` to `Redirects`.
 
 #### Domain
 Replace the domain in `dashboard.js` with the domain of you Heroku app. \
