@@ -13,23 +13,6 @@ export const { data, execute } = {
     const member = interaction.options.getMentionable('user')
     if (!(member instanceof GuildMember)) { return await interaction.reply(errorEmbed(lang.errors.invalidUser, true)) }
 
-    let userStatus
-    const status = member.presence?.status ?? 'offline'
-    switch (status) {
-      case 'online':
-        userStatus = '🟢 ' + lang.other.online
-        break
-      case 'idle':
-        userStatus = '🟡 ' + lang.other.idle
-        break
-      case 'dnd':
-        userStatus = '🔴 ' + lang.other.dnd
-        break
-      case 'offline':
-        userStatus = '⚫ ' + lang.other.offline
-        break
-    }
-
     const created = Math.floor(member.user.createdAt.getTime() / 1000)
     const joined = Math.floor(member.joinedAt.getTime() / 1000)
     const embed = new MessageEmbed()
@@ -42,7 +25,6 @@ export const { data, execute } = {
       .addField(lang.fields.id.name, member.id, true)
       .addField(lang.fields.profile.name, `<@${member.id}>`, true)
       .addField(lang.fields.avatarURL.name, `[${lang.fields.avatarURL.value}](${member.user.displayAvatarURL({ dynamic: true, size: 1024 })})`, true)
-      .addField(lang.fields.status.name, userStatus)
       .addField(lang.fields.created.name, `<t:${created}> (<t:${created}:R>)`)
       .addField(lang.fields.joined.name, `<t:${joined}> (<t:${joined}:R>)`)
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })

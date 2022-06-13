@@ -76,7 +76,6 @@ export const userinfo = {
     id: { name: 'ID', value: null },
     profile: { name: 'Profiili', value: null },
     avatarURL: { name: 'Avatarin Osoite', value: 'Avatar URL' },
-    status: { name: 'Tila', value: null },
     created: { name: 'Luotu', value: null },
     joined: { name: 'Liittynyt', value: null }
   },

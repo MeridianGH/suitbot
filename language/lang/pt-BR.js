@@ -76,7 +76,6 @@ export const userinfo = {
     id: { name: 'ID', value: null },
     profile: { name: 'Perfil', value: null },
     avatarURL: { name: 'Avatar URL', value: 'Avatar URL' },
-    status: { name: 'Status', value: null },
     created: { name: 'Criado', value: null },
     joined: { name: 'Entrou', value: null }
   },
