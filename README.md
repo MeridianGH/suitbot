@@ -47,6 +47,12 @@
   - Pause, Skip, Remove, Volume and more commands
 
 
+- Language support
+  - Supports multiple languages
+  - Change the language for your server using `/language`
+  - Add your own language by contacting me on the Discord server
+
+
 - Activities
   - Create invites for Discord Activities
   - YouTube Together and a lot of fun minigames
