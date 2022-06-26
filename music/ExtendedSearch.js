@@ -5,9 +5,6 @@ import ytpl from 'ytpl'
 
 const spotify = spotifyUrlInfo(fetch)
 
-const youtubePlaylist = /https?:\/\/(www\.)?youtube\.com\/playlist(.*)$/
-const spotifyRegex = /(?:https:\/\/open\.spotify\.com\/|spotify:)(?:.+)?(track|playlist|album)[/:]([A-Za-z0-9]+)/
-
 const buildResult = (loadType, tracks, error, playlist) => ({
   loadType,
   tracks: tracks ?? [],
@@ -32,8 +29,13 @@ export class ExtendedSearch extends Plugin {
     // Split off query parameters
     if (query.startsWith('https://')) { query = query.split('&')[0] }
 
-    // Add info to YouTube playlists
-    if (query.match(youtubePlaylist)) {
+    // YouTube Shorts
+    const shortsRegex = /https:\/\/(www\.)?youtube\.com\/shorts\/(.*)$/
+    if (query.match(shortsRegex)) { query = query.replace('shorts/', 'watch?v=') }
+
+    // YouTube Playlists
+    const playlistRegex = /https:\/\/(www\.)?youtube\.com\/playlist(.*)$/
+    if (query.match(playlistRegex)) {
       try {
         const data = ytpl.validateID(query) ? await ytpl(query) : null
         const result = await this._search(query, requestedBy)
@@ -44,7 +46,8 @@ export class ExtendedSearch extends Plugin {
       }
     }
 
-    // Spotify support
+    // Spotify
+    const spotifyRegex = /(?:https:\/\/open\.spotify\.com\/|spotify:)(?:.+)?(track|playlist|album)[/:]([A-Za-z0-9]+)/
     const type = query.match(spotifyRegex)?.[1]
     try {
       switch (type) {
