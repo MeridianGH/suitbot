@@ -75,7 +75,7 @@ function NowPlaying({ track, position, paused, repeatMode, volume }) {
         <li>
           <${Thumbnail} image=${track.thumbnail} />
           <div className='progress-container'>
-            <div className='progress' style=${{ width: `${track.isStream ? '100%' : position / track.duration * 100 + '%'}` }} />
+            <div className='progress-bar' style=${{ width: `${track.isStream ? '100%' : position / track.duration * 100 + '%'}` }} />
           </div>
         </li>
         <li>
@@ -120,7 +120,7 @@ function VolumeControl(props) {
 
   return html`
     <div>
-      <button className='volume-display' disabled><i className=${volume === 0 ? 'fas fa-volume-off' : volume <= 33 ? 'fas fa-volume-down' : volume <= 66 ? 'fas fa-volume' : 'fas fa-volume-up'} /> ${volume}</button>
+      <button className='volume-display disabled'><i className=${volume === 0 ? 'fas fa-volume-off' : volume <= 33 ? 'fas fa-volume-down' : volume <= 66 ? 'fas fa-volume' : 'fas fa-volume-up'} /> ${volume}</button>
       <input className='volume-slider' type='range' defaultValue=${volume} step='1' min='0' max='100' onInput=${(event) => { setVolume(event.target.value) }} onMouseUp=${(event) => { send({ type: 'volume', volume: event.target.value }) }} />
     </div>
   `

@@ -10,6 +10,7 @@
     transition: opacity 1s;
     display: flex;
     align-items: center;
+    z-index: 1;
 }
 
 ul.horizontal-list {
@@ -34,6 +35,7 @@ ul.horizontal-list li {
     margin-right: 20px;
     position: relative;
     overflow: hidden;
+    border-radius: 5px 5px 0 0;
 }
 .thumbnail-backdrop {
     height: 200px;
@@ -57,7 +59,7 @@ ul.horizontal-list li {
     width: 356px;
     background-color: var(--button-color)
 }
-.progress {
+.progress-bar {
     width: 0;
     height: 5px;
     background-color: #ff0000
