@@ -117,6 +117,7 @@ export function setupWebsocket(client, domain) {
             player.queue.add(result.tracks)
             if (player.state !== 'CONNECTED') { await player.connect() }
             if (!player.playing && !player.paused && player.queue.totalSize === result.tracks.length) { await player.play() }
+
             // noinspection JSUnresolvedVariable
             embed
               .setTitle(result.playlist.name)
@@ -125,6 +126,7 @@ export function setupWebsocket(client, domain) {
               .addField(lang.fields.amount.name, lang.fields.amount.value(result.tracks.length), true)
               .addField(lang.fields.author.name, result.playlist.author, true)
               .addField(lang.fields.position.name, `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, true)
+            toast = { message: `Added playlist "${result.playlist.name}" to the queue.`, type: 'info' }
           } else {
             const track = result.tracks[0]
             player.queue.add(track)
@@ -138,6 +140,7 @@ export function setupWebsocket(client, domain) {
               .addField(lang.fields.duration.name, track.isStream ? '🔴 Live' : msToHMS(track.duration), true)
               .addField(lang.fields.author.name, track.author, true)
               .addField(lang.fields.position.name, (player.queue.indexOf(track) + 1).toString(), true)
+            toast = { message: `Added track "${track.title}" to the queue.`, type: 'info' }
           }
           await client.channels.cache.get(player.textChannel).send({ embeds: [embed] })
           break
