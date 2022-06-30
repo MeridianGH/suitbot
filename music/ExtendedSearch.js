@@ -68,9 +68,9 @@ export class ExtendedSearch extends Plugin {
       return buildResult('LOAD_FAILED', null, e.message ?? null, null)
     }
 
-    // Use maxresdefault thumbnails
+    // Use best thumbnail available
     const search = await this._search(query, requestedBy)
-    search.tracks.forEach((track) => { track.thumbnail = track.displayThumbnail('maxresdefault') })
+    for (const track of search.tracks) { track.thumbnail = await this.getBestThumbnail(track) }
 
     return search
   }
@@ -129,5 +129,15 @@ export class ExtendedSearch extends Plugin {
     const { author, title, thumbnail, uri } = data
     Object.assign(track, { author, title, thumbnail, uri })
     return track
+  }
+
+  async getBestThumbnail(track) {
+    for (const size of ['maxresdefault', 'hqdefault', 'mqdefault', 'default']) {
+      // noinspection JSCheckFunctionSignatures
+      const thumbnail = track.displayThumbnail(size)
+      if (!thumbnail) { continue }
+      if ((await fetch(thumbnail)).ok) { return thumbnail }
+    }
+    return track.thumbnail
   }
 }
