@@ -2,8 +2,9 @@ import { Client, Collection, Intents, MessageEmbed } from 'discord.js'
 import database from './utilities/database.js'
 import { Lavalink } from './music/lavalink.js'
 import { getFilesRecursively } from './utilities/utilities.js'
+import fs from 'fs'
 
-import { token } from './utilities/config.js'
+import { token, adminId } from './utilities/config.js'
 import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
 
@@ -30,7 +31,15 @@ for (const file of getFilesRecursively('./events')) {
 }
 process.on('SIGTERM', shutdown)
 process.on('SIGINT', shutdown)
-process.on('uncaughtException', (error) => { console.log(`Ignoring uncaught exception: ${error} | ${error.stack.split(/\r?\n/)[1].split('\\').pop().slice(0, -1)}`) })
+process.on('uncaughtException', async (error) => {
+  console.log(`Ignoring uncaught exception: ${error} | ${error.stack.split(/\r?\n/)[1].split('\\').pop().slice(0, -1).trim()}`)
+  if (client.isReady()) {
+    fs.writeFileSync('error.txt', error.stack)
+    const user = await client.users.fetch(adminId)
+    await user.send({ content: `\`New Exception | ${error}\``, files: ['error.txt'] })
+    fs.unlink('error.txt', () => {})
+  }
+})
 
 // Shutdown Handling
 async function shutdown() {
