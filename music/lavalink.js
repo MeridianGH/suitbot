@@ -55,11 +55,12 @@ export class Lavalink {
     doc.lavalink.server.youtubeConfig.PSID = psid
     fs.writeFileSync('./music/lavalink/application.yml', yaml.dump(doc, {}))
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const timeout = setTimeout(() => {
         console.log('Failed to start Lavalink within 10s.')
-        reject()
+        process.exit()
       }, 10000)
+
       const lavalink = spawn('cd ./music/lavalink && java -jar Lavalink.jar', { shell: true })
       const onData = (data) => {
         data = data.toString().trim()
@@ -67,15 +68,18 @@ export class Lavalink {
           console.log('Successfully started Lavalink.')
           lavalink.stdout.removeListener('data', onData)
           clearTimeout(timeout)
-          resolve(lavalink)
+          resolve()
         } else if (data.toLowerCase().includes('failed')) {
           console.log('Failed to start Lavalink.')
           lavalink.stdout.removeListener('data', onData)
           clearTimeout(timeout)
-          reject()
+          process.exit()
         }
       }
       lavalink.stdout.on('data', onData)
+
+      process.on('SIGTERM', () => { lavalink.kill() })
+      process.on('SIGINT', () => { lavalink.kill() })
     })
   }
 

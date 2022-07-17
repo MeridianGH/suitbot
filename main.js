@@ -10,7 +10,7 @@ import { iconURL } from './events/ready.js'
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
 client.database = database
 client.lavalink = new Lavalink(client)
-const lavalink = await client.lavalink.initialize()
+await client.lavalink.initialize()
 
 // Commands
 client.commands = new Collection()
@@ -50,7 +50,6 @@ async function shutdown() {
     })
     player.destroy()
   }
-  lavalink.kill()
   client.destroy()
   client.dashboard.shutdown()
   console.log('Received SIGTERM, shutting down.')
