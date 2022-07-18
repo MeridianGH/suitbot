@@ -7,7 +7,7 @@ export const { data, execute } = {
     .setName('pause')
     .setDescription('Pauses or resumes playback.'),
   async execute(interaction) {
-    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).nowplaying
+    const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).pause
     const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
     if (!player || !player.queue.current) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
     if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
