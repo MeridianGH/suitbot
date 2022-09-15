@@ -1,6 +1,6 @@
 // noinspection JSCheckFunctionSignatures,JSUnresolvedVariable,JSUnusedGlobalSymbols
 
-import { Structure, Plugin } from 'erela.js'
+import { Plugin, Structure } from 'erela.js'
 
 export class FilterManager extends Plugin {
   load() {

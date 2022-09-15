@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
@@ -22,7 +21,7 @@ export const { data, execute } = {
       description += `${lang.other.nowPlaying}\n[${queue.current.title}](${queue.current.uri}) | \`${queue.current.isStream ? '🔴 Live' : msToHMS(queue.current.duration)}\`\n\n`
       description += lang.other.noUpcomingSongs + '\u2015'.repeat(34)
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
         .setDescription(description)
         .setFooter({ text: `SuitBot | ${lang.other.page} 1/1 | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
@@ -34,7 +33,7 @@ export const { data, execute } = {
       for (const track of queue) { description += `\`${queue.indexOf(track) + 1}.\` [${track.title}](${track.uri}) | \`${track.isStream ? '🔴 Live' : msToHMS(track.duration)}\`\n\n` }
       description += `**${lang.other.songsInQueue(queue.length)} | ${lang.other.totalDuration(msToHMS(queue.duration))}**\n${'\u2015'.repeat(34)}`
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
         .setDescription(description)
         .setFooter({ text: `SuitBot | ${lang.other.page} 1/1 | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
@@ -49,7 +48,7 @@ export const { data, execute } = {
         for (const track of tracks) { description += `\`${queue.indexOf(track) + 1}.\` [${track.title}](${track.uri}) | \`${track.isStream ? '🔴 Live' : msToHMS(track.duration)}\`\n\n` }
         description += `**${lang.other.songsInQueue(queue.length)} | ${lang.other.totalDuration(msToHMS(queue.duration))}**\n${'\u2015'.repeat(34)}`
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
           .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
           .setDescription(description)
           .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${Math.ceil(queue.length / 10)} | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
@@ -59,16 +58,16 @@ export const { data, execute } = {
 
     const isOnePage = pages.length === 1
 
-    const previous = new MessageButton()
+    const previous = new ButtonBuilder()
       .setCustomId('previous')
       .setLabel(lang.other.previous)
-      .setStyle('PRIMARY')
-    const next = new MessageButton()
+      .setStyle(ButtonStyle.Primary)
+    const next = new ButtonBuilder()
       .setCustomId('next')
       .setLabel(lang.other.next)
-      .setStyle('PRIMARY')
+      .setStyle(ButtonStyle.Primary)
 
-    const embedMessage = await interaction.reply({ embeds: [pages[0]], components: isOnePage ? [] : [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(false)] })], fetchReply: true })
+    const embedMessage = await interaction.reply({ embeds: [pages[0]], components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])], fetchReply: true })
 
     if (!isOnePage) {
       // Collect button interactions (when a user clicks a button),
@@ -76,10 +75,10 @@ export const { data, execute } = {
       let currentIndex = 0
       collector.on('collect', async (buttonInteraction) => {
         buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
-        await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
+        await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
       })
       collector.on('end', async () => {
-        await embedMessage.edit({ components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
+        await embedMessage.edit({ components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(true)])] })
       })
     }
   }

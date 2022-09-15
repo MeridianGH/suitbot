@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -8,7 +7,7 @@ export const { data, execute } = {
     .setDescription('Replies with the current latency.'),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).ping
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(lang.title)
       .setThumbnail(interaction.client.user.displayAvatarURL())

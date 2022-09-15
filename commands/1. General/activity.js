@@ -1,8 +1,7 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
 import { errorEmbed } from '../../utilities/utilities.js'
 import { REST } from '@discordjs/rest'
 import { ChannelType, Routes } from 'discord-api-types/v10'
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -25,7 +24,7 @@ export const { data, execute } = {
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).activity
     const channel = interaction.options.getChannel('channel')
-    if (!channel.isVoice()) { return await interaction.reply(errorEmbed(lang.errors.voiceChannel, true)) }
+    if (channel.type !== ChannelType.GuildVoice) { return await interaction.reply(errorEmbed(lang.errors.voiceChannel, true)) }
 
     const rest = new REST({ version: '10' }).setToken(interaction.client.token)
     await rest.post(Routes.channelInvites(channel.id), { body: { 'target_application_id': interaction.options.getString('activity'), 'target_type': 2 } })
@@ -33,7 +32,7 @@ export const { data, execute } = {
         if (response.error || !response.code) { return interaction.reply(errorEmbed(lang.errors.generic, true)) }
         if (response.code === '50013') { return interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
           .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
           .setTitle(lang.title)
           .setURL(`https://discord.gg/${response.code}`)

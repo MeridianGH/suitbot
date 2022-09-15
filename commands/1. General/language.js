@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageEmbed, Permissions } from 'discord.js'
+import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js'
 import { getLanguage } from '../../language/locale.js'
 import { errorEmbed } from '../../utilities/utilities.js'
 
@@ -16,10 +15,10 @@ export const { data, execute } = {
   async execute(interaction) {
     const langCode = interaction.options.getString('language')
     const lang = getLanguage(langCode).language
-    if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
+    if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
 
     await interaction.client.database.setLocale(interaction.guild.id, langCode)
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(lang.title)
       .setDescription(lang.description(langCode))

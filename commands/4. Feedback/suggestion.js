@@ -1,6 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { simpleEmbed } from '../../utilities/utilities.js'
-import { MessageEmbed } from 'discord.js'
 import { guildId } from '../../utilities/config.js'
 import { getLanguage } from '../../language/locale.js'
 
@@ -13,9 +12,9 @@ export const { data, execute } = {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).suggestion
     const suggestion = interaction.options.getString('suggestion')
     const developerGuild = interaction.client.guilds.cache.get(guildId)
-    const suggestionChannel = developerGuild.channels.cache.find((channel) => channel.name === 'suggestions' && channel.isText())
+    const suggestionChannel = developerGuild.channels.cache.find((channel) => channel.name === 'suggestions' && channel.isTextBased())
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: 'Suggestion received', iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(`By \`${interaction.member.user.tag}\` in \`${interaction.guild.name}\``)
       .setDescription(suggestion)

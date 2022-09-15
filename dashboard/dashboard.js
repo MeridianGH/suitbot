@@ -1,7 +1,6 @@
 // noinspection JSCheckFunctionSignatures
 
 import express from 'express'
-const app = express()
 import minify from 'express-minify'
 import ejs from 'ejs'
 
@@ -9,7 +8,6 @@ import passport from 'passport'
 import { Strategy } from 'passport-discord'
 import session from 'express-session'
 import memorystore from 'memorystore'
-const MemoryStore = memorystore(session)
 import { randomBytes } from 'crypto'
 
 import fs from 'fs'
@@ -17,9 +15,13 @@ import path from 'path'
 import fetch from 'node-fetch'
 import { marked } from 'marked'
 import { setupWebsocket } from './websocket.js'
-import { appId, clientSecret, adminId } from '../utilities/config.js'
+import { adminId, appId, clientSecret } from '../utilities/config.js'
 
 import { fileURLToPath } from 'url'
+
+const app = express()
+const MemoryStore = memorystore(session)
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export function startDashboard(client) {

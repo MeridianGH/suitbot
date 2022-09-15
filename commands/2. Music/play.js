@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js'
 import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
@@ -12,8 +11,8 @@ export const { data, execute } = {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).play
     const channel = interaction.member.voice.channel
     if (!channel) { return await interaction.reply(errorEmbed(lang.errors.noVoiceChannel, true)) }
-    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
-    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
+    if (interaction.guild.members.me.voice.channel && channel !== interaction.guild.members.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (!interaction.guild.members.me.permissionsIn(channel).has([PermissionsBitField.Flags.Connect, PermissionsBitField.Flags.Speak])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
     const player = interaction.client.lavalink.createPlayer(interaction)
@@ -29,14 +28,16 @@ export const { data, execute } = {
       interaction.client.dashboard.update(player)
 
       // noinspection JSUnresolvedVariable
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
         .setTitle(result.playlist.name)
         .setURL(result.playlist.uri)
         .setThumbnail(result.playlist.thumbnail)
-        .addField(lang.fields.amount.name, lang.fields.amount.value(result.tracks.length), true)
-        .addField(lang.fields.author.name, result.playlist.author, true)
-        .addField(lang.fields.position.name, `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, true)
+        .addFields([
+          { name: lang.fields.amount.name, value: lang.fields.amount.value(result.tracks.length), inline: true },
+          { name: lang.fields.author.name, value: result.playlist.author, inline: true },
+          { name: lang.fields.position.name, value: `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, inline: true }
+        ])
         .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
       await interaction.editReply({ embeds: [embed] })
     } else {
@@ -46,14 +47,16 @@ export const { data, execute } = {
       if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
       interaction.client.dashboard.update(player)
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
         .setTitle(track.title)
         .setURL(track.uri)
         .setThumbnail(track.thumbnail)
-        .addField(lang.fields.duration.name, track.isStream ? '🔴 Live' : msToHMS(track.duration), true)
-        .addField(lang.fields.author.name, track.author, true)
-        .addField(lang.fields.position.name, (player.queue.indexOf(track) + 1).toString(), true)
+        .addFields([
+          { name: lang.fields.duration.name, value: track.isStream ? '🔴 Live' : msToHMS(track.duration), inline: true },
+          { name: lang.fields.author.name, value: track.author, inline: true },
+          { name: lang.fields.position.name, value: (player.queue.indexOf(track) + 1).toString(), inline: true }
+        ])
         .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
       await interaction.editReply({ embeds: [embed] })
     }

@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
@@ -20,14 +19,16 @@ export const { data, execute } = {
 
     await interaction.reply({
       embeds: [
-        new MessageEmbed()
+        new EmbedBuilder()
           .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
           .setTitle(track.title)
           .setURL(track.uri)
           .setThumbnail(track.thumbnail)
-          .addField(lang.fields.duration.name, track.isStream ? '🔴 Live' : `\`${progressBar}\``, true)
-          .addField(lang.fields.author.name, track.author, true)
-          .addField(lang.fields.requestedBy.name, track.requester.toString(), true)
+          .addFields([
+            { name: lang.fields.duration.name, value: track.isStream ? '🔴 Live' : `\`${progressBar}\``, inline: true },
+            { name: lang.fields.author.name, value: track.author, inline: true },
+            { name: lang.fields.requestedBy.name, value: track.requester.toString(), inline: true }
+          ])
           .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
       ]
     })

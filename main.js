@@ -1,14 +1,14 @@
-import { Client, Collection, Intents, MessageEmbed } from 'discord.js'
+import { Client, Collection, EmbedBuilder, GatewayIntentBits } from 'discord.js'
 import database from './utilities/database.js'
 import { Lavalink } from './music/lavalink.js'
 import { getFilesRecursively } from './utilities/utilities.js'
 import fs from 'fs'
 
-import { token, adminId } from './utilities/config.js'
+import { adminId, token } from './utilities/config.js'
 import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'PLAYING' }] } })
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'Playing' }] } })
 client.database = database
 client.lavalink = new Lavalink(client)
 await client.lavalink.initialize()
@@ -50,17 +50,17 @@ async function shutdown() {
     // noinspection JSUnresolvedFunction
     await client.channels.cache.get(player.textChannel).send({
       embeds: [
-        new MessageEmbed()
+        new EmbedBuilder()
           .setTitle(lang.title)
           .setDescription(lang.description)
           .setFooter({ text: 'SuitBot', iconURL: iconURL })
-          .setColor('#ff0000')
+          .setColor([255, 0, 0])
       ]
     })
     player.destroy()
   }
   client.destroy()
-  client.dashboard.shutdown()
+  client.dashboard?.shutdown()
   console.log('Received SIGTERM, shutting down.')
   process.exit(0)
 }

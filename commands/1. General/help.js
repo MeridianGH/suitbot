@@ -1,6 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import fs from 'fs'
-import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -27,19 +26,21 @@ export const { data, execute } = {
 
     const pages = []
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(lang.title)
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(lang.description)
-      .addField('➕ ' + lang.fields.invite.name, `[${lang.fields.invite.value}](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)`, true)
-      .addField('🌐 ' + lang.fields.website.name, '[suitbot.xyz](https://suitbot.xyz)', true)
-      .addField('\u200b', '\u200b', true)
-      .addField('<:github:923336812410306630> ' + lang.fields.github.name, `[${lang.fields.github.value}](https://github.com/MeridianGH/suitbot)`, true)
-      .addField('<:discord:934041553209548840> ' + lang.fields.discord.name, `[${lang.fields.discord.value}](https://discord.gg/qX2CBrrUpf)`, true)
-      .addField('\u200b', '\u200b', true)
-      .addField('\u200b', lang.fields.buttons.value + '\nChange language with `/language`.')
       .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
+      .addFields([
+        { name: '➕ ' + lang.fields.invite.name, value: `[${lang.fields.invite.value}](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)`, inline: true },
+        { name: '🌐 ' + lang.fields.website.name, value: '[suitbot.xyz](https://suitbot.xyz)', inline: true },
+        { name: '\u200b', value: '\u200b', inline: true },
+        { name: '<:github:923336812410306630> ' + lang.fields.github.name, value: `[${lang.fields.github.value}](https://github.com/MeridianGH/suitbot)`, inline: true },
+        { name: '<:discord:934041553209548840> ' + lang.fields.discord.name, value: `[${lang.fields.discord.value}](https://discord.gg/qX2CBrrUpf)`, inline: true },
+        { name: '\u200b', value: '\u200b', inline: true },
+        { name: '\u200b', value: lang.fields.buttons.value + '\nChange language with `/language`.', inline: false }
+      ])
     pages.push(embed)
 
     for (const [category, commands] of Object.entries(categories)) {
@@ -50,7 +51,7 @@ export const { data, execute } = {
       }
       description = description + '\u2015'.repeat(34)
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
         .setTitle(category)
         .setDescription(description)
@@ -58,26 +59,26 @@ export const { data, execute } = {
       pages.push(embed)
     }
 
-    const previous = new MessageButton()
+    const previous = new ButtonBuilder()
       .setCustomId('previous')
       .setLabel(lang.other.previous)
-      .setStyle('PRIMARY')
-    const next = new MessageButton()
+      .setStyle(ButtonStyle.Primary)
+    const next = new ButtonBuilder()
       .setCustomId('next')
       .setLabel(lang.other.next)
-      .setStyle('PRIMARY')
+      .setStyle(ButtonStyle.Primary)
 
     let currentIndex = Math.max(Number(interaction.options.getString('category')) - 1, 0)
-    const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })], fetchReply: true })
+    const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
     const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
     collector.on('collect', async (buttonInteraction) => {
       buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
-      await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
+      await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])] })
     })
     collector.on('end', async (collected) => {
-      await collected.first()?.message.edit({ embeds: [pages[0]], components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
+      await collected.first()?.message.edit({ embeds: [pages[0]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(true)])] })
     })
   }
 }

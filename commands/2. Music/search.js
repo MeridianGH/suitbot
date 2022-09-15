@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageActionRow, MessageEmbed, MessageSelectMenu } from 'discord.js'
+import { ActionRowBuilder, EmbedBuilder, PermissionsBitField, SelectMenuBuilder, SlashCommandBuilder } from 'discord.js'
 import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
@@ -12,8 +11,8 @@ export const { data, execute } = {
     const { search: lang, play } = getLanguage(await interaction.client.database.getLocale(interaction.guildId))
     const channel = interaction.member.voice.channel
     if (!channel) { return await interaction.reply(errorEmbed(lang.errors.noVoiceChannel, true)) }
-    if (interaction.guild.me.voice.channel && channel !== interaction.guild.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
-    if (!interaction.guild.me.permissionsIn(channel).has(['CONNECT', 'SPEAK'])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
+    if (interaction.guild.members.me.voice.channel && channel !== interaction.guild.members.me.voice.channel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (!interaction.guild.members.me.permissionsIn(channel).has([PermissionsBitField.Flags.Connect, PermissionsBitField.Flags.Speak])) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
     await interaction.deferReply()
 
     const player = interaction.client.lavalink.createPlayer(interaction)
@@ -24,20 +23,20 @@ export const { data, execute } = {
     const tracks = result.tracks.slice(0, 5).map((track, index) => ({ label: track.title, description: track.author, value: index.toString() }))
 
     // noinspection JSCheckFunctionSignatures
-    const selectMenu = new MessageSelectMenu()
+    const selectMenu = new SelectMenuBuilder()
       .setCustomId('search')
       .setPlaceholder(lang.other.select)
       .addOptions(...tracks)
 
     const embedMessage = await interaction.editReply({
       embeds: [
-        new MessageEmbed()
+        new EmbedBuilder()
           .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
           .setTitle(lang.title(interaction.options.getString('query')))
           .setThumbnail(result.tracks[0].thumbnail)
           .setFooter({ text: `SuitBot | ${lang.other.expires}`, iconURL: interaction.client.user.displayAvatarURL() })
       ],
-      components: [new MessageActionRow({ components: [selectMenu] })],
+      components: [new ActionRowBuilder().setComponents(selectMenu)],
       fetchReply: true
     })
 
@@ -53,14 +52,16 @@ export const { data, execute } = {
       // noinspection JSCheckFunctionSignatures
       await menuInteraction.editReply({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setAuthor({ name: play.author, iconURL: interaction.member.user.displayAvatarURL() })
             .setTitle(track.title)
             .setURL(track.uri)
             .setThumbnail(track.thumbnail)
-            .addField(play.fields.duration.name, track.isStream ? '🔴 Live' : msToHMS(track.duration), true)
-            .addField(play.fields.author.name, track.author, true)
-            .addField(play.fields.position.name, (player.queue.indexOf(track) + 1).toString(), true)
+            .addFields([
+              { name: play.fields.duration.name, value: track.isStream ? '🔴 Live' : msToHMS(track.duration), inline: true },
+              { name: play.fields.author.name, value: track.author, inline: true },
+              { name: play.fields.position.name, value: (player.queue.indexOf(track) + 1).toString(), inline: true }
+            ])
             .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
         ],
         components: []

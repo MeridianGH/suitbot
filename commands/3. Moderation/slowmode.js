@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageEmbed, Permissions } from 'discord.js'
+import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js'
 import { errorEmbed } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
@@ -12,12 +11,12 @@ export const { data, execute } = {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).slowmode
     const seconds = interaction.options.getInteger('seconds')
 
-    if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
-    if (!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
+    if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageChannels)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
+    if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageChannels)) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
 
     await interaction.channel.setRateLimitPerUser(seconds)
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(`#${interaction.channel.name}`)
       .setThumbnail(interaction.guild.iconURL())

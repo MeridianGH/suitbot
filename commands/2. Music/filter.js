@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
+import { SlashCommandBuilder } from 'discord.js'
 import { errorEmbed, simpleEmbed } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 

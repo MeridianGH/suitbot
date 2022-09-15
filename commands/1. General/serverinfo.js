@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -10,17 +9,19 @@ export const { data, execute } = {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).serverinfo
     const guild = interaction.guild
     const created = Math.floor(guild.createdAt.getTime() / 1000)
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(guild.name)
       .setThumbnail(guild.iconURL({ dynamic: true, size: 1024 }))
-      .addField(lang.fields.members.name, guild.memberCount.toString(), true)
-      .addField(lang.fields.channels.name, guild.channels.channelCountWithoutThreads.toString(), true)
-      .addField(lang.fields.boosts.name, guild.premiumSubscriptionCount.toString() ?? '0', true)
-      .addField(lang.fields.owner.name, `<@${guild.ownerId}>`, true)
-      .addField(lang.fields.guildId.name, guild.id, true)
-      .addField('\u200b', '\u200b', true)
-      .addField(lang.fields.created.name, `<t:${created}> (<t:${created}:R>)`)
+      .addFields([
+        { name: lang.fields.members.name, value: guild.memberCount.toString(), inline: true },
+        { name: lang.fields.channels.name, value: guild.channels.channelCountWithoutThreads.toString(), inline: true },
+        { name: lang.fields.boosts.name, value: guild.premiumSubscriptionCount.toString() ?? '0', inline: true },
+        { name: lang.fields.owner.name, value: `<@${guild.ownerId}>`, inline: true },
+        { name: lang.fields.guildId.name, value: guild.id, inline: true },
+        { name: '\u200b', value: '\u200b', inline: true },
+        { name: lang.fields.created.name, value: `<t:${created}> (<t:${created}:R>)`, inline: false }
+      ])
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
     await interaction.reply({ embeds: [embed] })

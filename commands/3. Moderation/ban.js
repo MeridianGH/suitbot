@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { GuildMember, MessageEmbed, Permissions } from 'discord.js'
+import { EmbedBuilder, GuildMember, PermissionsBitField, SlashCommandBuilder } from 'discord.js'
 import { errorEmbed } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
@@ -14,16 +13,16 @@ export const { data, execute } = {
     const member = interaction.options.getMentionable('user')
     const reason = interaction.options.getString('reason')
 
-    if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
+    if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) { return await interaction.reply(errorEmbed(lang.errors.userMissingPerms, true)) }
     if (!(member instanceof GuildMember)) { return await interaction.reply(errorEmbed(lang.errors.invalidUser, true)) }
     if (!member.bannable) { return await interaction.reply(errorEmbed(lang.errors.missingPerms, true)) }
 
     await member.ban({ reason: reason }).catch(async () => await interaction.reply(errorEmbed(lang.errors.generic, true)))
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(member.displayName)
-      .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
+      .setThumbnail(member.user.displayAvatarURL({ size: 1024 }))
       .setDescription(lang.description(reason))
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 

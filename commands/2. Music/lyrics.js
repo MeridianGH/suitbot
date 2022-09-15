@@ -1,10 +1,10 @@
-import { SlashCommandBuilder } from '@discordjs/builders'
-import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js'
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { errorEmbed } from '../../utilities/utilities.js'
 import ytdl from 'ytdl-core'
 import { geniusAppId } from '../../utilities/config.js'
 import genius from 'genius-lyrics'
 import { getLanguage } from '../../language/locale.js'
+
 const Genius = new genius.Client(geniusAppId)
 
 export const { data, execute } = {
@@ -38,18 +38,18 @@ export const { data, execute } = {
 
       const isOnePage = pages.length === 1
 
-      const previous = new MessageButton()
+      const previous = new ButtonBuilder()
         .setCustomId('previous')
         .setLabel(lang.other.previous)
-        .setStyle('PRIMARY')
-      const next = new MessageButton()
+        .setStyle(ButtonStyle.Primary)
+      const next = new ButtonBuilder()
         .setCustomId('next')
         .setLabel(lang.other.next)
-        .setStyle('PRIMARY')
+        .setStyle(ButtonStyle.Primary)
 
       const embedMessage = await interaction.editReply({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
             .setTitle(player.queue.current.title)
             .setURL(song.url)
@@ -57,7 +57,7 @@ export const { data, execute } = {
             .setDescription(pages[0])
             .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
         ],
-        components: isOnePage ? [] : [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(false)] })],
+        components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])],
         fetchReply: true
       })
 
@@ -70,7 +70,7 @@ export const { data, execute } = {
           buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
           await buttonInteraction.update({
             embeds: [
-              new MessageEmbed()
+              new EmbedBuilder()
                 .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
                 .setTitle(player.queue.current.title)
                 .setURL(song.url)
@@ -78,17 +78,17 @@ export const { data, execute } = {
                 .setDescription(pages[currentIndex])
                 .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
             ],
-            components: [new MessageActionRow({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })]
+            components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])]
           })
         })
         collector.on('end', async () => {
-          await embedMessage.edit({ components: [new MessageActionRow({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
+          await embedMessage.edit({ components: [new ActionRowBuilder({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
         })
       }
     } catch {
       await interaction.editReply({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
             .setTitle(player.queue.current.title)
             .setURL(player.queue.current.uri)

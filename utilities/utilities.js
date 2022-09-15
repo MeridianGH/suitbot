@@ -1,12 +1,13 @@
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder } from 'discord.js'
 import fs from 'fs'
 import path from 'path'
 import { iconURL } from '../events/ready.js'
+import _ from 'lodash'
 
 export function simpleEmbed(content, ephemeral = false) {
   return {
     embeds: [
-      new MessageEmbed()
+      new EmbedBuilder()
         .setDescription(content)
         .setFooter({ text: 'SuitBot', iconURL: iconURL })
     ],
@@ -17,10 +18,10 @@ export function simpleEmbed(content, ephemeral = false) {
 export function errorEmbed(content, ephemeral = false) {
   return {
     embeds: [
-      new MessageEmbed()
+      new EmbedBuilder()
         .setDescription(content)
         .setFooter({ text: 'SuitBot', iconURL: iconURL })
-        .setColor('#ff0000')
+        .setColor([255, 0, 0])
     ],
     ephemeral: ephemeral
   }
@@ -28,6 +29,13 @@ export function errorEmbed(content, ephemeral = false) {
 
 export function sleep(seconds) {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
+}
+
+export function objectDifference(oldObject, newObject) {
+  return {
+    old: _.pickBy(oldObject, (value, key) => !_.isEqual(value, newObject[key])),
+    new: _.pickBy(newObject, (value, key) => !_.isEqual(oldObject[key], value))
+  }
 }
 
 export function msToHMS(ms) {

@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js'
+import { EmbedBuilder } from 'discord.js'
 import { server as WebsocketServer } from 'websocket'
 import { msToHMS } from '../utilities/utilities.js'
 import { getLanguage } from '../language/locale.js'
@@ -52,7 +52,7 @@ export function setupWebsocket(client, domain) {
 
       if (data.type === 'request') { return send(ws, simplifyPlayer(player)) }
 
-      if (guild.members.cache.get(user.id)?.voice.channel !== guild.me.voice.channel) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
+      if (guild.members.cache.get(user.id)?.voice.channel !== guild.members.me.voice.channel) { return send(ws, { toast: { message: 'You need to be in the same voice channel as the bot to use this command!', type: 'danger' } }) }
 
       let toast = null
       switch (data.type) {
@@ -109,7 +109,7 @@ export function setupWebsocket(client, domain) {
           if (result.loadType === 'LOAD_FAILED' || result.loadType === 'NO_MATCHES') { return send(ws, { toast: { message: 'There was an error while adding your song/playlist to the queue.', type: 'danger' } }) }
           const lang = getLanguage(await client.database.getLocale(guild.id)).play
 
-          const embed = new MessageEmbed()
+          const embed = new EmbedBuilder()
             .setAuthor({ name: lang.author, iconURL: user.displayAvatarURL() })
             .setFooter({ text: 'SuitBot Web Dashboard', iconURL: client.user.displayAvatarURL() })
 
@@ -123,9 +123,11 @@ export function setupWebsocket(client, domain) {
               .setTitle(result.playlist.name)
               .setURL(result.playlist.uri)
               .setThumbnail(result.playlist.thumbnail)
-              .addField(lang.fields.amount.name, lang.fields.amount.value(result.tracks.length), true)
-              .addField(lang.fields.author.name, result.playlist.author, true)
-              .addField(lang.fields.position.name, `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, true)
+              .addFields([
+                { name: lang.fields.amount.name, value: lang.fields.amount.value(result.tracks.length), inline: true },
+                { name: lang.fields.author.name, value: result.playlist.author, inline: true },
+                { name: lang.fields.position.name, value: `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, inline: true }
+              ])
             toast = { message: `Added playlist "${result.playlist.name}" to the queue.`, type: 'info' }
           } else {
             const track = result.tracks[0]
@@ -137,9 +139,11 @@ export function setupWebsocket(client, domain) {
               .setTitle(track.title)
               .setURL(track.uri)
               .setThumbnail(track.thumbnail)
-              .addField(lang.fields.duration.name, track.isStream ? '🔴 Live' : msToHMS(track.duration), true)
-              .addField(lang.fields.author.name, track.author, true)
-              .addField(lang.fields.position.name, (player.queue.indexOf(track) + 1).toString(), true)
+              .addFields([
+                { name: lang.fields.duration.name, value: track.isStream ? '🔴 Live' : msToHMS(track.duration), inline: true },
+                { name: lang.fields.author.name, value: track.author, inline: true },
+                { name: lang.fields.position.name, value: (player.queue.indexOf(track) + 1).toString(), inline: true }
+              ])
             toast = { message: `Added track "${track.title}" to the queue.`, type: 'info' }
           }
           await client.channels.cache.get(player.textChannel).send({ embeds: [embed] })
