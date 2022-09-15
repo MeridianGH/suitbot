@@ -57,9 +57,9 @@ export class Lavalink {
 
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
-        console.log('Failed to start Lavalink within 10s.')
+        console.log('Failed to start Lavalink within 30s.')
         process.exit()
-      }, 10000)
+      }, 30000)
 
       const lavalink = spawn('cd ./music/lavalink && java -jar Lavalink.jar', { shell: true })
       const onData = (data) => {
