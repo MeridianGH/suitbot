@@ -3,7 +3,7 @@
 import { spawn } from 'child_process'
 import { Manager } from 'erela.js'
 import { ExtendedSearch } from './ExtendedSearch.js'
-import { objectDifference, simpleEmbed } from '../utilities/utilities.js'
+import { simpleEmbed } from '../utilities/utilities.js'
 import { FilterManager } from './FilterManager.js'
 import yaml from 'js-yaml'
 import fs from 'fs'
@@ -110,10 +110,6 @@ export class Lavalink {
     if (newState.guild.members.me.id === newState.member.id) {
       // Disconnect
 
-      // TODO: Do something about the voiceState bug
-      // See also: https://github.com/discord/discord-api-docs/issues/5351
-      // Use this to debug:
-      // console.log(objectDifference(oldState, newState))
       if (!newState.channelId) { return player.destroy() }
 
       // Muted
