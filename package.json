@@ -14,7 +14,7 @@
     "discord-api-types": "^0.37.2",
     "discord.js": "14.2.0",
     "ejs": "^3.0.2",
-    "erela.js": "^2.3.3",
+    "erela.js": "github:menudocs/erela.js#build",
     "express": "^4.17.1",
     "express-minify": "^1.0.0",
     "express-session": "^1.17.2",
