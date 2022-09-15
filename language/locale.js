@@ -1,7 +1,7 @@
 import * as de from './lang/de.js'
 import * as enUS from './lang/en-US.js'
 import * as fi from './lang/fi.js'
-import * as ja from 'lang/ja.js'
+import * as ja from './lang/ja.js'
 import * as ptBR from './lang/pt-BR.js'
 
 // https://discord.com/developers/docs/reference#locales
