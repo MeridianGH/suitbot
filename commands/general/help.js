@@ -2,27 +2,20 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashComman
 import fs from 'fs'
 import { getLanguage } from '../../language/locale.js'
 
+const categories = ['general', 'music', 'moderation', 'feedback']
+
 export const { data, execute } = {
   data: new SlashCommandBuilder()
     .setName('help')
     .setDescription('Replies with help on how to use this bot.')
     .addStringOption((option) => option.setName('category').setDescription('The category to display first.').addChoices(
-      { name: 'General', value: '2' },
-      { name: 'Music', value: '3' },
-      { name: 'Moderation', value: '4' },
-      { name: 'Feedback', value: '5' }
+      { name: 'General', value: '1' },
+      { name: 'Music', value: '2' },
+      { name: 'Moderation', value: '3' },
+      { name: 'Feedback', value: '4' }
     )),
   async execute(interaction) {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).help
-    const folders = fs.readdirSync('./commands/', { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name)
-    const categories = {}
-    for (const folder of folders) {
-      const commands = []
-      for (const file of fs.readdirSync('./commands/' + folder)) {
-        commands.push(file)
-      }
-      categories[folder] = commands
-    }
 
     const pages = []
 
@@ -31,7 +24,6 @@ export const { data, execute } = {
       .setTitle(lang.title)
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(lang.description)
-      .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
       .addFields([
         { name: '➕ ' + lang.fields.invite.name, value: `[${lang.fields.invite.value}](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)`, inline: true },
         { name: '🌐 ' + lang.fields.website.name, value: '[suitbot.xyz](https://suitbot.xyz)', inline: true },
@@ -41,10 +33,12 @@ export const { data, execute } = {
         { name: '\u200b', value: '\u200b', inline: true },
         { name: '\u200b', value: lang.fields.buttons.value + '\nChange language with `/language`.', inline: false }
       ])
+      .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${categories.length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
     pages.push(embed)
 
-    for (const [category, commands] of Object.entries(categories)) {
+    for (const category of categories) {
       let description = ''
+      const commands = fs.readdirSync('./commands/' + category)
       for (const command of commands) {
         const commandData = await import(`../${category}/${command}`)
         description = description + `\`${commands.indexOf(command) + 1}.\` **/${commandData.data.name}:** ${commandData.data.description}\n\n`
@@ -53,9 +47,9 @@ export const { data, execute } = {
 
       const embed = new EmbedBuilder()
         .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-        .setTitle(category)
+        .setTitle(`${categories.indexOf(category) + 1}. ${category.replace(/(^[a-z])/i, (str, first) => first.toUpperCase() )}`)
         .setDescription(description)
-        .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${Object.entries(categories).length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ text: `SuitBot | ${lang.other.page} ${pages.length + 1}/${categories.length + 1}`, iconURL: interaction.client.user.displayAvatarURL() })
       pages.push(embed)
     }
 
@@ -68,7 +62,7 @@ export const { data, execute } = {
       .setLabel(lang.other.next)
       .setStyle(ButtonStyle.Primary)
 
-    let currentIndex = Math.max(Number(interaction.options.getString('category')) - 1, 0)
+    let currentIndex = Math.max(Number(interaction.options.getString('category')), 0)
     const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
