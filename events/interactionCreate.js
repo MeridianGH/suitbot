@@ -1,4 +1,5 @@
 import { errorEmbed } from '../utilities/utilities.js'
+import { logging } from '../utilities/logging.js'
 
 export const { data, execute } = {
   data: { name: 'interactionCreate' },
@@ -16,6 +17,6 @@ export const { data, execute } = {
       return await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
     }
 
-    console.log(`${interaction.user.tag} triggered /${interaction.commandName} in #${interaction.channel.name}/${interaction.guild.name}.`)
+    logging.info(`${interaction.user.tag} triggered /${interaction.commandName} in #${interaction.channel.name}/${interaction.guild.name}.`)
   }
 }

@@ -7,6 +7,7 @@ import fs from 'fs'
 import { adminId, token } from './utilities/config.js'
 import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
+import { logging } from './utilities/logging.js'
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'Playing' }] } })
 client.database = database
@@ -32,7 +33,7 @@ for (const file of getFilesRecursively('./events')) {
 process.on('SIGTERM', shutdown)
 process.on('SIGINT', shutdown)
 process.on('uncaughtException', async (error) => {
-  console.log(`Ignoring uncaught exception: ${error} | ${error.stack.split(/\r?\n/)[1].split('\\').pop().slice(0, -1).trim()}`)
+  logging.warn(`Ignoring uncaught exception: ${error} | ${error.stack.split(/\r?\n/)[1].split('\\').pop().slice(0, -1).trim()}`)
   if (client.isReady()) {
     fs.writeFileSync('error.txt', error.stack)
     const user = await client.users.fetch(adminId)
@@ -43,7 +44,7 @@ process.on('uncaughtException', async (error) => {
 
 // Shutdown Handling
 async function shutdown() {
-  console.log(`Closing ${client.lavalink.manager.players.size} queues.`)
+  logging.info(`Closing ${client.lavalink.manager.players.size} queues.`)
   for (const entry of client.lavalink.manager.players) {
     const player = entry[1]
     const lang = getLanguage(await client.database.getLocale(player.guild)).serverShutdown
@@ -61,7 +62,7 @@ async function shutdown() {
   }
   client.destroy()
   client.dashboard?.shutdown()
-  console.log('Received SIGTERM, shutting down.')
+  logging.info('Received SIGTERM, shutting down.')
   process.exit(0)
 }
 

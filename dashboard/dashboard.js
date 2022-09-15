@@ -18,6 +18,7 @@ import { setupWebsocket } from './websocket.js'
 import { adminId, appId, clientSecret } from '../utilities/config.js'
 
 import { fileURLToPath } from 'url'
+import { logging } from '../utilities/logging.js'
 
 const app = express()
 const MemoryStore = memorystore(session)
@@ -65,7 +66,7 @@ export function startDashboard(client) {
 
   const heartbeat = () => {
     setTimeout(() => {
-      fetch(domain).catch(() => console.log('Error when sending heartbeat.')).finally(heartbeat)
+      fetch(domain).catch(() => logging.warn('Error when sending heartbeat.')).finally(heartbeat)
     }, 1500000)
   }
 
@@ -146,7 +147,7 @@ export function startDashboard(client) {
   })
 
   client.dashboard = app.listen(port, null, null, () => {
-    console.log(`Dashboard is up and running on port ${port}.`)
+    logging.success(`Dashboard is up and running on port ${port}.`)
     heartbeat()
   })
 
