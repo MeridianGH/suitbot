@@ -8,6 +8,7 @@ import { FilterManager } from './FilterManager.js'
 import yaml from 'js-yaml'
 import fs from 'fs'
 import { papisid, psid } from '../utilities/config.js'
+import http from 'http'
 
 export class Lavalink {
   constructor(client) {
@@ -49,11 +50,16 @@ export class Lavalink {
     this.client.on('voiceStateUpdate', (oldState, newState) => this._voiceUpdate(oldState, newState))
   }
 
-  initialize() {
+  async initialize() {
     const doc = yaml.load(fs.readFileSync('./music/lavalink/template.yml'), {})
     doc.lavalink.server.youtubeConfig.PAPISID = papisid
     doc.lavalink.server.youtubeConfig.PSID = psid
     fs.writeFileSync('./music/lavalink/application.yml', yaml.dump(doc, {}))
+
+    if (await this._portInUse(doc.server.port)) {
+      console.log(`A server (possibly Lavalink) is already active on port ${doc.server.port}.\nContinuing, but expect errors if the server already running isn't Lavalink.`)
+      return
+    }
 
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
@@ -80,6 +86,17 @@ export class Lavalink {
 
       process.on('SIGTERM', () => { lavalink.kill() })
       process.on('SIGINT', () => { lavalink.kill() })
+    })
+  }
+
+  _portInUse(port) {
+    return new Promise((resolve) => {
+      const server = http.createServer()
+      server.listen(port, () => {
+        server.close()
+        resolve(false)
+      })
+      server.on('error', () => { resolve(true) })
     })
   }
 
