@@ -12,7 +12,6 @@ import { randomBytes } from 'crypto'
 
 import fs from 'fs'
 import path from 'path'
-import fetch from 'node-fetch'
 import { marked } from 'marked'
 import { setupWebsocket } from './websocket.js'
 import { adminId, appId, clientSecret } from '../utilities/config.js'
@@ -26,8 +25,9 @@ const MemoryStore = memorystore(session)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export function startDashboard(client) {
-  const port = process.env.PORT ?? 80
-  const domain = process.env.PORT ? 'https://suitbotxyz.herokuapp.com' : 'http://localhost'
+  const port = 80
+  const domain = 'https://suitbot.xyz'
+  const host = process.env.NODE_ENV === 'production' ? domain : 'http://localhost'
 
   // Set EJS engine
   app.engine('ejs', ejs.renderFile)
@@ -41,7 +41,7 @@ export function startDashboard(client) {
   // Passport Discord login
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((obj, done) => done(null, obj))
-  passport.use(new Strategy({ clientID: appId, clientSecret: clientSecret, callbackURL: `${domain}/callback`, scope: ['identify', 'guilds'] }, (accessToken, refreshToken, profile, done) => { process.nextTick(() => done(null, profile)) }))
+  passport.use(new Strategy({ clientID: appId, clientSecret: clientSecret, callbackURL: `${host}/callback`, scope: ['identify', 'guilds'] }, (accessToken, refreshToken, profile, done) => { process.nextTick(() => done(null, profile)) }))
 
   app.use(session({
     store: new MemoryStore({ checkPeriod: 86400000 }),
@@ -63,20 +63,6 @@ export function startDashboard(client) {
     req.session.backURL = req.url
     res.redirect('/login')
   }
-
-  const heartbeat = () => {
-    setTimeout(() => {
-      fetch(domain).catch(() => logging.warn('Error when sending heartbeat.')).finally(heartbeat)
-    }, 1500000)
-  }
-
-  app.use(function forceDomain(req, res, next) {
-    // Redirect from Heroku app to domain
-    if (req.get('Host') === 'suitbotxyz.herokuapp.com') {
-      return res.redirect(301, 'https://suitbot.xyz' + req.originalUrl)
-    }
-    return next()
-  })
 
   // Login endpoint.
   app.get('/login', (req, res, next) => {
@@ -148,11 +134,10 @@ export function startDashboard(client) {
 
   client.dashboard = app.listen(port, null, null, () => {
     logging.success(`Dashboard is up and running on port ${port}.`)
-    heartbeat()
   })
 
   // WebSocket
-  const wss = setupWebsocket(client, domain)
+  const wss = setupWebsocket(client, host)
   client.dashboard.update = function(player) {
     client.dashboard.emit('update', player)
   }

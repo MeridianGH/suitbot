@@ -9,6 +9,9 @@
   "engines": {
     "node": "16.x"
   },
+  "scripts": {
+    "start": "set NODE_ENV=production&&node ."
+  },
   "dependencies": {
     "@discordjs/rest": "^1.0.1",
     "discord-api-types": "^0.37.2",

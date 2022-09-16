@@ -2,7 +2,6 @@
 
 [![Invite](https://img.shields.io/static/v1?style=for-the-badge&logo=discord&label=Invite&message=SuitBot&color=000000)](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)
 [![Discord](https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord)](https://discord.gg/qX2CBrrUpf)
-[![Heroku](https://img.shields.io/static/v1?label=Hosted%20with&message=Heroku&color=7056bf&style=for-the-badge&logo=heroku)](https://www.heroku.com)
 [![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=gnu&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
 
 # SuitBot
@@ -166,7 +165,8 @@ Replace the domain in `dashboard.js` with your domain. \
 If you want to redirect from HTTP to HTTPS, make sure to replace the domains in the function `forceDomain()` as well.
 
 #### Database
-Install PostgreSQL and set the database URL in `database.js`.
+Install PostgreSQL and create a database `suitbot`.
+If you choose to name it differently, set the database URL in `database.js`.
 
 Create a table using the following command:
 ```
@@ -182,48 +182,13 @@ Guild commands are refreshed instantly while global commands can take up to an h
 
 Start the bot with
 ```shell
-node main.js
+node .
 ```
 
----
-
-## Heroku
-### Prerequisites
-- A Heroku account
-
-### Installing
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-### Configuration
-Refer to the configuration guide above on how to get the config variables. \
-Set the variables in config vars under `Settings`.
-
-### Setting up
-#### Discord
-Go to your Discord Application, go to `OAuth2` and add `http://yourHerokuDomain/callback` to `Redirects`.
-
-#### Domain
-Replace the domain in `dashboard.js` with the domain of you Heroku app. \
-If you're using a custom domain, make sure to replace the domains in the function `forceDomain()` as well.
-
-#### Database
-In your Heroku app, go to `Resources` and click on `Heroku Postgres`. \
-Select `Dataclips`, create a Dataclip and give it a title. \
-Paste the following command and hit `Save & Run`:
+To start the bot for production use
+```shell
+npm run start
 ```
-BEGIN;
-set transaction read write;
-CREATE TABLE servers (
-  id varchar(30) UNIQUE NOT NULL,
-  locale varchar(5) NOT NULL
-);
-commit;
-```
-Delete the Dataclip when it's done. (Click the two-arrow-symbol next to `Save & Run`)
-
-### Deploying
-Deploying on Heroku automatically deploys all commands globally. Make sure to test new commands locally before you deploy.
-
 ---
 </details>
 
@@ -254,7 +219,6 @@ Deploying on Heroku automatically deploys all commands globally. Make sure to te
 [![GitHub watchers](https://img.shields.io/github/watchers/MeridianGH/suitbot?style=for-the-badge)](https://github.com/MeridianGH/suitbot/watchers)
 
 ### Dashboard
-[![GitHub deployments](https://img.shields.io/github/deployments/MeridianGH/suitbot/suitbotxyz?label=Deployment&style=for-the-badge)](https://github.com/MeridianGH/suitbot/deployments)
 [![Website](https://img.shields.io/website?down_message=offline&label=dashboard&style=for-the-badge&up_message=online&url=https%3A%2F%2Fsuitbot.xyz)](https://suitbot.xyz)
 
 ## Licensing
