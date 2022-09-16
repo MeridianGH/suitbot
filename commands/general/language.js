@@ -10,6 +10,7 @@ export const { data, execute } = {
       { name: 'English', value: 'en-US' },
       { name: 'Deutsch', value: 'de' },
       { name: 'Suomi', value: 'fi' },
+      { name: '日本語', value: 'ja' },
       { name: 'Português do Brasil', value: 'pt-BR' }
     )),
   async execute(interaction) {
