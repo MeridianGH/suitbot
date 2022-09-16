@@ -63,7 +63,6 @@ export const { data, execute } = {
 
       if (!isOnePage) {
         // Collect button interactions (when a user clicks a button)
-        // noinspection JSCheckFunctionSignatures
         const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
         let currentIndex = 0
         collector.on('collect', async (buttonInteraction) => {

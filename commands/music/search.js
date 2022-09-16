@@ -22,7 +22,6 @@ export const { data, execute } = {
     if (result.loadType !== 'SEARCH_RESULT') { return await interaction.editReply(errorEmbed(lang.errors.generic)) }
     const tracks = result.tracks.slice(0, 5).map((track, index) => ({ label: track.title, description: track.author, value: index.toString() }))
 
-    // noinspection JSCheckFunctionSignatures
     const selectMenu = new SelectMenuBuilder()
       .setCustomId('search')
       .setPlaceholder(lang.other.select)
@@ -40,7 +39,6 @@ export const { data, execute } = {
       fetchReply: true
     })
 
-    // noinspection JSCheckFunctionSignatures
     const collector = embedMessage.createMessageComponentCollector({ time: 60000, filter: async (c) => { await c.deferUpdate(); return c.user.id === interaction.user.id } })
     collector.on('collect', async (menuInteraction) => {
       const track = result.tracks[Number(menuInteraction.values[0])]
@@ -49,7 +47,6 @@ export const { data, execute } = {
       if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
       interaction.client.dashboard.update(player)
 
-      // noinspection JSCheckFunctionSignatures
       await menuInteraction.editReply({
         embeds: [
           new EmbedBuilder()

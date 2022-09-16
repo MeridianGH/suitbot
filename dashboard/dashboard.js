@@ -1,5 +1,3 @@
-// noinspection JSCheckFunctionSignatures
-
 import express from 'express'
 import minify from 'express-minify'
 import ejs from 'ejs'

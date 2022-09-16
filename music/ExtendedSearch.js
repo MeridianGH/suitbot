@@ -133,7 +133,6 @@ export class ExtendedSearch extends Plugin {
 
   async getBestThumbnail(track) {
     for (const size of ['maxresdefault', 'hqdefault', 'mqdefault', 'default']) {
-      // noinspection JSCheckFunctionSignatures
       const thumbnail = track.displayThumbnail(size)
       if (!thumbnail) { continue }
       if ((await fetch(thumbnail)).ok) { return thumbnail }

@@ -1,5 +1,3 @@
-// noinspection JSCheckFunctionSignatures
-
 import { existsSync, readFileSync } from 'fs'
 
 const file = new URL('../config.json', import.meta.url)
