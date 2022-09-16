@@ -47,19 +47,15 @@ export const { data, execute } = {
         .setLabel(lang.other.next)
         .setStyle(ButtonStyle.Primary)
 
-      const embedMessage = await interaction.editReply({
-        embeds: [
-          new EmbedBuilder()
-            .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-            .setTitle(player.queue.current.title)
-            .setURL(song.url)
-            .setThumbnail(player.queue.current.thumbnail)
-            .setDescription(pages[0])
-            .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
-        ],
-        components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])],
-        fetchReply: true
-      })
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+        .setTitle(player.queue.current.title)
+        .setURL(song.url)
+        .setThumbnail(player.queue.current.thumbnail)
+        .setDescription(pages[0])
+        .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
+
+      const embedMessage = await interaction.editReply({ embeds: [embed], components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])], fetchReply: true })
 
       if (!isOnePage) {
         // Collect button interactions (when a user clicks a button)
