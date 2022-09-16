@@ -1,4 +1,4 @@
-import { Client, Collection, EmbedBuilder, GatewayIntentBits } from 'discord.js'
+import { ActivityType, Client, Collection, EmbedBuilder, GatewayIntentBits } from 'discord.js'
 import database from './utilities/database.js'
 import { Lavalink } from './music/lavalink.js'
 import { getFilesRecursively } from './utilities/utilities.js'
@@ -9,7 +9,7 @@ import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
 import { logging } from './utilities/logging.js'
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: 'Playing' }] } })
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: ActivityType.Playing }] } })
 client.database = database
 client.lavalink = new Lavalink(client)
 await client.lavalink.initialize()
