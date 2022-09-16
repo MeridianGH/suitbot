@@ -1,5 +1,5 @@
 import { ActionRowBuilder, EmbedBuilder, PermissionsBitField, SelectMenuBuilder, SlashCommandBuilder } from 'discord.js'
-import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
+import { addMusicControls, errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -35,8 +35,7 @@ export const { data, execute } = {
           .setThumbnail(result.tracks[0].thumbnail)
           .setFooter({ text: `SuitBot | ${lang.other.expires}`, iconURL: interaction.client.user.displayAvatarURL() })
       ],
-      components: [new ActionRowBuilder().setComponents(selectMenu)],
-      fetchReply: true
+      components: [new ActionRowBuilder().setComponents(selectMenu)]
     })
 
     const collector = embedMessage.createMessageComponentCollector({ time: 60000, filter: async (c) => { await c.deferUpdate(); return c.user.id === interaction.user.id } })
@@ -47,27 +46,21 @@ export const { data, execute } = {
       if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
       interaction.client.dashboard.update(player)
 
-      await menuInteraction.editReply({
-        embeds: [
-          new EmbedBuilder()
-            .setAuthor({ name: play.author, iconURL: interaction.member.user.displayAvatarURL() })
-            .setTitle(track.title)
-            .setURL(track.uri)
-            .setThumbnail(track.thumbnail)
-            .addFields([
-              { name: play.fields.duration.name, value: track.isStream ? '🔴 Live' : msToHMS(track.duration), inline: true },
-              { name: play.fields.author.name, value: track.author, inline: true },
-              { name: play.fields.position.name, value: (player.queue.indexOf(track) + 1).toString(), inline: true }
-            ])
-            .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-        ],
-        components: []
-      })
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: play.author, iconURL: interaction.member.user.displayAvatarURL() })
+        .setTitle(track.title)
+        .setURL(track.uri)
+        .setThumbnail(track.thumbnail)
+        .addFields([
+          { name: play.fields.duration.name, value: track.isStream ? '🔴 Live' : msToHMS(track.duration), inline: true },
+          { name: play.fields.author.name, value: track.author, inline: true },
+          { name: play.fields.position.name, value: (player.queue.indexOf(track) + 1).toString(), inline: true }
+        ])
+        .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
 
+      const message = await menuInteraction.editReply({ embeds: [embed], components: [] })
       collector.stop()
-    })
-    collector.on('end', async () => {
-      await embedMessage.edit({ components: [] })
+      addMusicControls(message, player)
     })
   }
 }

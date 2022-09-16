@@ -1,5 +1,5 @@
 import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js'
-import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
+import { addMusicControls, errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -39,7 +39,8 @@ export const { data, execute } = {
           { name: lang.fields.position.name, value: `${player.queue.indexOf(result.tracks[0]) + 1}-${player.queue.indexOf(result.tracks[result.tracks.length - 1]) + 1}`, inline: true }
         ])
         .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-      await interaction.editReply({ embeds: [embed] })
+      const message = await interaction.editReply({ embeds: [embed] })
+      addMusicControls(message, player)
     } else {
       const track = result.tracks[0]
       player.queue.add(track)
@@ -58,7 +59,8 @@ export const { data, execute } = {
           { name: lang.fields.position.name, value: (player.queue.indexOf(track) + 1).toString(), inline: true }
         ])
         .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
-      await interaction.editReply({ embeds: [embed] })
+      const message = await interaction.editReply({ embeds: [embed] })
+      addMusicControls(message, player)
     }
   }
 }

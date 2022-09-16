@@ -1,5 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
-import { errorEmbed, msToHMS } from '../../utilities/utilities.js'
+import { addMusicControls, errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 
 export const { data, execute } = {
@@ -17,20 +17,19 @@ export const { data, execute } = {
     const progress = Math.round(20 * player.position / player.queue.current.duration)
     const progressBar = '▬'.repeat(progress) + '🔘' + ' '.repeat(20 - progress) + '\n' + msToHMS(player.position) + '/' + msToHMS(player.queue.current.duration)
 
-    await interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
-          .setTitle(track.title)
-          .setURL(track.uri)
-          .setThumbnail(track.thumbnail)
-          .addFields([
-            { name: lang.fields.duration.name, value: track.isStream ? '🔴 Live' : `\`${progressBar}\``, inline: true },
-            { name: lang.fields.author.name, value: track.author, inline: true },
-            { name: lang.fields.requestedBy.name, value: track.requester.toString(), inline: true }
-          ])
-          .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
-      ]
-    })
+    const embed = new EmbedBuilder()
+      .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
+      .setTitle(track.title)
+      .setURL(track.uri)
+      .setThumbnail(track.thumbnail)
+      .addFields([
+        { name: lang.fields.duration.name, value: track.isStream ? '🔴 Live' : `\`${progressBar}\``, inline: true },
+        { name: lang.fields.author.name, value: track.author, inline: true },
+        { name: lang.fields.requestedBy.name, value: track.requester.toString(), inline: true }
+      ])
+      .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
+
+    const message = await interaction.reply({ embeds: [embed], fetchReply: true })
+    addMusicControls(message, player)
   }
 }

@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { EmbedBuilder } from 'discord.js'
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js'
 import fs from 'fs'
 import path from 'path'
 import { iconURL } from '../events/ready.js'
@@ -71,4 +71,60 @@ export function getFilesRecursively(directory, files) {
     }
   }
   return files
+}
+
+export function addMusicControls(message, player) {
+  const previous = new ButtonBuilder()
+    .setCustomId('previous')
+    .setEmoji('⏮')
+    .setStyle(ButtonStyle.Secondary)
+  const pause = new ButtonBuilder()
+    .setCustomId('pause')
+    .setEmoji('⏯')
+    .setStyle(ButtonStyle.Secondary)
+  const skip = new ButtonBuilder()
+    .setCustomId('skip')
+    .setEmoji('⏭')
+    .setStyle(ButtonStyle.Secondary)
+  const stop = new ButtonBuilder()
+    .setCustomId('stop')
+    .setEmoji('⏹')
+    .setStyle(ButtonStyle.Secondary)
+
+  message.edit({ components: [new ActionRowBuilder().setComponents([previous, pause, skip, stop])] })
+
+  const collector = message.createMessageComponentCollector({ idle: 150000 })
+  collector.on('collect', async (buttonInteraction) => {
+    switch (buttonInteraction.customId) {
+      case 'previous': {
+        if (player.previousTracks.length === 0) { break }
+        const track = player.previousTracks.pop()
+        player.queue.add(track, 0)
+        player.manager.once('trackEnd', (player) => { player.queue.add(player.previousTracks.pop(), 0) })
+        player.stop()
+        break
+      }
+      case 'pause': {
+        player.pause(!player.paused)
+        break
+      }
+      case 'skip': {
+        if (player.queue.length === 0) {
+          player.destroy()
+          break
+        }
+        player.stop()
+        break
+      }
+      case 'stop': {
+        player.destroy()
+        break
+      }
+    }
+    message.client.dashboard.update(player)
+    await buttonInteraction.deferUpdate()
+  })
+  collector.on('end', async (collected) => {
+    await collected.first()?.message.edit({ components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), pause.setDisabled(true), skip.setDisabled(true), stop.setDisabled(true)])] })
+  })
 }
