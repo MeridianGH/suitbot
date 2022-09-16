@@ -10,7 +10,8 @@
     "node": "16.x"
   },
   "scripts": {
-    "start": "set NODE_ENV=production&&node ."
+    "start:win": "set NODE_ENV=production && node .",
+    "start:unix": "NODE_ENV=production node ."
   },
   "dependencies": {
     "@discordjs/rest": "^1.0.1",

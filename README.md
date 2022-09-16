@@ -184,10 +184,11 @@ Start the bot with
 ```shell
 node .
 ```
-
-To start the bot for production use
+\
+To start the bot for production use one of these specific for your platform
 ```shell
-npm run start
+npm run start:win
+npm run start:unix
 ```
 ---
 </details>
