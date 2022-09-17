@@ -5,6 +5,7 @@ import fs from 'fs'
 import path from 'path'
 import { iconURL } from '../events/ready.js'
 import _ from 'lodash'
+import { getLanguage } from '../language/locale.js'
 
 export function simpleEmbed(content, ephemeral = false) {
   return {
@@ -95,42 +96,53 @@ export function addMusicControls(message, player) {
 
   const collector = message.createMessageComponentCollector({ idle: 150000 })
   collector.on('collect', async (buttonInteraction) => {
+    // noinspection JSUnresolvedVariable
+    const { previous, pause, skip, stop } = getLanguage(await buttonInteraction.client.database.getLocale(buttonInteraction.guildId))
+
+    if (buttonInteraction.member.voice.channel.id !== player.voiceChannel) { return await buttonInteraction.reply(errorEmbed(previous.errors.sameChannel, true)) }
+
     switch (buttonInteraction.customId) {
       case 'previous': {
         if (player.position > 5000) {
           await player.seek(0)
+          await buttonInteraction.deferUpdate()
           break
         }
         try {
-          if (player.previousTracks.length === 0) { break }
+          if (player.previousTracks.length === 0) { return await buttonInteraction.reply(errorEmbed(previous.errors.generic, true)) }
           const track = player.previousTracks.pop()
           player.queue.add(track, 0)
           player.manager.once('trackEnd', (player) => { player.queue.add(player.previousTracks.pop(), 0) })
           player.stop()
+          await buttonInteraction.reply(simpleEmbed('⏮ ' + previous.other.response(`\`#0\`: **${track.title}**`), true))
         } catch (e) {
           await player.seek(0)
+          await buttonInteraction.deferUpdate()
         }
         break
       }
       case 'pause': {
         player.pause(!player.paused)
+        await buttonInteraction.reply(simpleEmbed(player.paused ? '⏸ ' + pause.other.paused : '▶ ' + pause.other.resumed, true))
         break
       }
       case 'skip': {
         if (player.queue.length === 0) {
           player.destroy()
+          await buttonInteraction.reply(simpleEmbed('⏹ ' + stop.other.response, true))
           break
         }
         player.stop()
+        await buttonInteraction.reply(simpleEmbed('⏭ ' + skip.other.skipped, true))
         break
       }
       case 'stop': {
         player.destroy()
+        await buttonInteraction.reply(simpleEmbed('⏹ ' + stop.other.response, true))
         break
       }
     }
     message.client.dashboard.update(player)
-    await buttonInteraction.deferUpdate()
   })
   collector.on('end', async (collected) => {
     await collected.first()?.message.edit({ components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), pause.setDisabled(true), skip.setDisabled(true), stop.setDisabled(true)])] })
