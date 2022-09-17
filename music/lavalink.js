@@ -33,11 +33,13 @@ export class Lavalink {
     })
       .on('nodeConnect', (node) => { logging.info(`Node ${node.options.identifier} connected`) })
       .on('nodeError', (node, error) => { logging.error(`Node ${node.options.identifier} had an error: ${error.message}`) })
+      .on('playerCreate', (player) => {
+        player.previousTracks = []
+      })
       .on('trackStart', (player) => {
         this.client.dashboard.update(player)
       })
       .on('trackEnd', (player, track) => {
-        player.previousTracks = player.previousTracks ?? []
         player.previousTracks.push(track)
         player.previousTracks = player.previousTracks.slice(-11)
       })

@@ -97,11 +97,19 @@ export function addMusicControls(message, player) {
   collector.on('collect', async (buttonInteraction) => {
     switch (buttonInteraction.customId) {
       case 'previous': {
-        if (player.previousTracks.length === 0) { break }
-        const track = player.previousTracks.pop()
-        player.queue.add(track, 0)
-        player.manager.once('trackEnd', (player) => { player.queue.add(player.previousTracks.pop(), 0) })
-        player.stop()
+        if (player.position > 5000) {
+          await player.seek(0)
+          break
+        }
+        try {
+          if (player.previousTracks.length === 0) { break }
+          const track = player.previousTracks.pop()
+          player.queue.add(track, 0)
+          player.manager.once('trackEnd', (player) => { player.queue.add(player.previousTracks.pop(), 0) })
+          player.stop()
+        } catch (e) {
+          await player.seek(0)
+        }
         break
       }
       case 'pause': {
