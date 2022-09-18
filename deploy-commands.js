@@ -11,7 +11,7 @@ for (const file of getFilesRecursively('./commands')) {
   commands.push(command.data.toJSON())
 }
 
-const rest = new REST({ version: '9' }).setToken(token)
+const rest = new REST({ version: '10' }).setToken(token)
 
 if (process.argv.includes('global')) {
   rest.put(Routes.applicationCommands(appId), { body: commands })
