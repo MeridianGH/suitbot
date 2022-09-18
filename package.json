@@ -14,30 +14,27 @@
     "start:unix": "NODE_ENV=production node ."
   },
   "dependencies": {
-    "@discordjs/rest": "^1.0.1",
-    "discord-api-types": "^0.37.2",
-    "discord.js": "14.2.0",
+    "@discordjs/rest": "^1.1.0",
+    "discord-api-types": "^0.37.10",
+    "discord.js": "^14.3.0",
     "ejs": "^3.0.2",
     "erela.js": "github:menudocs/erela.js#build",
     "express": "^4.17.1",
     "express-minify": "^1.0.0",
     "express-session": "^1.17.2",
-    "genius-lyrics": "^4.3.8",
+    "genius-lyrics": "^4.4.0",
     "isomorphic-unfetch": "^3.1.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "marked": "^4.0.16",
+    "marked": "^4.1.0",
     "memorystore": "^1.6.6",
-    "node-fetch": "^3.2.5",
-    "passport": "0.4.1",
-    "passport-discord": "^0.1.4",
-    "postgres": "^3.1.0",
-    "spotify-url-info": "^3.1.2",
+    "postgres": "^3.2.4",
+    "spotify-url-info": "^3.1.8",
     "websocket": "^1.0.34",
-    "ytdl-core": "^4.11.0",
+    "ytdl-core": "^4.11.2",
     "ytpl": "^2.3.0"
   },
   "devDependencies": {
-    "eslint": "^8.14.0"
+    "eslint": "^8.23.1"
   }
 }
