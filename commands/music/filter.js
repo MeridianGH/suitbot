@@ -22,7 +22,7 @@ export const { data, execute } = {
     const filter = interaction.options.getString('filter')
     const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
     if (!player || !player.queue.current) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (interaction.member.voice.channel?.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
     // noinspection JSUnresolvedFunction
     player.setFilter(filter)

@@ -12,7 +12,7 @@ export const { data, execute } = {
     const index = interaction.options.getInteger('track')
     const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
     if (!player || !player.queue.current) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (interaction.member.voice.channel?.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
     if (index < 1 || index > player.queue.length) { return await interaction.reply(errorEmbed(lang.errors.index(player.queue.length), true)) }
     const track = player.queue.remove(index - 1)[0]

@@ -10,7 +10,7 @@ export const { data, execute } = {
     const lang = getLanguage(await interaction.client.database.getLocale(interaction.guildId)).shuffle
     const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
     if (!player || !player.queue.current) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (interaction.member.voice.channel?.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
     player.queue.shuffle()
     await interaction.reply(simpleEmbed('🔀 ' + lang.other.response))

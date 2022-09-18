@@ -104,7 +104,7 @@ export async function addMusicControls(message, player) {
   collector.on('collect', async (buttonInteraction) => {
     // noinspection JSUnresolvedVariable
 
-    if (buttonInteraction.member.voice.channel.id !== player.voiceChannel) { return await buttonInteraction.reply(errorEmbed(previous.errors.sameChannel, true)) }
+    if (buttonInteraction.member.voice.channel?.id !== player.voiceChannel) { return await buttonInteraction.reply(errorEmbed(previous.errors.sameChannel, true)) }
 
     switch (buttonInteraction.customId) {
       case 'previous': {

@@ -16,7 +16,7 @@ export const { data, execute } = {
     const mode = interaction.options.getString('mode')
     const player = interaction.client.lavalink.getPlayer(interaction.guild.id)
     if (!player || !player.queue.current) { return await interaction.reply(errorEmbed(lang.errors.nothingPlaying, true)) }
-    if (interaction.member.voice.channel.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
+    if (interaction.member.voice.channel?.id !== player.voiceChannel) { return await interaction.reply(errorEmbed(lang.errors.sameChannel, true)) }
 
     mode === 'track' ? player.setTrackRepeat(true) : mode === 'queue' ? player.setQueueRepeat(true) : player.setTrackRepeat(false)
     await interaction.reply(simpleEmbed(lang.other.response(player.queueRepeat ? lang.other.repeatModes.queue + ' 🔁' : player.trackRepeat ? lang.other.repeatModes.track + ' 🔂' : lang.other.repeatModes.none + ' ▶')))

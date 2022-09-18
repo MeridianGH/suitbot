@@ -146,6 +146,6 @@ export class Lavalink {
   }
 
   createPlayer(interaction) {
-    return this.manager.create({ guild: interaction.guild.id, voiceChannel: interaction.member.voice.channel.id, textChannel: interaction.channel.id, volume: 50 })
+    return this.manager.create({ guild: interaction.guild.id, voiceChannel: interaction.member.voice.channel?.id, textChannel: interaction.channel.id, volume: 50 })
   }
 }
