@@ -178,7 +178,7 @@ export const previous = {
 export const queue = {
   author: 'Fila.',
   other: {
-    dashboard: 'Ainda usando comandos antigos e chatos? Use o novo [dashboard](https://suitbot.xyz)!',
+    dashboard: (url) => `Ainda usando comandos antigos e chatos? Use o novo [dashboard](${url})!`,
     nowPlaying: 'Tocando Agora:',
     noUpcomingSongs: 'Nenhuma música na fila.\nAdicione músicas com `/play`!\n',
     songsInQueue: (amount) => `${amount} músicas na fila`,

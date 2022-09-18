@@ -17,7 +17,7 @@ export const { data, execute } = {
 
     if (queue.length === 0) {
       // Format single page with no upcoming songs.
-      let description = lang.other.dashboard + '\n\n'
+      let description = lang.other.dashboard(interaction.client.dashboard.host) + '\n\n'
       description += `${lang.other.nowPlaying}\n[${queue.current.title}](${queue.current.uri}) | \`${queue.current.isStream ? '🔴 Live' : msToHMS(queue.current.duration)}\`\n\n`
       description += lang.other.noUpcomingSongs + '\u2015'.repeat(34)
 
@@ -28,7 +28,7 @@ export const { data, execute } = {
       pages.push(embed)
     } else if (queue.length > 0 && queue.length <= 10) {
       // Format single page.
-      let description = lang.other.dashboard + '\n\n'
+      let description = lang.other.dashboard(interaction.client.dashboard.host) + '\n\n'
       description += `${lang.other.nowPlaying}\n[${queue.current.title}](${queue.current.uri}) | \`${queue.current.isStream ? '🔴 Live' : msToHMS(queue.current.duration)}\`\n\n`
       for (const track of queue) { description += `\`${queue.indexOf(track) + 1}.\` [${track.title}](${track.uri}) | \`${track.isStream ? '🔴 Live' : msToHMS(track.duration)}\`\n\n` }
       description += `**${lang.other.songsInQueue(queue.length)} | ${lang.other.totalDuration(msToHMS(queue.duration))}**\n${'\u2015'.repeat(34)}`
@@ -43,7 +43,7 @@ export const { data, execute } = {
       for (let i = 0; i < queue.length; i += 10) {
         const tracks = queue.slice(i, i + 10)
 
-        let description = lang.other.dashboard + '\n\n'
+        let description = lang.other.dashboard(interaction.client.dashboard.host) + '\n\n'
         description += `${lang.other.nowPlaying}\n[${queue.current.title}](${queue.current.uri}) | \`${queue.current.isStream ? '🔴 Live' : msToHMS(queue.current.duration)}\`\n\n`
         for (const track of tracks) { description += `\`${queue.indexOf(track) + 1}.\` [${track.title}](${track.uri}) | \`${track.isStream ? '🔴 Live' : msToHMS(track.duration)}\`\n\n` }
         description += `**${lang.other.songsInQueue(queue.length)} | ${lang.other.totalDuration(msToHMS(queue.duration))}**\n${'\u2015'.repeat(34)}`

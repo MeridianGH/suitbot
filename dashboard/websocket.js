@@ -29,7 +29,7 @@ export function setupWebsocket(client, domain) {
 
   // noinspection JSUnresolvedFunction
   wss.on('request', (request) => {
-    if (request.origin !== domain && request.origin !== 'https://suitbot.xyz') { return request.reject() }
+    if (request.origin !== domain) { return request.reject() }
     const ws = request.accept(null, request.origin)
     let guildId, userId
 

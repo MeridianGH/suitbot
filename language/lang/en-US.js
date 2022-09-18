@@ -178,7 +178,7 @@ export const previous = {
 export const queue = {
   author: 'Queue.',
   other: {
-    dashboard: 'Still using old and boring commands? Use the new [web dashboard](https://suitbot.xyz) instead!',
+    dashboard: (url) => `Still using old and boring commands? Use the new [web dashboard](${url}) instead!`,
     nowPlaying: 'Now Playing:',
     noUpcomingSongs: 'No upcoming songs.\nAdd songs with `/play`!\n',
     songsInQueue: (amount) => `${amount} songs in queue`,

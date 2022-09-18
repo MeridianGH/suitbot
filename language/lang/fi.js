@@ -178,7 +178,7 @@ export const previous = {
 export const queue = {
   author: 'Jono.',
   other: {
-    dashboard: 'Vielä käytät vabnhoja komentoja? Kokeile uutta [paneelia](https://suitbot.xyz) sen sijaan!',
+    dashboard: (url) => `Vielä käytät vabnhoja komentoja? Kokeile uutta [paneelia](${url}) sen sijaan!`,
     nowPlaying: 'Nyt Soitetaan:',
     noUpcomingSongs: 'Ei uusia musiikkeja tulossa.\nLisää musiikkeja `/play` komennolla!\n',
     songsInQueue: (amount) => `${amount} musiikkia jonossa`,

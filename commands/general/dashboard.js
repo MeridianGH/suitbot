@@ -10,7 +10,7 @@ export const { data, execute } = {
     const embed = new EmbedBuilder()
       .setAuthor({ name: lang.author, iconURL: interaction.member.user.displayAvatarURL() })
       .setTitle(lang.title)
-      .setURL('https://suitbot.xyz')
+      .setURL(interaction.client.dashboard.host)
       .setThumbnail(interaction.client.user.displayAvatarURL())
       .setDescription(lang.description)
       .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })

@@ -94,7 +94,7 @@ export async function addMusicControls(message, player) {
     .setStyle(ButtonStyle.Secondary)
   const dashboardButton = new ButtonBuilder()
     // TODO: Fix hardcoded URLs
-    .setURL(`https://suitbot.xyz/dashboard/${message.guildId}`)
+    .setURL(`${message.client.dashboard.host}/dashboard/${message.guildId}`)
     .setLabel(dashboard.author)
     .setStyle(ButtonStyle.Link)
 

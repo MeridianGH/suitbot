@@ -133,6 +133,7 @@ export function startDashboard(client) {
   client.dashboard = app.listen(port, null, null, () => {
     logging.success(`Dashboard is up and running on port ${port}.`)
   })
+  client.dashboard.host = host
 
   // WebSocket
   const wss = setupWebsocket(client, host)

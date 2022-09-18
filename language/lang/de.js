@@ -178,7 +178,7 @@ export const previous = {
 export const queue = {
   author: 'Wiedergabeliste.',
   other: {
-    dashboard: 'Benutzt du immer noch alte und langweilige Befehle? Nutze stattdessen das neue [Web Dashboard](https://suitbot.xyz)!',
+    dashboard: (url) => `Benutzt du immer noch alte und langweilige Befehle? Nutze stattdessen das neue [Web Dashboard](${url})!`,
     nowPlaying: 'Spielt gerade:',
     noUpcomingSongs: 'Keine kommenden Titel.\nFüge Lieder mit `/play` hinzu!\n',
     songsInQueue: (amount) => `${amount} Lieder in der Wiedergabeliste`,

@@ -26,7 +26,7 @@ export const { data, execute } = {
       .setDescription(lang.description)
       .addFields([
         { name: '➕ ' + lang.fields.invite.name, value: `[${lang.fields.invite.value}](https://discord.com/oauth2/authorize?client_id=887122733010411611&scope=bot%20applications.commands&permissions=2167425024)`, inline: true },
-        { name: '🌐 ' + lang.fields.website.name, value: '[suitbot.xyz](https://suitbot.xyz)', inline: true },
+        { name: '🌐 ' + lang.fields.website.name, value: `[${interaction.client.dashboard.host.replace(/^https?:\/\//, '')}](${interaction.client.dashboard.host})`, inline: true },
         { name: '\u200b', value: '\u200b', inline: true },
         { name: '<:github:923336812410306630> ' + lang.fields.github.name, value: `[${lang.fields.github.value}](https://github.com/MeridianGH/suitbot)`, inline: true },
         { name: '<:discord:934041553209548840> ' + lang.fields.discord.name, value: `[${lang.fields.discord.value}](https://discord.gg/qX2CBrrUpf)`, inline: true },

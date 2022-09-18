@@ -178,7 +178,7 @@ export const previous = {
 export const queue = {
   author: '再生待ちリスト',
   other: {
-    dashboard: 'まだコマンドなんか使ってるの？便利な[Webダッシュボード](https://suitbot.xyz)を使ってみよう！',
+    dashboard: (url) => `まだコマンドなんか使ってるの？便利な[Webダッシュボード](${url})を使ってみよう！`,
     nowPlaying: '現在再生中',
     noUpcomingSongs: '再生待ちの曲がありません。\n`/play` で曲を追加しよう！\n',
     songsInQueue: (amount) => `${amount}曲が再生待ち`,
