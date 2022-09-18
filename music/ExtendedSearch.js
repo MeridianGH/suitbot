@@ -124,9 +124,9 @@ export class ExtendedSearch extends Plugin {
     if (retries <= 0) { return }
     const tracks = (await this.manager.search(data.title, requestedBy)).tracks.slice(0, 5)
     const track =
-      tracks.find((track) => track.author.endsWith('- Topic') || track.author === data.author) ??
       tracks.find((track) => track.title.toLowerCase().includes('official audio')) ??
       tracks.find((track) => track.duration >= data.duration - 1500 && track.duration <= data.duration + 1500) ??
+      tracks.find((track) => track.author.endsWith('- Topic') || track.author === data.author) ??
       tracks[0]
     if (!track) { return await this.findClosestTrack(data, requestedBy, retries - 1) }
     const { author, title, thumbnail, uri } = data
