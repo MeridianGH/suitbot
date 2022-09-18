@@ -1,24 +1,21 @@
 import express from 'express'
+import session from 'express-session'
 import minify from 'express-minify'
 import ejs from 'ejs'
-
-import passport from 'passport'
-import { Strategy } from 'passport-discord'
-import session from 'express-session'
 import memorystore from 'memorystore'
-import { randomBytes } from 'crypto'
+const MemoryStore = memorystore(session)
+import { Routes } from 'discord-api-types/v10'
 
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+import { randomBytes } from 'crypto'
 import { marked } from 'marked'
 import { setupWebsocket } from './websocket.js'
 import { adminId, appId, clientSecret } from '../utilities/config.js'
-
-import { fileURLToPath } from 'url'
 import { logging } from '../utilities/logging.js'
 
 const app = express()
-const MemoryStore = memorystore(session)
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -36,11 +33,7 @@ export function startDashboard(client) {
   app.use('/assets', express.static(path.join(__dirname, 'assets')))
   app.use('/queue', express.static(path.join(__dirname, 'queue')))
 
-  // Passport Discord login
-  passport.serializeUser((user, done) => done(null, user))
-  passport.deserializeUser((obj, done) => done(null, obj))
-  passport.use(new Strategy({ clientID: appId, clientSecret: clientSecret, callbackURL: `${host}/callback`, scope: ['identify', 'guilds'] }, (accessToken, refreshToken, profile, done) => { process.nextTick(() => done(null, profile)) }))
-
+  // Session storage
   app.use(session({
     store: new MemoryStore({ checkPeriod: 86400000 }),
     secret: randomBytes(32).toString('hex'),
@@ -48,27 +41,50 @@ export function startDashboard(client) {
     saveUninitialized: false
   }))
 
-  app.use(passport.initialize())
-  app.use(passport.session())
-
   const render = (req, res, template, data = {}) => {
-    const baseData = { djsClient: client, path: req.path, user: req.isAuthenticated() ? req.user : null }
+    const baseData = { djsClient: client, path: req.path, user: req.session.user ?? null }
     res.render(path.join(__dirname, 'templates', template), Object.assign(baseData, data))
   }
 
   const checkAuth = (req, res, next) => {
-    if (req.isAuthenticated()) { return next() }
+    if (req.session.user) { return next() }
     req.session.backURL = req.url
     res.redirect('/login')
   }
 
   // Login endpoint.
-  app.get('/login', (req, res, next) => {
-    next()
-  }, passport.authenticate('discord'))
+  app.get('/login', (req, res) => {
+    const loginUrl = `https://discordapp.com/api/oauth2/authorize?client_id=${appId}&scope=identify%20guilds&response_type=code&redirect_uri=${encodeURIComponent(`${host}/callback`)}`
+    if (!req.session.user) { return res.redirect(loginUrl) }
+  })
 
   // Callback endpoint.
-  app.get('/callback', passport.authenticate('discord', { failureRedirect: '/' }), (req, res) => {
+  app.get('/callback', async (req, res) => {
+    if (!req.query.code) { return res.redirect('/') }
+
+    const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      body: new URLSearchParams({
+        'client_id': appId,
+        'client_secret': clientSecret,
+        'code': req.query.code,
+        'grant_type': 'authorization_code',
+        'redirect_uri': `${host}/callback`,
+        'scope': 'identify'
+      }),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    const token = await tokenResponse.json()
+    if (token.error || !token.access_token) { return res.redirect('/login') }
+
+    const userResponse = await fetch(Routes.user(), { headers: { authorization: `${token.token_type} ${token.access_token}` } })
+    const user = await userResponse.json()
+
+    const guildResponse = await fetch(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` } })
+    user.guilds = await guildResponse.json()
+
+    req.session.user = user
+
     if (req.session.backURL) {
       res.redirect(req.session.backURL)
       req.session.backURL = null
@@ -80,7 +96,6 @@ export function startDashboard(client) {
   // Logout endpoint.
   app.get('/logout', (req, res) => {
     req.session.destroy(() => {
-      req.logout()
       res.redirect('/')
     })
   })
