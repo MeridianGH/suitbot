@@ -74,30 +74,35 @@ export function getFilesRecursively(directory, files) {
   return files
 }
 
-export function addMusicControls(message, player) {
-  const previous = new ButtonBuilder()
+export async function addMusicControls(message, player) {
+  const { previous, pause, skip, stop, dashboard } = getLanguage(await message.client.database.getLocale(message.guildId))
+  const previousButton = new ButtonBuilder()
     .setCustomId('previous')
     .setEmoji('⏮')
     .setStyle(ButtonStyle.Secondary)
-  const pause = new ButtonBuilder()
+  const pauseButton = new ButtonBuilder()
     .setCustomId('pause')
     .setEmoji('⏯')
     .setStyle(ButtonStyle.Secondary)
-  const skip = new ButtonBuilder()
+  const skipButton = new ButtonBuilder()
     .setCustomId('skip')
     .setEmoji('⏭')
     .setStyle(ButtonStyle.Secondary)
-  const stop = new ButtonBuilder()
+  const stopButton = new ButtonBuilder()
     .setCustomId('stop')
     .setEmoji('⏹')
     .setStyle(ButtonStyle.Secondary)
+  const dashboardButton = new ButtonBuilder()
+    // TODO: Fix hardcoded URLs
+    .setURL(`https://suitbot.xyz/dashboard/${message.guildId}`)
+    .setLabel(dashboard.author)
+    .setStyle(ButtonStyle.Link)
 
-  message.edit({ components: [new ActionRowBuilder().setComponents([previous, pause, skip, stop])] })
+  message.edit({ components: [new ActionRowBuilder().setComponents([previousButton, pauseButton, skipButton, stopButton, dashboardButton])] })
 
   const collector = message.createMessageComponentCollector({ idle: 150000 })
   collector.on('collect', async (buttonInteraction) => {
     // noinspection JSUnresolvedVariable
-    const { previous, pause, skip, stop } = getLanguage(await buttonInteraction.client.database.getLocale(buttonInteraction.guildId))
 
     if (buttonInteraction.member.voice.channel.id !== player.voiceChannel) { return await buttonInteraction.reply(errorEmbed(previous.errors.sameChannel, true)) }
 
@@ -144,7 +149,7 @@ export function addMusicControls(message, player) {
     }
     message.client.dashboard.update(player)
   })
-  collector.on('end', async (collected) => {
-    await collected.first()?.message.edit({ components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), pause.setDisabled(true), skip.setDisabled(true), stop.setDisabled(true)])] })
+  collector.on('end', async () => {
+    await message.edit({ components: [new ActionRowBuilder().setComponents([previousButton.setDisabled(true), pauseButton.setDisabled(true), skipButton.setDisabled(true), stopButton.setDisabled(true), dashboardButton.setDisabled(true)])] })
   })
 }

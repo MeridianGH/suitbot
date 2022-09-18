@@ -63,16 +63,16 @@ export const { data, execute } = {
       .setStyle(ButtonStyle.Primary)
 
     let currentIndex = Math.max(Number(interaction.options.getString('category')), 0)
-    const embedMessage = await interaction.reply({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])], fetchReply: true })
+    const message = await interaction.reply({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
-    const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
+    const collector = message.createMessageComponentCollector({ idle: 150000 })
     collector.on('collect', async (buttonInteraction) => {
       buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])] })
     })
-    collector.on('end', async (collected) => {
-      await collected.first()?.message.edit({ embeds: [pages[0]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(true)])] })
+    collector.on('end', async () => {
+      await message.edit({ embeds: [pages[0]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(true)])] })
     })
   }
 }

@@ -67,18 +67,18 @@ export const { data, execute } = {
       .setLabel(lang.other.next)
       .setStyle(ButtonStyle.Primary)
 
-    const embedMessage = await interaction.reply({ embeds: [pages[0]], components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])], fetchReply: true })
+    const message = await interaction.reply({ embeds: [pages[0]], components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])], fetchReply: true })
 
     if (!isOnePage) {
       // Collect button interactions (when a user clicks a button),
-      const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
+      const collector = message.createMessageComponentCollector({ idle: 150000 })
       let currentIndex = 0
       collector.on('collect', async (buttonInteraction) => {
         buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
         await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder({ components: [previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)] })] })
       })
       collector.on('end', async () => {
-        await embedMessage.edit({ components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(true)])] })
+        await message.edit({ components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(true)])] })
       })
     }
   }
