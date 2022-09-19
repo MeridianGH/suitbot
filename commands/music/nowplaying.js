@@ -30,6 +30,6 @@ export const { data, execute } = {
       .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'}`, iconURL: interaction.client.user.displayAvatarURL() })
 
     const message = await interaction.reply({ embeds: [embed], fetchReply: true })
-    addMusicControls(message, player)
+    await addMusicControls(message, player)
   }
 }

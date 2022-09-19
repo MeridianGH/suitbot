@@ -40,7 +40,7 @@ export const { data, execute } = {
         ])
         .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
       const message = await interaction.editReply({ embeds: [embed] })
-      addMusicControls(message, player)
+      await addMusicControls(message, player)
     } else {
       const track = result.tracks[0]
       player.queue.add(track)
@@ -60,7 +60,7 @@ export const { data, execute } = {
         ])
         .setFooter({ text: 'SuitBot', iconURL: interaction.client.user.displayAvatarURL() })
       const message = await interaction.editReply({ embeds: [embed] })
-      addMusicControls(message, player)
+      await addMusicControls(message, player)
     }
   }
 }

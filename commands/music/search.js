@@ -60,7 +60,7 @@ export const { data, execute } = {
 
       const message = await menuInteraction.editReply({ embeds: [embed], components: [] })
       collector.stop()
-      addMusicControls(message, player)
+      await addMusicControls(message, player)
     })
   }
 }
