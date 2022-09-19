@@ -112,7 +112,7 @@ export function startDashboard(client) {
 
   // Admin endpoint.
   app.get('/admin', checkAuth, (req, res) => {
-    if (req.user.id !== adminId) { return res.redirect('/') }
+    if (req.session.user.id !== adminId) { return res.redirect('/') }
     render(req, res, 'admin.ejs')
   })
 
