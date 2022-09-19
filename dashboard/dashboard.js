@@ -62,26 +62,12 @@ export function startDashboard(client) {
   app.get('/callback', async (req, res) => {
     if (!req.query.code) { return res.redirect('/') }
 
-    const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
-      method: 'POST',
-      body: new URLSearchParams({
-        'client_id': appId,
-        'client_secret': clientSecret,
-        'code': req.query.code,
-        'grant_type': 'authorization_code',
-        'redirect_uri': `${host}/callback`,
-        'scope': 'identify'
-      }),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    })
-    const token = await tokenResponse.json()
+    const body = new URLSearchParams({ 'client_id': appId, 'client_secret': clientSecret, 'code': req.query.code, 'grant_type': 'authorization_code', 'redirect_uri': `${host}/callback` })
+    const token = await client.rest.post(Routes.oauth2TokenExchange(), { body: body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, auth: false, passThroughBody: true })
     if (token.error || !token.access_token) { return res.redirect('/login') }
 
-    const userResponse = await fetch(Routes.user(), { headers: { authorization: `${token.token_type} ${token.access_token}` } })
-    const user = await userResponse.json()
-
-    const guildResponse = await fetch(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` } })
-    user.guilds = await guildResponse.json()
+    const user = await client.rest.get(Routes.user(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false })
+    user.guilds = await client.rest.get(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false })
 
     req.session.user = user
 
