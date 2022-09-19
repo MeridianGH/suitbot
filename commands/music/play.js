@@ -1,6 +1,7 @@
 import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js'
 import { addMusicControls, errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
+import { logging } from '../../utilities/logging.js'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -23,7 +24,18 @@ export const { data, execute } = {
 
     if (result.loadType === 'PLAYLIST_LOADED') {
       player.queue.add(result.tracks)
-      if (player.state !== 'CONNECTED') { await player.connect() }
+      // DEBUG
+      // if (player.state !== 'CONNECTED') { await player.connect() }
+      if (player.state !== 'CONNECTED') {
+        try {
+          await player.connect()
+        } catch (e) {
+          logging.error(e.stack)
+          logging.warn(query)
+          logging.warn(player.state)
+          logging.warn(player.queue)
+        }
+      }
       if (!player.playing && !player.paused && player.queue.totalSize === result.tracks.length) { await player.play() }
       interaction.client.dashboard.update(player)
 
@@ -44,7 +56,18 @@ export const { data, execute } = {
     } else {
       const track = result.tracks[0]
       player.queue.add(track)
-      if (player.state !== 'CONNECTED') { await player.connect() }
+      // DEBUG
+      // if (player.state !== 'CONNECTED') { await player.connect() }
+      if (player.state !== 'CONNECTED') {
+        try {
+          await player.connect()
+        } catch (e) {
+          logging.error(e.stack)
+          logging.warn(query)
+          logging.warn(player.state)
+          logging.warn(player.queue)
+        }
+      }
       if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
       interaction.client.dashboard.update(player)
 
