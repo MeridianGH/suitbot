@@ -2,6 +2,8 @@ import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.
 import { addMusicControls, errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
 import { logging } from '../../utilities/logging.js'
+import { adminId } from '../../utilities/config.js'
+import fs from 'fs'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -30,10 +32,14 @@ export const { data, execute } = {
         try {
           await player.connect()
         } catch (e) {
-          logging.error(e.stack)
-          logging.warn(query)
-          logging.warn(player.state)
-          logging.warn(player.queue)
+          logging.error(e)
+          logging.warn('Query: ' + query)
+          logging.warn('State: ' + player.state)
+          logging.warn('Queue: ' + player.queue)
+          fs.writeFileSync('error.txt', e.stack)
+          const user = await interaction.client.users.fetch(adminId)
+          await user.send({ content: `\`New Exception | ${e}\``, files: ['error.txt'] })
+          fs.unlink('error.txt', () => {})
         }
       }
       if (!player.playing && !player.paused && player.queue.totalSize === result.tracks.length) { await player.play() }
@@ -62,10 +68,14 @@ export const { data, execute } = {
         try {
           await player.connect()
         } catch (e) {
-          logging.error(e.stack)
-          logging.warn(query)
-          logging.warn(player.state)
-          logging.warn(player.queue)
+          logging.error(e)
+          logging.warn('Query: ' + query)
+          logging.warn('State: ' + player.state)
+          logging.warn('Queue: ' + player.queue)
+          fs.writeFileSync('error.txt', e.stack)
+          const user = await interaction.client.users.fetch(adminId)
+          await user.send({ content: `\`New Exception | ${e}\``, files: ['error.txt'] })
+          fs.unlink('error.txt', () => {})
         }
       }
       if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
