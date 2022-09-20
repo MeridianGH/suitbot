@@ -1,9 +1,6 @@
 import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js'
 import { addMusicControls, errorEmbed, msToHMS } from '../../utilities/utilities.js'
 import { getLanguage } from '../../language/locale.js'
-import { logging } from '../../utilities/logging.js'
-import { adminId } from '../../utilities/config.js'
-import fs from 'fs'
 
 export const { data, execute } = {
   data: new SlashCommandBuilder()
@@ -26,21 +23,14 @@ export const { data, execute } = {
 
     if (result.loadType === 'PLAYLIST_LOADED') {
       player.queue.add(result.tracks)
-      // DEBUG
-      // if (player.state !== 'CONNECTED') { await player.connect() }
+
       if (player.state !== 'CONNECTED') {
-        try {
-          await player.connect()
-        } catch (e) {
-          logging.error(e)
-          logging.warn('Query: ' + query)
-          logging.warn('State: ' + player.state)
-          logging.warn('Queue: ' + player.queue)
-          fs.writeFileSync('error.txt', e.stack)
-          const user = await interaction.client.users.fetch(adminId)
-          await user.send({ content: `\`New Exception | ${e}\``, files: ['error.txt'] })
-          fs.unlink('error.txt', () => {})
+        if (!interaction.member.voice.channel) {
+          player.destroy()
+          return await interaction.editReply(errorEmbed(lang.errors.noVoiceChannel))
         }
+        player.setVoiceChannel(interaction.member.voice.channel.id)
+        await player.connect()
       }
       if (!player.playing && !player.paused && player.queue.totalSize === result.tracks.length) { await player.play() }
       interaction.client.dashboard.update(player)
@@ -62,21 +52,13 @@ export const { data, execute } = {
     } else {
       const track = result.tracks[0]
       player.queue.add(track)
-      // DEBUG
-      // if (player.state !== 'CONNECTED') { await player.connect() }
       if (player.state !== 'CONNECTED') {
-        try {
-          await player.connect()
-        } catch (e) {
-          logging.error(e)
-          logging.warn('Query: ' + query)
-          logging.warn('State: ' + player.state)
-          logging.warn('Queue: ' + player.queue)
-          fs.writeFileSync('error.txt', e.stack)
-          const user = await interaction.client.users.fetch(adminId)
-          await user.send({ content: `\`New Exception | ${e}\``, files: ['error.txt'] })
-          fs.unlink('error.txt', () => {})
+        if (!interaction.member.voice.channel) {
+          player.destroy()
+          return await interaction.editReply(errorEmbed(lang.errors.noVoiceChannel))
         }
+        player.setVoiceChannel(interaction.member.voice.channel.id)
+        await player.connect()
       }
       if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
       interaction.client.dashboard.update(player)

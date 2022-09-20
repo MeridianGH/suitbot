@@ -45,7 +45,7 @@ export class Lavalink {
       })
       .on('queueEnd', (player) => {
         this.client.dashboard.update(player)
-        setTimeout(() => { if (!player.playing) { player.destroy() } }, 30000)
+        setTimeout(() => { if (!player.playing && !player.queue.current) { player.destroy() } }, 30000)
       })
 
     this.client.once('ready', () => this.manager.init(this.client.user.id))
@@ -135,7 +135,7 @@ export class Lavalink {
     }
 
     // Channel empty
-    if (oldState?.guild.channels.cache.get(player.voiceChannel).members.size <= 1) {
+    if (oldState?.guild.channels.cache.get(player.voiceChannel).members.size === 1) {
       oldState?.guild.channels.cache.get(player.textChannel).send(simpleEmbed('Left the voice channel because it was empty.'))
       return player.destroy()
     }

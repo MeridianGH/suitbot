@@ -42,7 +42,14 @@ export const { data, execute } = {
     collector.on('collect', async (menuInteraction) => {
       const track = result.tracks[Number(menuInteraction.values[0])]
       player.queue.add(track)
-      if (player.state !== 'CONNECTED') { await player.connect() }
+      if (player.state !== 'CONNECTED') {
+        if (!interaction.member.voice.channel) {
+          player.destroy()
+          return await interaction.editReply(Object.assign(errorEmbed(lang.errors.noVoiceChannel), { components: [] }))
+        }
+        player.setVoiceChannel(interaction.member.voice.channel.id)
+        await player.connect()
+      }
       if (!player.playing && !player.paused && !player.queue.length) { await player.play() }
       interaction.client.dashboard.update(player)
 
