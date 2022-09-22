@@ -4,6 +4,7 @@ import ytdl from 'ytdl-core'
 import { geniusAppId } from '../../utilities/config.js'
 import genius from 'genius-lyrics'
 import { getLanguage } from '../../language/locale.js'
+import { logging } from '../../utilities/logging.js'
 
 const Genius = new genius.Client(geniusAppId)
 
@@ -55,11 +56,11 @@ export const { data, execute } = {
         .setDescription(pages[0])
         .setFooter({ text: `SuitBot | ${lang.other.repeatModes.repeat}: ${player.queueRepeat ? '🔁 ' + lang.other.repeatModes.queue : player.trackRepeat ? '🔂 ' + lang.other.repeatModes.track : '❌'} | ${lang.other.genius}`, iconURL: interaction.client.user.displayAvatarURL() })
 
-      const embedMessage = await interaction.editReply({ embeds: [embed], components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])], fetchReply: true })
+      const message = await interaction.editReply({ embeds: [embed], components: isOnePage ? [] : [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(false)])], fetchReply: true })
 
       if (!isOnePage) {
         // Collect button interactions (when a user clicks a button)
-        const collector = embedMessage.createMessageComponentCollector({ idle: 150000 })
+        const collector = message.createMessageComponentCollector({ idle: 150000 })
         let currentIndex = 0
         collector.on('collect', async (buttonInteraction) => {
           buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
@@ -77,7 +78,8 @@ export const { data, execute } = {
           })
         })
         collector.on('end', async () => {
-          await embedMessage.edit({ components: [new ActionRowBuilder({ components: [previous.setDisabled(true), next.setDisabled(true)] })] })
+          const fetchedMessage = await message.fetch(true).catch((e) => { logging.warn(`Failed to edit message components: ${e}`) })
+          await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents([fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true))])] })
         })
       }
     } catch {

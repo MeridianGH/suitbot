@@ -1,6 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import fs from 'fs'
 import { getLanguage } from '../../language/locale.js'
+import { logging } from '../../utilities/logging.js'
 
 const categories = ['general', 'music', 'moderation', 'feedback']
 
@@ -72,7 +73,8 @@ export const { data, execute } = {
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])] })
     })
     collector.on('end', async () => {
-      await message.edit({ embeds: [pages[0]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(true), next.setDisabled(true)])] })
+      const fetchedMessage = await message.fetch(true).catch((e) => { logging.warn(`Failed to edit message components: ${e}`) })
+      await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents([fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true))])] })
     })
   }
 }

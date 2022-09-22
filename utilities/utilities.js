@@ -6,6 +6,7 @@ import path from 'path'
 import { iconURL } from '../events/ready.js'
 import _ from 'lodash'
 import { getLanguage } from '../language/locale.js'
+import { logging } from './logging.js'
 
 export function simpleEmbed(content, ephemeral = false) {
   return {
@@ -149,6 +150,7 @@ export async function addMusicControls(message, player) {
     message.client.dashboard.update(player)
   })
   collector.on('end', async () => {
-    await message.edit({ components: [new ActionRowBuilder().setComponents([previousButton.setDisabled(true), pauseButton.setDisabled(true), skipButton.setDisabled(true), stopButton.setDisabled(true), dashboardButton.setDisabled(true)])] })
+    const fetchedMessage = await message.fetch(true).catch((e) => { logging.warn(`Failed to edit message components: ${e}`) })
+    await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents([fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true))])] })
   })
 }
