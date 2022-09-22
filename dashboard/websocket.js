@@ -182,7 +182,7 @@ export function setupWebsocket(client, domain) {
     if (clients[player.guild]) {
       for (const user of Object.keys(clients[player.guild])) {
         const ws = clients[player.guild][user]
-        send(ws, simplifyPlayer(player))
+        setTimeout(() => { send(ws, simplifyPlayer(player)) }, 1000)
       }
     }
   })
