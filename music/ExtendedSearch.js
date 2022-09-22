@@ -95,7 +95,7 @@ export class ExtendedSearch extends Plugin {
       async (playlistTrack) => await this.findClosestTrack({
         author: playlistTrack.track.artists[0].name,
         duration: playlistTrack.track.duration_ms,
-        thumbnail: playlistTrack.track.coverArt?.sources[0]?.url,
+        thumbnail: playlistTrack.track.album?.images[0]?.url,
         title: playlistTrack.track.artists[0].name + ' - ' + playlistTrack.track.name,
         uri: playlistTrack.track.external_urls.spotify
       }, requestedBy))
@@ -111,7 +111,7 @@ export class ExtendedSearch extends Plugin {
       async (track) => await this.findClosestTrack({
         author: track.artists[0].name,
         duration: track.duration_ms,
-        thumbnail: track.coverArt?.sources[0]?.url,
+        thumbnail: data.images[0]?.url,
         title: track.artists[0].name + ' - ' + track.name,
         uri: track.external_urls.spotify
       }, requestedBy))
