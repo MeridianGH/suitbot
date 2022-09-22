@@ -60,7 +60,7 @@ export const { data, execute } = {
 
       if (!isOnePage) {
         // Collect button interactions (when a user clicks a button)
-        const collector = message.createMessageComponentCollector({ idle: 150000 })
+        const collector = message.createMessageComponentCollector({ idle: 300000 })
         let currentIndex = 0
         collector.on('collect', async (buttonInteraction) => {
           buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1

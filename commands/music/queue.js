@@ -72,7 +72,7 @@ export const { data, execute } = {
 
     if (!isOnePage) {
       // Collect button interactions (when a user clicks a button),
-      const collector = message.createMessageComponentCollector({ idle: 150000 })
+      const collector = message.createMessageComponentCollector({ idle: 300000 })
       let currentIndex = 0
       collector.on('collect', async (buttonInteraction) => {
         buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
@@ -80,7 +80,7 @@ export const { data, execute } = {
       })
       collector.on('end', async () => {
         const fetchedMessage = await message.fetch(true).catch((e) => { logging.warn(`Failed to edit message components: ${e}`) })
-        await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents([fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true))])] })
+        await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents(fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true)))] })
       })
     }
   }

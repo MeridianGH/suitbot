@@ -67,14 +67,14 @@ export const { data, execute } = {
     const message = await interaction.reply({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])], fetchReply: true })
 
     // Collect button interactions (when a user clicks a button)
-    const collector = message.createMessageComponentCollector({ idle: 150000 })
+    const collector = message.createMessageComponentCollector({ idle: 300000 })
     collector.on('collect', async (buttonInteraction) => {
       buttonInteraction.customId === 'previous' ? currentIndex -= 1 : currentIndex += 1
       await buttonInteraction.update({ embeds: [pages[currentIndex]], components: [new ActionRowBuilder().setComponents([previous.setDisabled(currentIndex === 0), next.setDisabled(currentIndex === pages.length - 1)])] })
     })
     collector.on('end', async () => {
       const fetchedMessage = await message.fetch(true).catch((e) => { logging.warn(`Failed to edit message components: ${e}`) })
-      await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents([fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true))])] })
+      await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents(fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true)))] })
     })
   }
 }

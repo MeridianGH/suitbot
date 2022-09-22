@@ -100,10 +100,8 @@ export async function addMusicControls(message, player) {
 
   message.edit({ components: [new ActionRowBuilder().setComponents([previousButton, pauseButton, skipButton, stopButton, dashboardButton])] })
 
-  const collector = message.createMessageComponentCollector({ idle: 150000 })
+  const collector = message.createMessageComponentCollector({ idle: 300000 })
   collector.on('collect', async (buttonInteraction) => {
-    // noinspection JSUnresolvedVariable
-
     if (buttonInteraction.member.voice.channel?.id !== player.voiceChannel) { return await buttonInteraction.reply(errorEmbed(previous.errors.sameChannel, true)) }
 
     switch (buttonInteraction.customId) {
@@ -151,6 +149,6 @@ export async function addMusicControls(message, player) {
   })
   collector.on('end', async () => {
     const fetchedMessage = await message.fetch(true).catch((e) => { logging.warn(`Failed to edit message components: ${e}`) })
-    await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents([fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true))])] })
+    await fetchedMessage?.edit({ components: [new ActionRowBuilder().setComponents(fetchedMessage.components[0].components.map((component) => ButtonBuilder.from(component.toJSON()).setDisabled(true)))] })
   })
 }
