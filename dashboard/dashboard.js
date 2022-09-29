@@ -66,8 +66,9 @@ export function startDashboard(client) {
     const token = await client.rest.post(Routes.oauth2TokenExchange(), { body: body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, auth: false, passThroughBody: true }).catch(() => null)
     if (!token?.access_token) { return res.redirect('/login') }
 
-    const user = await client.rest.get(Routes.user(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false })
-    user.guilds = await client.rest.get(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false })
+    const user = await client.rest.get(Routes.user(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false }).catch((e) => { logging.warn('Error while fetching user while authenticating: ' + e) })
+    user.guilds = await client.rest.get(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false }).catch((e) => { logging.warn('Error while fetching guilds while authenticating: ' + e) })
+    if (!user || !user.guilds) { return res.redirect('/login') }
 
     req.session.user = user
 
