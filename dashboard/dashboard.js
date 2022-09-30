@@ -67,9 +67,10 @@ export function startDashboard(client) {
     if (!token?.access_token) { return res.redirect('/login') }
 
     const user = await client.rest.get(Routes.user(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false }).catch((e) => { logging.warn('Error while fetching user while authenticating: ' + e) })
-    user.guilds = await client.rest.get(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false }).catch((e) => { logging.warn('Error while fetching guilds while authenticating: ' + e) })
-    if (!user || !user.guilds) { return res.redirect('/login') }
+    const guilds = await client.rest.get(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false }).catch((e) => { logging.warn('Error while fetching guilds while authenticating: ' + e) })
+    if (!user || !guilds) { return res.redirect('/login') }
 
+    user.guilds = guilds
     req.session.user = user
 
     if (req.session.backURL) {
