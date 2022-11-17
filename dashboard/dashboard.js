@@ -64,10 +64,12 @@ export function startDashboard(client) {
 
     const body = new URLSearchParams({ 'client_id': appId, 'client_secret': clientSecret, 'code': req.query.code, 'grant_type': 'authorization_code', 'redirect_uri': `${host}/callback` })
     const token = await client.rest.post(Routes.oauth2TokenExchange(), { body: body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, auth: false, passThroughBody: true }).catch(() => null)
+    console.log(token)
     if (!token?.access_token) { return res.redirect('/login') }
 
     const user = await client.rest.get(Routes.user(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false }).catch((e) => { logging.warn('Error while fetching user while authenticating: ' + e) })
     const guilds = await client.rest.get(Routes.userGuilds(), { headers: { authorization: `${token.token_type} ${token.access_token}` }, auth: false }).catch((e) => { logging.warn('Error while fetching guilds while authenticating: ' + e) })
+    console.log(user, guilds)
     if (!user || !guilds) { return res.redirect('/login') }
 
     user.guilds = guilds
