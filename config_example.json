@@ -6,5 +6,5 @@
 	"adminId": "yourUserID",
 	"papisid": "yourPAPISID",
 	"psid": "yourPSID",
-	"geniusAppId": "yourGeniusAppId"
+	"geniusClientToken": "yourGeniusClientAccessToken"
 }
