@@ -9,10 +9,10 @@ import { getLanguage } from './language/locale.js'
 import { iconURL } from './events/ready.js'
 import { logging } from './utilities/logging.js'
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates], presence: { status: 'online', activities: [{ name: '/help | suitbot.xyz', type: ActivityType.Playing }] } })
-client.database = database
-client.lavalink = new Lavalink(client)
-await client.lavalink.initialize()
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates], presence: { status: 'dnd', activities: [{ name: '/help | The future of SuitBot...', type: ActivityType.Playing }] } })
+// client.database = database
+// client.lavalink = new Lavalink(client)
+// await client.lavalink.initialize()
 
 // Commands
 client.commands = new Collection()
@@ -44,7 +44,7 @@ process.on('uncaughtException', async (error) => {
 
 // Shutdown Handling
 async function shutdown() {
-  logging.info(`Closing ${client.lavalink.manager.players.size} queues.`)
+/*  logging.info(`Closing ${client.lavalink.manager.players.size} queues.`)
   for (const entry of client.lavalink.manager.players) {
     const player = entry[1]
     const lang = getLanguage(await client.database.getLocale(player.guild)).serverShutdown
@@ -59,7 +59,7 @@ async function shutdown() {
       ]
     })
     player.destroy()
-  }
+  }*/
   client.destroy()
   client.dashboard?.shutdown()
   logging.info('Received SIGTERM, shutting down.')
