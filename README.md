@@ -4,6 +4,8 @@
 [![Discord](https://shields.io/discord/610498937874546699?style=for-the-badge&logo=discord&label=discord)](https://discord.gg/qX2CBrrUpf)
 [![License](https://img.shields.io/github/license/MeridianGH/suitbot?logo=gnu&style=for-the-badge)](https://github.com/MeridianGH/suitbot/blob/main/LICENSE.md)
 
+> This repository has been archived in favor of the newer and improved, but slightly stripped down version **[Kalliope](https://github.com/MeridianGH/Kalliope)**.
+
 # SuitBot
 
 > A lightweight music and general purpose bot with dashboard, that uses slash commands and buttons to be as user-friendly as possible!
